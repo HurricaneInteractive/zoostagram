@@ -1,0 +1,10 @@
+/**
+    Core SCSS file, should ONLY include imports! Order is important!
+    Any other scss files should be added in the 'scss' folder, and NEED to be partials
+    eg. '_base.scss' - requires a '_' in front
+*/
+
+@import 'scss/variables';
+@import 'scss/mixins';
+@import 'scss/base';
+@import 'scss/globals';

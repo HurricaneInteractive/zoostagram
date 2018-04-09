@@ -1,0 +1,18 @@
+/**
+    Base styling for the project. Should only contain declarations for HTML elements.
+    Should not also include classes
+    ONLY exception:
+        label, .label
+    
+    We may want a different items to share the label styling but not a label element.
+*/
+
+body {
+    margin: 0;
+    padding: 0;
+    font-size: $basefontsize;
+}
+
+* {
+    box-sizing: border-box;
+}

@@ -1,0 +1,7 @@
+/**
+    Should only include GLOBAL classes - button style for example
+*/
+
+.clearfix {
+    @include clearfix();
+}
