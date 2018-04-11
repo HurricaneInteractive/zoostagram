@@ -11,6 +11,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 import Entry from './Global/Entry'
 import Capture from './Journey/Capture'
+import Learn from './Learn/Learn';
 
 export default class AppRouter extends Component {
     render() {
@@ -19,10 +20,12 @@ export default class AppRouter extends Component {
                 <Fragment>
                     <div className="navigation">
                         <Link to="/journey">Journey</Link>
+                        <Link to="/learn">Learn</Link>
                     </div>
 
                     <Route exact path="/" component={Entry} />
                     <Route path="/journey" component={Capture} />
+                    <Route path="/learn" component={Learn} />
                 </Fragment>
             </Router>
         )
