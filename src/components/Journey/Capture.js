@@ -4,6 +4,7 @@
  * Currently being used by AJ to test image capturing
  * 
  * TODO: Include proper user flow & UI
+ * TODO: Camera Flip Functionality
  * 
  * User Flow
  * - Camera with live feed to take the image
@@ -40,7 +41,8 @@ class Capture extends Component {
         super()
         this.state = {
             stream: null,
-            initialising: true
+            initialising: true,
+            user: null
         }
 
         this.width = 1280;
@@ -85,6 +87,9 @@ class Capture extends Component {
      * @memberof Capture
      */
     componentDidMount() {
+        this.setState({
+            user: firebase.auth().currentUser
+        })
         this.initialiseStream();
     }
 
@@ -218,7 +223,7 @@ class Capture extends Component {
      * 
      * @memberof Capture
      * 
-     * TODO: Update the storage path to save into a specific folder per user
+     * TODO: Update the storage path to save into a specific folder per user & journey ID
      * TODO: Display the Process to the user
      * TODO: Save with the enclosure that the user picks
      */
@@ -232,8 +237,11 @@ class Capture extends Component {
         }
 
         let name = CryptoJS.SHA256(String(new Date())).words.join('') + '.jpg';
+        let folder = this.state.user.uid;
 
-        let uploadTask = storageRef.child('images/' + name).put(file, metadata);
+        let referencePath = `journey/${folder}/${name}`;
+
+        let uploadTask = storageRef.child(referencePath).put(file, metadata);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
             // Processing
