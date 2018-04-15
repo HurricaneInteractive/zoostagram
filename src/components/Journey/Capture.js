@@ -17,6 +17,8 @@ import { Link } from 'react-router-dom'
 import firebase from '../firebase'
 import CryptoJS from 'crypto-js'
 
+import Loading from '../Global/Loading'
+
 const mimetype = 'image/jpeg'
 
 const storageRef = firebase.storage().ref();
@@ -37,10 +39,11 @@ class Capture extends Component {
     constructor() {
         super()
         this.state = {
-            stream: null
+            stream: null,
+            initialising: true
         }
 
-        this.width = 640;
+        this.width = 1280;
         this.height = 0;
         this.streaming = false;
         this.video = null;
@@ -138,6 +141,10 @@ class Capture extends Component {
                 _this.canvas.setAttribute('width', _this.width);
                 _this.canvas.setAttribute('height', _this.height);
                 _this.streaming = true;
+                
+                _this.setState({
+                    initialising: false
+                })
             }
         }, false)
 
@@ -262,6 +269,7 @@ class Capture extends Component {
     render() {
         return (
             <div className="camera-feed">
+                { this.state.initialising === true ? <Loading fullscreen={true} /> : '' }
                 <video id="main-camera" />
                 <canvas id="image-copy" />
                 <img id="photo-preview" alt="preview of stream" />
