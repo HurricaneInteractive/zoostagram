@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "crypto-js": "^3.1.9-1",
     "dotenv": "^5.0.1",
     "firebase": "^4.12.1",
     "node-sass-chokidar": "^1.2.2",
