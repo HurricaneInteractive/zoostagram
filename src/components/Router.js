@@ -86,6 +86,7 @@ export default class AppRouter extends Component {
                 <Route exact path="/" component={Entry} />
                 <Route path="/journey" component={Capture} />
                 <Route path="/learn" component={Learn} />
+                <Route path="/quiz" component={Quizobject} />
             </Switch>
         )
 
