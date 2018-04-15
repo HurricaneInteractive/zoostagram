@@ -40,7 +40,7 @@ class Capture extends Component {
             stream: null
         }
 
-        this.width = 320;
+        this.width = 640;
         this.height = 0;
         this.streaming = false;
         this.video = null;
@@ -65,6 +65,15 @@ class Capture extends Component {
     componentWillUnmount() {
         this.clearPhoto();
         this.state.stream.getTracks()[0].stop();
+    }
+
+    /**
+     * Sets the width to the width of the window
+     * 
+     * @memberof Capture
+     */
+    componentWillMount() {
+        this.width = window.innerWidth
     }
 
     /**
@@ -111,6 +120,7 @@ class Capture extends Component {
                 })
             })
             .catch((err) => {
+                alert(err.name + ": " + err.message);
                 console.log(err.name + ": " + err.message);
             })
         
@@ -234,6 +244,7 @@ class Capture extends Component {
             }
         }, (err) => {
             // Error
+            alert(err);
             console.error(err)
         }, () => {
             // Success
