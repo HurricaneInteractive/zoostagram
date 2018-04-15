@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import firebase from '../firebase';
 
+import Loading from './Loading'
+
 /**
  * Shows the Sign In / Register Page
  * 
@@ -19,13 +21,16 @@ export default class SignInRegister extends Component {
         this.state = {
             email: '',
             password: '',
-            register: true
+            register: true,
+            processing: false
         }
 
         // Bind events
         this.togglePills = this.togglePills.bind(this)
         this.onChange = this.onChange.bind(this)
         this.onSubmission = this.onSubmission.bind(this)
+        this.createUserEntry = this.createUserEntry.bind(this)
+        this.handleErrors = this.handleErrors.bind(this)
     }
 
     /**
@@ -61,11 +66,15 @@ export default class SignInRegister extends Component {
      * @memberof SignInRegister
      * 
      * TODO: Handle different possible errors - existing user etc
-     * TODO: Create a new DB entry if a user is created
      */
     onSubmission(e) {
         e.preventDefault();
+        const _this = this;
         let { email, password, register } = this.state;
+
+        this.setState({
+            processing: true
+        })
         
         firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
             .then(() => {
@@ -73,18 +82,52 @@ export default class SignInRegister extends Component {
                     // Sign In
                     case false:
                         return firebase.auth().signInWithEmailAndPassword(email, password).catch((err) => {
-                            console.error(err.message);
+                            _this.handleErrors(err);
                         });
                     // Register a user
                     default:
-                        return firebase.auth().createUserWithEmailAndPassword(email, password).catch((err) => {
-                            console.error(err.message);
-                        });
+                        firebase.auth().createUserWithEmailAndPassword(email, password)
+                            .then((user) => {
+                                _this.createUserEntry(user)
+                            })
+                            .catch((err) => {
+                                _this.handleErrors(err);
+                            });
+                        break;
                 }
             })
             .catch((err) => {
-                console.error = err.message;
+                _this.handleErrors(err);
             })
+    }
+
+    /**
+     * Creates a new DB entry for the user and saves the email
+     * 
+     * @param {object} user Firebase User Object
+     */
+    createUserEntry(user) {
+        let email = this.state.email;
+
+        return firebase.database().ref(`users/${user.uid}`)
+            .set({
+                email: email
+            })
+            .then(() => user)
+    }
+
+    /**
+     * Handle all errors created by Firebase Objects
+     * 
+     * @param {object} error Firebase Error Object
+     * 
+     * TODO: Complete functionality
+     */
+    handleErrors(error) {
+        console.error(error.message);
+        this.setState({
+            processing: false
+        })
     }
 
     /**
@@ -94,6 +137,10 @@ export default class SignInRegister extends Component {
      * @memberof SignInRegister
      */
     render() {
+        if (this.state.processing === true) {
+            return <Loading fullscreen={true} />
+        }
+
         return(
             <div className="page sign-in-register">
                 <div className="toggle-pills">
