@@ -28,3 +28,18 @@
         stroke: #211f27;
     }
 }
+
+.page {
+    padding: 15px;
+}
+
+.btn {
+    display: inline-block;
+    background: $purple;
+    color: white;
+    font-size: 13px;
+    text-transform: uppercase;
+    border: none;
+    padding: 13px 18px;
+    border-radius: 5px;
+}

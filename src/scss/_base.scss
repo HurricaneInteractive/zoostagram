@@ -11,8 +11,21 @@ body {
     margin: 0;
     padding: 0;
     font-size: $base-font-size;
+    font-family: $font-family;
 }
 
 * {
     box-sizing: border-box;
+}
+
+input {
+    font-family: $font-family;
+    font-size: $base-font-size;
+    border: 1px solid $light-grey;
+    padding: 15px 12px;
+    background: transparent;
+    margin: 5px 0;
+    width: 100%;
+    display: block;
+    border-radius: 5px;
 }

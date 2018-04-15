@@ -1,0 +1,28 @@
+.sign-in-register {
+    .toggle-pills {
+        @include clearfix();
+        margin-bottom: 20px;
+        a {
+            width: 50%;
+            display: block;
+            float: left;
+            text-align: center;
+            padding: 15px 10px;
+            border: 1px solid $light-grey;
+            &:not(:last-child) {
+                border-right: none;
+            }
+            &:first-child {
+                border-radius: 5px 0 0 5px;
+            }
+            &:last-child {
+                border-radius: 0 5px 5px 0;
+            }
+            &.active {
+                border-color: $purple;
+                background: $purple;
+                color: white;
+            }
+        }
+    }
+}
