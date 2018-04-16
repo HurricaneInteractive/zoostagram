@@ -13,7 +13,7 @@
  * -- Also close button to delete that image and take a new photo
  */
 
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import firebase from '../firebase'
 import CryptoJS from 'crypto-js'
@@ -43,11 +43,13 @@ class Capture extends Component {
             stream: null,
             initialising: true,
             user: null,
-            facingMode: "environment"
+            facingMode: "user",
+            fullscreen: false,
+            reviewingPhoto: false
         }
 
-        this.width = 1280;
-        this.height = 0;
+        this.width = 0;
+        this.height = 960;
         this.streaming = false;
         this.video = null;
         this.canvas = null;
@@ -62,6 +64,8 @@ class Capture extends Component {
         this.savePhoto = this.savePhoto.bind(this);
         this.flipCameraFacingMode = this.flipCameraFacingMode.bind(this);
         this.clearStreams = this.clearStreams.bind(this)
+        this.goFullscreen = this.goFullscreen.bind(this)
+        this.stopImageReview = this.stopImageReview.bind(this)
     }
 
     /**
@@ -82,6 +86,7 @@ class Capture extends Component {
      */
     componentWillMount() {
         this.width = window.innerWidth
+        this.height = window.innerHeight
     }
 
     /**
@@ -104,13 +109,17 @@ class Capture extends Component {
     initialiseStream() {
         const _this = this;
 
+        if (this.state.stream !== null) {
+            this.clearStreams();
+        }
+
         // Gets all the component elements
         this.video = document.getElementById('main-camera');
         this.canvas = document.getElementById('image-copy');
         // this.photo = document.getElementById('photo-preview');
 
         // Contraints for the camera
-        const mediaConstraints = {
+        let mediaConstraints = {
             audio: false,
             video: {
                 facingMode: _this.state.facingMode
@@ -125,10 +134,6 @@ class Capture extends Component {
                 video.onloadedmetadata = function(e) {
                     video.play();
                 }
-
-                // This must be initiate by a user :(
-                // let requestFullScreen = this.video.requestFullscreen || this.video.msRequestFullscreen || this.video.mozRequestFullScreen || this.video.webkitRequestFullscreen;
-                // requestFullScreen.call(this.video);
                 
                 _this.setState({
                     stream: mediaStream
@@ -142,16 +147,15 @@ class Capture extends Component {
         // Sets the height and width of the video & canvas elements when the stream starts
         this.video.addEventListener('canplay', (e) => {
             if (!_this.streaming) {
-                _this.height = _this.video.videoHeight / (_this.video.videoWidth / _this.width);
 
-                if (isNaN(_this.height)) {
-                    _this.height = _this.width / (4 / 3);
-                }
+                _this.height = window.innerHeight;
+                _this.width = _this.video.videoWidth / (_this.video.videoHeight / _this.height);
 
                 _this.video.setAttribute('width', _this.width);
                 _this.video.setAttribute('height', _this.height);
-                _this.canvas.setAttribute('width', _this.width);
-                _this.canvas.setAttribute('height', _this.height);
+
+                _this.canvas.setAttribute('width', window.innerWidth);
+                _this.canvas.setAttribute('height', window.innerHeight);
                 _this.streaming = true;
                 
                 _this.setState({
@@ -174,9 +178,6 @@ class Capture extends Component {
         context.fillStyle = "#FFF";
         context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // let data = this.canvas.toDataURL(mimetype);
-        // this.photo.setAttribute('src', data);
-
         this.photo_blob = null;
     }
 
@@ -195,18 +196,26 @@ class Capture extends Component {
         let context = this.canvas.getContext('2d');
 
         if (this.width && this.height) {
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
-            context.drawImage(this.video, 0, 0, this.width, this.height);
+            // this.canvas.width = window.innerWidth;
+            // this.canvas.height = window.innerHeight;
+            // this.canvas.width = this.width;
+            // this.canvas.height = this.height;
 
-            // let data = this.canvas.toDataURL(mimetype);
-            // this.photo.setAttribute('src', data);
+            let canvasX = Math.round((this.width - this.canvas.width) / 2);
+            console.log('Canvas X', canvasX);
+
+            // context.drawImage(this.video, 0, 0, this.width, this.height);
+            context.drawImage(this.video, canvasX, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
 
             // Converts the canvas to a Image Blob to save into Firebase Storage
             this.canvas.toBlob(function(blob) {
                 _this.saveBlob(blob)
-                _this.savePhoto();
+                // _this.savePhoto();
             }, mimetype);
+
+            this.setState({
+                reviewingPhoto: true
+            })
         }
         else {
             this.clearPhoto();
@@ -234,7 +243,14 @@ class Capture extends Component {
      * TODO: Display the Process to the user
      * TODO: Save with the enclosure that the user picks
      */
-    savePhoto() {
+    savePhoto(e = null) {
+
+        const _this = this;
+
+        if (e !== null) {
+            e.preventDefault();
+        }
+
         let file = this.photo_blob;
         let metadata = {
             contentType: mimetype,
@@ -249,49 +265,101 @@ class Capture extends Component {
         let referencePath = `journey/${folder}/${name}`;
 
         let uploadTask = storageRef.child(referencePath).put(file, metadata);
-        console.log(uploadTask);
 
-        // uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-        //     // Processing
-        //     let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        //     console.log('Upload is ' + progress + '% done');
-        //     switch (snapshot.state) {
-        //         case firebase.storage.TaskState.PAUSED:
-        //             console.log('Upload is paused');
-        //             break;
-        //         case firebase.storage.TaskState.RUNNING:
-        //             console.log('Upload is running');
-        //             break;
-        //         default:
-        //             console.log('Stupid eslint');
-        //     }
-        // }, (err) => {
-        //     // Error
-        //     alert(err);
-        //     console.error(err)
-        // }, () => {
-        //     // Success
-        //     let downloadURL = uploadTask.snapshot.downloadURL;
-        //     console.log('Completed', downloadURL);
-        // })
+        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+            // Processing
+            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED:
+                    console.log('Upload is paused');
+                    break;
+                case firebase.storage.TaskState.RUNNING:
+                    console.log('Upload is running');
+                    break;
+                default:
+                    console.log('Stupid eslint');
+            }
+        }, (err) => {
+            // Error
+            alert(err);
+            console.error(err)
+        }, () => {
+            // Success
+            let downloadURL = uploadTask.snapshot.downloadURL;
+            console.log('Completed', downloadURL);
+            _this.setState({
+                reviewingPhoto: false
+            })
+        })
     }
 
+    /**
+     * Stops all the current streaming Tracks
+     * 
+     * @memberof Capture
+     */
     clearStreams() {
+        this.streaming = false;
         this.state.stream.getTracks().forEach(function(track) {
             track.stop();
         });
     }
 
+    /**
+     * Flips the camera view to either take an `environment` or a `user` shot
+     * 
+     * @param {object} e Anchor event object
+     * @memberof Capture
+     */
     flipCameraFacingMode(e) {
         e.preventDefault();
         let mode = this.state.facingMode === "user" ? "environment" : "user";
-        console.log('New mode', mode);
 
         this.setState({
             facingMode: mode
+        }, () => {
+            this.initialiseStream();
         })
+    }
 
-        this.initialiseStream();
+    goFullscreen(e) {
+        e.preventDefault()
+        let elem = document.body;
+        
+        switch(this.state.fullscreen) {
+            case true:
+                let exitFullScreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+                exitFullScreen.call(document);
+
+                this.setState({
+                    fullscreen: false
+                }, () => {
+                    this.initialiseStream();
+                })
+                break;
+
+            default:
+                let requestFullScreen = elem.requestFullscreen || elem.msRequestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullscreen;
+                requestFullScreen.call(elem);
+
+                this.setState({
+                    fullscreen: true
+                }, () => {
+                    this.initialiseStream();
+                })
+                break;
+        }
+    }
+
+    stopImageReview(e) {
+        e.preventDefault();
+
+        this.setState({
+            reviewingPhoto: false
+        }, () => {
+            this.clearPhoto()
+        })
     }
 
     /**
@@ -302,15 +370,32 @@ class Capture extends Component {
      */
     render() {
         return (
-            <div className="camera-feed">
+            <div className={`camera-feed ${ this.state.reviewingPhoto ? 'review-image' : '' }`}>
                 { this.state.initialising === true ? <Loading fullscreen={true} /> : '' }
-                <video id="main-camera" />
-                <canvas id="image-copy" />
+                <video id="main-camera" className={`${this.state.facingMode}`} />
+                <canvas id="image-copy" className={`${this.state.facingMode}`} />
                 <div className="camera-controls">
-                    <Link id="stop-capturing" to="/">Stop</Link>
-                    <a id="camera-flip" onClick={ (e) => this.flipCameraFacingMode(e) }>Flip View</a>
+                    <div className="user-controls-bar">
+                        {
+                            this.state.reviewingPhoto ? (
+                                <a id="stop-capturing" onClick={ (e) => this.stopImageReview(e) }>Return to camera</a>
+                            ) : (
+                                <Fragment>
+                                    <a id="camera-flip" onClick={ (e) => this.flipCameraFacingMode(e) }>Flip View</a>
+                                    <Link id="stop-capturing" to="/">Stop</Link>
+                                </Fragment>
+                            )
+                        }
+                        <a id="fullscreen" className={`${this.state.fullscreen ? 'exit' : ''}`} onClick={ (e) => this.goFullscreen(e) }>Fullscreen</a>
+                    </div>
                     <div className="capture-bar">
-                        <a className="take-photo" onClick={ (e) => this.takePhoto(e) }>Take Photo</a>
+                        {
+                            this.state.reviewingPhoto ? (
+                                <a className="save-photo" onClick={ (e) => this.savePhoto(e) }><span className="save-icon">Save</span></a>
+                            ) : (
+                                <a className="take-photo" onClick={ (e) => this.takePhoto(e) }>Take Photo</a>
+                            )
+                        }
                     </div>
                 </div>
             </div>
