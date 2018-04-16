@@ -9,16 +9,30 @@
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
     }
     video {
         margin: 0;
         padding: 0;
-        transform: scaleX(-1);
+        left: 50%;
+        z-index: 1;
+        transform: scaleX(1) translateX(-50%);
+        &.user {
+            transform: scaleX(-1) translateX(50%);
+        }
     }
     canvas {
-        transform: translateX(100%);
-        transition: transform 250ms ease-in-out;
+        z-index: 2;
+        transform: scaleX(1) translateX(100%);
+        transition: transform 300ms ease-in-out;
+    }
+    &.review-image {
+        canvas {
+            transform: scaleX(1) translateX(-50%);
+            left: 50%;
+            &.user {
+                transform: scaleX(-1) translateX(50%);
+            }
+        }
     }
     .camera-controls {
         position: absolute;
@@ -26,28 +40,47 @@
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 2;
-        #stop-capturing,
-        #camera-flip {
-            display: block;
-            text-indent: -9999px;
-            overflow: hidden;
+        z-index: 3;
+        .user-controls-bar {
             position: fixed;
-            cursor: pointer;
-        }
-        #stop-capturing {
-            width: 25px;
-            height: 25px;
-            background: url('./images/capture-close.svg') no-repeat center center / 25px 25px;
-            top: 43px;
-            left: 51px;
-        }
-        #camera-flip {
-            width: 40px;
-            height: 40px;
-            background: url('./images/capture-flip.svg') no-repeat center center / 40px 40px;
-            top: 35px;
-            right: 44px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: -moz-linear-gradient(top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 15%, rgba(0,0,0,0) 100%);
+            background: -webkit-linear-gradient(top, rgba(0,0,0,0.4) 0%,rgba(0,0,0,0.2) 15%,rgba(0,0,0,0) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%,rgba(0,0,0,0.2) 15%,rgba(0,0,0,0) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', endColorstr='#0d000000',GradientType=0 );
+            > a {
+                display: block;
+                text-indent: -9999px;
+                overflow: hidden;
+                position: absolute;
+                cursor: pointer;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            #stop-capturing {
+                width: 25px;
+                height: 25px;
+                background: url('./images/capture-close.svg') no-repeat center center / 25px 25px;
+                left: 40px;
+            }
+            #camera-flip {
+                width: 40px;
+                height: 40px;
+                background: url('./images/capture-flip.svg') no-repeat center center / 40px 40px;
+                right: calc(30px + 30px + 20px);    // #fullscreen width + fullscreen right + spacing in XD
+            }
+            #fullscreen {
+                width: 30px;
+                height: 30px;
+                background: url('./images/capture-fullscreen.svg') no-repeat center center / 30px 30px;
+                right: 30px;
+                &.exit {
+                    background: url('./images/capture-exit-fullscreen.svg') no-repeat center center / 30px 30px;
+                }
+            }
         }
         .capture-bar {
             position: fixed;
@@ -59,9 +92,10 @@
             background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
             background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
             filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000',GradientType=0 );
-            .take-photo {
+            .take-photo,
+            .save-photo {
                 position: absolute;
-                top: -27px;
+                top: -10px;
                 left: 50%;
                 transform: translateX(-50%);
                 width: 70px;
@@ -69,9 +103,11 @@
                 border-radius: 50%;
                 background: white;
                 display: inline-block;
+                cursor: pointer;
+            }
+            .take-photo {
                 text-indent: -99999px;
                 overflow: hidden;
-                cursor: pointer;
                 &:after {
                     content: '';
                     top: 50%;
@@ -82,6 +118,28 @@
                     height: 18px;
                     border: 3px solid $black;
                     border-radius: 50%;
+                }
+            }
+            .save-photo {
+                text-align: center;
+                .save-icon {
+                    display: inline-block;
+                    margin-top: 17px;
+                    font-size: 14px;
+                    font-family: $heebo;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                    position: relative;
+                    &:after {
+                        content: '';
+                        width: 14px;
+                        height: 18px;
+                        background: url('./images/capture-save-arrow.svg') no-repeat center center / 14px 18px;
+                        position: absolute;
+                        top: 100%;
+                        left: 50%;
+                        transform: translateX(-50%);
+                    }
                 }
             }
         }
