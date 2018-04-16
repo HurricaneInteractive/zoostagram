@@ -20,6 +20,7 @@ import Capture from './Journey/Capture'
 
 // Learn Components
 import Learn from './Learn/Learn';
+import QuizObject from './Learn/QuizObject'
 
 /**
  * AppRouter Class - Handles which component is shown based on URL
@@ -86,7 +87,7 @@ export default class AppRouter extends Component {
                 <Route exact path="/" component={Entry} />
                 <Route path="/journey" component={Capture} />
                 <Route path="/learn" component={Learn} />
-                <Route path="/quiz" component={Quizobject} />
+                <Route path="/quiz" component={QuizObject} />
             </Switch>
         )
 
