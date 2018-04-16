@@ -12,7 +12,8 @@ class SingleQuiz extends React.Component {
         super(props);
 
         this.state = {
-            allLearnData: null
+            allLearnData: null,
+            quizName: null
         }
 
        this.renderQuiz = this.renderQuiz.bind(this)
@@ -23,15 +24,25 @@ class SingleQuiz extends React.Component {
 
         databaseRef.ref(`quiz/${this.props.match.params.id}`).once('value').then(function(snapshot) {
             let databaseState = snapshot.val();
-            console.log(databaseState);   
+            // console.log(databaseState);
             _this.setState({
                 allLearnData: databaseState
             });
         });
+
+        databaseRef.ref(`quiz/${this.props.match.params.id}`).once('value').then(function(snapshot) {
+            let quizNameYo = snapshot.key;
+            console.log(quizNameYo);
+            _this.setState({
+                quizName: quizNameYo
+            });
+        });
+
+
     }
 
     renderQuiz() {
-        console.log(this.state.allLearnData);
+        console.log(this.state);
 
         let quiz = this.state.allLearnData;
         let keys = Object.keys(quiz);
@@ -42,7 +53,6 @@ class SingleQuiz extends React.Component {
         let allQuiz = Object.keys(quiz).map((key, i) => {
             return (
                 <div key={i}>
-                    <h1>hola</h1>
                     <li>
                         { quiz[key].question }
                     </li>
@@ -63,6 +73,8 @@ class SingleQuiz extends React.Component {
         return (
             <div className="quiz-container">
                 <div>
+                    <h2>{this.state.quizName}</h2>
+                    {console.log(this.state)}
                     { this.renderQuiz() }
                 </div>
             </div>
