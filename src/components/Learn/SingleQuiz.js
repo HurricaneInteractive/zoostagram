@@ -14,7 +14,8 @@ class SingleQuiz extends React.Component {
 
         this.state = {
             allLearnData: null,
-            quizName: null
+            quizName: null,
+            answersCorrect: 0
         }
 
        this.renderQuiz = this.renderQuiz.bind(this)
@@ -39,32 +40,45 @@ class SingleQuiz extends React.Component {
             });
         });
 
-
     }
 
     renderQuiz() {
         console.log(this.state);
 
+        const _this = this;
+        console.log(_this);
+
         let quiz = this.state.allLearnData;
         let keys = Object.keys(quiz);
         console.log(keys);
+        console.log(this.state.answersCorrect);
 
         console.log(quiz[keys[0]].options);
 
         let allQuiz = Object.keys(quiz).map((key, i) => {
             let quizData = quiz[key];
+
+            let correctAnswer = quizData.answer;
+            console.log(correctAnswer);
             return (
                 <div key={i}>
                     <h2>{ quizData.question }</h2>
                     <ul>
                         {console.log(quizData)}
                         {
-                            quizData.options.map(i => {
+                            quizData.options.map(i => {              
                                 return (
-                                    <li key={i}>
+                                    <li key={i} onClick={()=>{
+                                            let userAnswer = i;
+                                            userAnswer === quizData.answer &&
+                                            _this.setState({
+                                                answersCorrect: this.state.answersCorrect + 1
+                                            })
+                                        }}>
                                         {console.log(i)}
                                         {i}
                                     </li>
+                                    
                                 )
                             })
                         }
@@ -84,6 +98,7 @@ class SingleQuiz extends React.Component {
       
         return (
             <div className="quiz-container">
+                <h3>Correct Answers: {this.state.answersCorrect}</h3>
                 <div>
                     <h2>{this.state.quizName}</h2>
                     <h2>{this.state.allLearnData.question}</h2>
