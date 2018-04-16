@@ -59,6 +59,12 @@ class SingleQuiz extends React.Component {
                 <div key={i}>
                     <h2>{ quizData.question }</h2>
                     <ul>
+                        {/* 
+                            make the questions go through as a slideshow
+                            create onClick event that goes to the next question
+                            keep users data until they have submitted - not like its currently adding to the score straight away
+                                (just incase they go back and change their answers)
+                        */}
                         {
                             quizData.options.map(i => {              
                                 return (
