@@ -42,7 +42,8 @@ class Capture extends Component {
         this.state = {
             stream: null,
             initialising: true,
-            user: null
+            user: null,
+            facingMode: "environment"
         }
 
         this.width = 1280;
@@ -59,6 +60,8 @@ class Capture extends Component {
         this.clearPhoto = this.clearPhoto.bind(this);
         this.saveBlob = this.saveBlob.bind(this);
         this.savePhoto = this.savePhoto.bind(this);
+        this.flipCameraFacingMode = this.flipCameraFacingMode.bind(this);
+        this.clearStreams = this.clearStreams.bind(this)
     }
 
     /**
@@ -69,7 +72,7 @@ class Capture extends Component {
      */
     componentWillUnmount() {
         this.clearPhoto();
-        this.state.stream.getTracks()[0].stop();
+        this.clearStreams();
     }
 
     /**
@@ -104,13 +107,13 @@ class Capture extends Component {
         // Gets all the component elements
         this.video = document.getElementById('main-camera');
         this.canvas = document.getElementById('image-copy');
-        this.photo = document.getElementById('photo-preview');
+        // this.photo = document.getElementById('photo-preview');
 
         // Contraints for the camera
         const mediaConstraints = {
             audio: false,
             video: {
-                facingMode: "user"
+                facingMode: _this.state.facingMode
             }
         }
 
@@ -122,6 +125,10 @@ class Capture extends Component {
                 video.onloadedmetadata = function(e) {
                     video.play();
                 }
+
+                // This must be initiate by a user :(
+                // let requestFullScreen = this.video.requestFullscreen || this.video.msRequestFullscreen || this.video.mozRequestFullScreen || this.video.webkitRequestFullscreen;
+                // requestFullScreen.call(this.video);
                 
                 _this.setState({
                     stream: mediaStream
@@ -164,11 +171,11 @@ class Capture extends Component {
      */
     clearPhoto() {
         let context = this.canvas.getContext('2d');
-        context.fillStyle = "#AAA";
+        context.fillStyle = "#FFF";
         context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        let data = this.canvas.toDataURL(mimetype);
-        this.photo.setAttribute('src', data);
+        // let data = this.canvas.toDataURL(mimetype);
+        // this.photo.setAttribute('src', data);
 
         this.photo_blob = null;
     }
@@ -192,8 +199,8 @@ class Capture extends Component {
             this.canvas.height = this.height;
             context.drawImage(this.video, 0, 0, this.width, this.height);
 
-            let data = this.canvas.toDataURL(mimetype);
-            this.photo.setAttribute('src', data);
+            // let data = this.canvas.toDataURL(mimetype);
+            // this.photo.setAttribute('src', data);
 
             // Converts the canvas to a Image Blob to save into Firebase Storage
             this.canvas.toBlob(function(blob) {
@@ -242,30 +249,49 @@ class Capture extends Component {
         let referencePath = `journey/${folder}/${name}`;
 
         let uploadTask = storageRef.child(referencePath).put(file, metadata);
+        console.log(uploadTask);
 
-        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-            // Processing
-            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
-            switch (snapshot.state) {
-                case firebase.storage.TaskState.PAUSED:
-                    console.log('Upload is paused');
-                    break;
-                case firebase.storage.TaskState.RUNNING:
-                    console.log('Upload is running');
-                    break;
-                default:
-                    console.log('Stupid eslint');
-            }
-        }, (err) => {
-            // Error
-            alert(err);
-            console.error(err)
-        }, () => {
-            // Success
-            let downloadURL = uploadTask.snapshot.downloadURL;
-            console.log('Completed', downloadURL);
+        // uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+        //     // Processing
+        //     let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        //     console.log('Upload is ' + progress + '% done');
+        //     switch (snapshot.state) {
+        //         case firebase.storage.TaskState.PAUSED:
+        //             console.log('Upload is paused');
+        //             break;
+        //         case firebase.storage.TaskState.RUNNING:
+        //             console.log('Upload is running');
+        //             break;
+        //         default:
+        //             console.log('Stupid eslint');
+        //     }
+        // }, (err) => {
+        //     // Error
+        //     alert(err);
+        //     console.error(err)
+        // }, () => {
+        //     // Success
+        //     let downloadURL = uploadTask.snapshot.downloadURL;
+        //     console.log('Completed', downloadURL);
+        // })
+    }
+
+    clearStreams() {
+        this.state.stream.getTracks().forEach(function(track) {
+            track.stop();
+        });
+    }
+
+    flipCameraFacingMode(e) {
+        e.preventDefault();
+        let mode = this.state.facingMode === "user" ? "environment" : "user";
+        console.log('New mode', mode);
+
+        this.setState({
+            facingMode: mode
         })
+
+        this.initialiseStream();
     }
 
     /**
@@ -280,10 +306,12 @@ class Capture extends Component {
                 { this.state.initialising === true ? <Loading fullscreen={true} /> : '' }
                 <video id="main-camera" />
                 <canvas id="image-copy" />
-                <img id="photo-preview" alt="preview of stream" />
                 <div className="camera-controls">
-                    <Link to="/">Stop</Link>
-                    <a className="take-photo" onClick={ (e) => this.takePhoto(e) }>Take Photo</a>
+                    <Link id="stop-capturing" to="/">Stop</Link>
+                    <a id="camera-flip" onClick={ (e) => this.flipCameraFacingMode(e) }>Flip View</a>
+                    <div className="capture-bar">
+                        <a className="take-photo" onClick={ (e) => this.takePhoto(e) }>Take Photo</a>
+                    </div>
                 </div>
             </div>
         )
