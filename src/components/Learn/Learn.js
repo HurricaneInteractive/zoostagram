@@ -15,41 +15,42 @@ import Loading from '../Global/Loading'
 const databaseRef = firebase.database();
 
 class QuizSelect extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             allLearnData: null
         }
 
-        this.renderQuiz = this.renderQuiz.bind(this)
+        this.renderQuiz = this.renderQuizTitles.bind(this)
     }
 
     componentDidMount() {
         const _this = this;
 
-        databaseRef.ref('/quiz').once('value').then(function(snapshot) {
+        databaseRef.ref(`quiz/`).once('value').then(function(snapshot) {
             let databaseState = snapshot.val();
-            // console.log(snapshot.val());
+            // console.log(databaseState);
             _this.setState({
                 allLearnData: databaseState
             });
         });
     }
 
-    renderQuiz() {
+    renderQuizTitles() {
         console.log(this.state.allLearnData);
 
-        let quiz = this.state.allLearnData.lions;
-        let keys = Object.keys(quiz);
-        console.log(keys);
+        let quiz = this.state.allLearnData;
+        let keysTitle = Object.keys(quiz);
+        console.log(keysTitle);
 
         // console.log(quiz[keys[0]].question);
 
-        let allQuiz = Object.keys(quiz).map((key, i) => {
+        let allQuiz = keysTitle.map((key, i) => {
             return (
                 <li key={i}>
-                    { quiz[key].question }
+                    {console.log( keysTitle[i] )}
+                    <Link to={`/doquiz/${keysTitle[i]}`}>{keysTitle[i]}</Link>
                 </li>
             )
         })
@@ -66,20 +67,12 @@ class QuizSelect extends React.Component {
         return (
             <div className="quiz-container">
                 <div>
-                    { this.renderQuiz() }
+                    { this.renderQuizTitles() }
                 </div>
             </div>
         )
     }
 }
-
-const UrlSelector = () => (
-    <div>
-        <Link to="/doquiz/lions">Lions</Link>
-        <Link to="/doquiz/pandas">Pandas</Link>
-    </div>
-    
-)
 
 /*
 
@@ -93,9 +86,7 @@ const Learn = () => {
     return (
         <div>
             <h1>Learn</h1>
-            <Link to="/">link</Link>
             <QuizSelect/>
-            <UrlSelector />
         </div>
         
     )
