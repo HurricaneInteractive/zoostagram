@@ -4,13 +4,21 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: #222;
+    background: $black;
+    video, canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
     video {
         margin: 0;
         padding: 0;
-        top: 0;
-        left: 0;
-        height: 100%;
+        transform: scaleX(-1);
+    }
+    canvas {
+        transform: translateX(100%);
+        transition: transform 250ms ease-in-out;
     }
     .camera-controls {
         position: absolute;
@@ -19,20 +27,63 @@
         width: 100%;
         height: 100%;
         z-index: 2;
-        .take-photo {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: white;
-            border: 8px solid #ddd;
-            display: inline-block;
-            text-indent: -99999px;
+        #stop-capturing,
+        #camera-flip {
+            display: block;
+            text-indent: -9999px;
             overflow: hidden;
+            position: fixed;
             cursor: pointer;
+        }
+        #stop-capturing {
+            width: 25px;
+            height: 25px;
+            background: url('./images/capture-close.svg') no-repeat center center / 25px 25px;
+            top: 43px;
+            left: 51px;
+        }
+        #camera-flip {
+            width: 40px;
+            height: 40px;
+            background: url('./images/capture-flip.svg') no-repeat center center / 40px 40px;
+            top: 35px;
+            right: 44px;
+        }
+        .capture-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+            background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000',GradientType=0 );
+            .take-photo {
+                position: absolute;
+                top: -27px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 70px;
+                height: 72px;
+                border-radius: 50%;
+                background: white;
+                display: inline-block;
+                text-indent: -99999px;
+                overflow: hidden;
+                cursor: pointer;
+                &:after {
+                    content: '';
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    position: absolute;
+                    width: 18px;
+                    height: 18px;
+                    border: 3px solid $black;
+                    border-radius: 50%;
+                }
+            }
         }
     }
 }
