@@ -1,36 +1,29 @@
-/**
- * Placeholder Capture Component
- * 
- * Currently being used by AJ to test image capturing
- */
 
-// eslint-disable-next-line
 import React from 'react'
-// eslint-disable-next-line
-import { Link, Route, Router } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import firebase from '../firebase'
 
 import Loading from '../Global/Loading'
 
 const databaseRef = firebase.database();
 
-class QuizSelect extends React.Component {
-    constructor() {
-        super();
+class SingleQuiz extends React.Component {
+    constructor(props) {
+        super(props);
 
         this.state = {
             allLearnData: null
         }
 
-        this.renderQuiz = this.renderQuiz.bind(this)
+       this.renderQuiz = this.renderQuiz.bind(this)
     }
 
     componentDidMount() {
         const _this = this;
 
-        databaseRef.ref('/quiz').once('value').then(function(snapshot) {
+        databaseRef.ref(`quiz/${this.props.match.params.id}`).once('value').then(function(snapshot) {
             let databaseState = snapshot.val();
-            // console.log(snapshot.val());
+            console.log(databaseState);   
             _this.setState({
                 allLearnData: databaseState
             });
@@ -40,17 +33,21 @@ class QuizSelect extends React.Component {
     renderQuiz() {
         console.log(this.state.allLearnData);
 
-        let quiz = this.state.allLearnData.lions;
+        let quiz = this.state.allLearnData;
         let keys = Object.keys(quiz);
         console.log(keys);
 
-        // console.log(quiz[keys[0]].question);
+        console.log(quiz[keys[0]].question);
 
         let allQuiz = Object.keys(quiz).map((key, i) => {
             return (
-                <li key={i}>
-                    { quiz[key].question }
-                </li>
+                <div key={i}>
+                    <h1>hola</h1>
+                    <li>
+                        { quiz[key].question }
+                    </li>
+                </div>
+                
             )
         })
 
@@ -73,14 +70,6 @@ class QuizSelect extends React.Component {
     }
 }
 
-const UrlSelector = () => (
-    <div>
-        <Link to="/doquiz/lions">Lions</Link>
-        <Link to="/doquiz/pandas">Pandas</Link>
-    </div>
-    
-)
-
 /*
 
 quiz name
@@ -88,17 +77,4 @@ progression bar
 click through questions
 
 */
-
-const Learn = () => {
-    return (
-        <div>
-            <h1>Learn</h1>
-            <Link to="/">link</Link>
-            <QuizSelect/>
-            <UrlSelector />
-        </div>
-        
-    )
-}
-
-export default Learn
+export default SingleQuiz
