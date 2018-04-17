@@ -14,7 +14,10 @@ class SingleQuiz extends React.Component {
         this.state = {
             allLearnData: null,
             quizName: null,
-            answersCorrect: 0
+            answersCorrect: 0,
+            userAnswers: [],
+            userProgression: 0,
+            optionState: false
         }
 
        this.renderQuiz = this.renderQuiz.bind(this)
@@ -40,6 +43,18 @@ class SingleQuiz extends React.Component {
         });
 
     }
+    /* 
+        make the questions go through as a slideshow
+        create onClick event that goes to the next question
+        keep users data until they have submitted - not like its currently adding to the score straight away
+            (just incase they go back and change their answers)
+    */
+
+    clickHandler() {
+        this.setState({
+            optionState: !this.state.optionState
+        })
+    }
 
     renderQuiz() {
         console.log(this.state);
@@ -47,35 +62,58 @@ class SingleQuiz extends React.Component {
 
         let quiz = this.state.allLearnData;
         let keys = Object.keys(quiz);
+        
         console.log(keys);
-        console.log(this.state.answersCorrect);
+        console.log(this.state.userProgression);
+        console.log(this.state.userAnswers);
 
-        let allQuiz = Object.keys(quiz).map((key, i) => {
-            let quizData = quiz[key];
+        let quizProgression = quiz[keys[this.state.userProgression]];
 
-            let correctAnswer = quizData.answer;
-            console.log(correctAnswer);
+        console.log('Progression', quizProgression);
+
             return (
-                <div key={i}>
-                    <h2>{ quizData.question }</h2>
+                <div>
+                    <h2>{ quizProgression.question }</h2>
+                    {
+                        <button onClick={()=>{
+                            _this.setState({
+                                userProgression: this.state.userProgression - 1
+                            })
+                        }}
+                        >{"< back"}</button>
+                    }
                     <ul>
-                        {/* 
-                            make the questions go through as a slideshow
-                            create onClick event that goes to the next question
-                            keep users data until they have submitted - not like its currently adding to the score straight away
-                                (just incase they go back and change their answers)
-                        */}
                         {
-                            quizData.options.map(i => {              
+                            quizProgression.options.map(i => {        
+                                let buttonClass = ['button'];
+                                if (this.state.optionState) {
+                                    buttonClass.push('toggle')
+                                }
+                                console.log('answers', this.state.userProgression);
+                                console.log('i', i);
+                                let clickedAnswer = "";
+                                let questionClass = "toggle"
                                 return (
-                                    <li key={i} onClick={()=>{
-                                            let userAnswer = i;
-                                            userAnswer === quizData.answer &&
-                                            _this.setState({
-                                                answersCorrect: this.state.answersCorrect + 1
-                                            })
-                                        }}>
-                                        {console.log(i)}
+                                    <li key={i}
+                                    // {
+                                    //     if (clickedAnswer) 'active' {
+                                    //         questionClass = "toggle"
+                                    //     }
+                                    // }
+                                    // if statement should match the key that was clicked and give it an active class
+                                        
+                                    className={(questionClass)}
+                                    // onClick={
+                                    //     this.clickHandler.bind(this)
+                                    // }
+                                    onClick={()=>{
+                                        this.clickHandler.bind(this)
+                                        clickedAnswer = i
+                                        console.log(clickedAnswer)
+                                    }}
+                                    /* if clicked - give active class */
+                                    >
+                                        {console.log('i = ', i)}
                                         {i}
                                     </li>
                                     
@@ -83,11 +121,88 @@ class SingleQuiz extends React.Component {
                             })
                         }
                     </ul>
+                    {
+                        <button onClick={()=>{
+                            _this.setState({
+                                userProgression: this.state.userProgression + 1
+                            })
+                        }}
+                        >{"forward >"}</button>
+                    }
                 </div>
             )
-        })
 
-        return allQuiz;
+        // let quizProgression = Object.keys(quiz[this.state.userProgression]) ((key, i) => {
+        //     let quizData = quiz[key];
+        //     console.log(key);
+        //     console.log(i);
+        //     console.log(quizData);
+        //     console.log(quizProgression);
+            
+        //     return (
+        //         <div key={i}>
+        //             <h2>{ quizData.question }</h2>
+        //             <ul>
+        //                 {
+        //                     quizData.options.map(i => {              
+        //                         return (
+        //                             <li key={i} onClick={()=>{
+        //                                     _this.setState({
+        //                                         userProgression: this.state.userProgression + 1
+        //                                     })
+        //                                 }}>
+        //                                 {console.log(i)}
+        //                                 {i}
+        //                             </li>
+                                    
+        //                         )
+        //                     })
+        //                 }
+        //             </ul>
+        //         </div>
+        //     )
+        // })
+
+        // return quizProgression;
+        
+        
+
+
+        // let allQuiz = Object.keys(quiz).map((key, i) => {
+        //     let quizData = quiz[key];
+            
+        //     console.log(allQuiz);
+
+        //     let correctAnswer = quizData.answer;
+        //     console.log(correctAnswer);
+        //     return (
+        //         <div key={i}>
+        //             <h2>{ quizData.question }</h2>
+        //             <ul>
+        //                 {
+        //                     quizData.options.map(i => {              
+        //                         return (
+        //                             <li key={i} onClick={()=>{
+        //                                     let userAnswer = i;
+        //                                     userAnswer === quizData.answer &&
+        //                                     _this.setState({
+        //                                         answersCorrect: this.state.answersCorrect + 1
+        //                                     })
+        //                                 }}>
+        //                                 {console.log(i)}
+        //                                 {i}
+        //                             </li>
+                                    
+        //                         )
+        //                     })
+        //                 }
+        //             </ul>
+        //         </div>
+        //     )
+        // })
+
+        // return allQuiz;
+    //}
     }
 
     render() {
