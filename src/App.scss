@@ -4,8 +4,7 @@
     eg. '_base.scss' - requires a '_' in front
 */
 
-@import url('https://fonts.googleapis.com/css?family=Raleway');
-@import url('https://fonts.googleapis.com/css?family=Heebo:400,700');
+@import url('https://fonts.googleapis.com/css?family=Heebo:700|Raleway|Satisfy');
 
 @import 'scss/variables';
 @import 'scss/mixins';
@@ -14,6 +13,7 @@
 
 // Global Elements
 @import 'scss/global/signinregister';
+@import 'scss/global/logo';
 
 // Journey Code
 @import 'scss/journey/capture';

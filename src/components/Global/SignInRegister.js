@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import firebase from '../firebase';
 
 import Loading from './Loading'
+import Logo from './Logo'
 
 /**
  * Shows the Sign In / Register Page
@@ -142,7 +143,8 @@ export default class SignInRegister extends Component {
         }
 
         return(
-            <div className="page sign-in-register">
+            <div className="page sign-in-register purple-grain-bg">
+                <Logo />
                 <div className="toggle-pills">
                     <a className={`${ this.state.register === true ? 'active' : '' }`} onClick={ (e) => this.togglePills(e, true) }>Register</a>
                     <a className={`${ this.state.register !== true ? 'active' : '' }`} onClick={ (e) => this.togglePills(e, false) }>Sign In</a>

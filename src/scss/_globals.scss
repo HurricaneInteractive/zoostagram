@@ -30,7 +30,8 @@
 }
 
 .page {
-    padding: 15px;
+    padding: 50px 15px 15px;
+    height: 100vh;
 }
 
 .btn {
@@ -42,4 +43,12 @@
     border: none;
     padding: 13px 18px;
     border-radius: 5px;
+}
+
+.purple-grain-bg {
+    background-color: $purple;
+    background-image: url('./images/grain-bg.png');
+    background-repeat: repeat;
+    background-position: top left;
+    background-size: 200px 200px;
 }
