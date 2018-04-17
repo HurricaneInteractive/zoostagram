@@ -50,10 +50,14 @@ class SingleQuiz extends React.Component {
             (just incase they go back and change their answers)
     */
 
-    clickHandler() {
+    clickHandler(i, selectedQuestion, questionAnswerClass) {
+        console.log("run")
+        selectedQuestion = i
         this.setState({
             optionState: !this.state.optionState
         })
+        questionAnswerClass = 'active'
+        return questionAnswerClass
     }
 
     renderQuiz() {
@@ -83,40 +87,72 @@ class SingleQuiz extends React.Component {
                         >{"< back"}</button>
                     }
                     <ul>
+                        
                         {
+                            
+                            
                             quizProgression.options.map(i => {        
-                                let buttonClass = ['button'];
-                                if (this.state.optionState) {
-                                    buttonClass.push('toggle')
-                                }
-                                console.log('answers', this.state.userProgression);
-                                console.log('i', i);
-                                let clickedAnswer = "";
-                                let questionClass = "toggle"
+                                // console.log('answers', this.state.userProgression);
+                                // console.log('i', i);
+                                // let clickedAnswer = "";
+                                // console.log(clickedAnswer);
+                                // let questionClass = ""
+                                // let nameOfClass = ""
+                                let selectedQuestion = null;
+                                let questionAnswerClass = "button";
+                                console.log(selectedQuestion)
                                 return (
                                     <li key={i}
                                     // {
-                                    //     if (clickedAnswer) 'active' {
+                                    //     if (clickedAnswer = 'active') {
                                     //         questionClass = "toggle"
                                     //     }
                                     // }
                                     // if statement should match the key that was clicked and give it an active class
                                         
-                                    className={(questionClass)}
+                                    // if (clickedAnswer = "active") {
+                                        //     questionClass = "toggle"
+                                        // }
+
+                                    // className={(questionClass)}
+                                    className={(questionAnswerClass)}
                                     // onClick={
                                     //     this.clickHandler.bind(this)
                                     // }
                                     onClick={()=>{
-                                        this.clickHandler.bind(this)
-                                        clickedAnswer = i
-                                        console.log(clickedAnswer)
+                                        let fuAnswer = this.clickHandler(i, selectedQuestion, questionAnswerClass)
+                                        console.log(fuAnswer)
+                                        questionAnswerClass = fuAnswer
+                                        console.log(questionAnswerClass)
+
+
+                                        // need to figure out a way to refresh the className variable to update to active
+                                        // clickHandler function returns 'active' - so just need to assign this to the className variable
+
+
+                                        // selectedQuestion = i
+                                        // clickedAnswer = i
+                                        // console.log(this.clickHandler)
+                                        // console.log("clicked answer " + clickedAnswer)
+                                        // // if (clickedAnswer = "active") {
+                                        // //     questionClass = "toggle"
+                                        // // }
+                                        // console.log("option state " + this.state.optionState)
+                                        // this.setState({optionState: !this.state.optionState})
+
+                                        // if (clickedAnswer === i) {
+                                        //     nameOfClass="button active"
+                                        //     console.log("if" + nameOfClass)
+                                        // }
+                                        // else {
+                                        //     nameOfClass="button"
+                                        //     console.log("else" + nameOfClass)
+                                        // }
                                     }}
-                                    /* if clicked - give active class */
                                     >
-                                        {console.log('i = ', i)}
+                                        {/* {console.log('i = ', i)} */}
                                         {i}
                                     </li>
-                                    
                                 )
                             })
                         }
