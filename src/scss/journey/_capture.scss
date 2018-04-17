@@ -22,16 +22,14 @@
     }
     canvas {
         z-index: 2;
-        transform: scaleX(1) translateX(100%);
-        transition: transform 300ms ease-in-out;
+        transform: translateX(100%);
+        transition: none;
     }
     &.review-image {
         canvas {
-            transform: scaleX(1) translateX(-50%);
+            transition: transform 300ms ease-in-out;
+            transform: translateX(-50%);
             left: 50%;
-            &.user {
-                transform: scaleX(-1) translateX(50%);
-            }
         }
     }
     .camera-controls {
@@ -141,6 +139,85 @@
                         transform: translateX(-50%);
                     }
                 }
+            }
+            .enclosure-select {
+                max-width: 270px;
+                width: 100%;
+                position: absolute;
+                bottom: calc(100% + 25px);
+                left: 50%;
+                transform: translateX(-50%);
+                font-family: $heebo;
+                font-weight: bold;
+                &:not(.open) {
+                    .enclosures {
+                        pointer-events: none;
+                        transform: scale(0) translateX(-50%);
+                    }
+                }
+                &.error {
+                    .enclosure-trigger {
+                        box-shadow: 0 1px 4px 1px rgba(255, 0, 0, 0.5);
+                    }
+                }
+                .enclosures {
+                    width: 100%;
+                    position: absolute;
+                    bottom: calc(100% + 10px);
+                    left: 50%;
+                    transform: scale(1) translateX(-50%);
+                    transform-origin: center left;
+                    height: 200px;
+                    overflow-y: auto;
+                    margin: 0;
+                    padding: 10px 0;
+                    background: white;
+                    border-radius: 10px;
+                    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+                    transition: transform 300ms ease-in-out;
+                    li {
+                        padding: 20px;
+                        text-transform: uppercase;
+                        font-size: 14px;
+                        cursor: pointer;
+                        &:not(:first-child) {
+                            border-top: 1px solid #eee;
+                        }
+                        &.active {
+                            background: #eee;
+                        }
+                    }
+                }
+                .enclosure-trigger {
+                    display: block;
+                    text-transform: capitalize;
+                    text-align: center;
+                    width: 100%;
+                    padding: 22px 50px 21px;
+                    background: white;
+                    border-radius: 10px;
+                    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+                    cursor: pointer;
+                    &:after {
+                        content: '';
+                        width: 14px;
+                        height: 14px;
+                        background: url('./images/capture-enclosure-select.svg') no-repeat center center / 14px 14px;
+                        display: inline-block;
+                        margin-left: 7px;
+                        vertical-align: middle;
+                    }
+                }
+            }
+        }
+    }
+    &.saving {
+        .loading-svg {
+            &.fullscreen {
+                background: rgba(0, 0, 0, 0.5);
+            }
+            svg {
+                stroke: white;
             }
         }
     }

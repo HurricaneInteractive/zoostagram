@@ -18,6 +18,8 @@ import { Link } from 'react-router-dom'
 import firebase from '../firebase'
 import CryptoJS from 'crypto-js'
 
+import Enclosures from '../config/enclosures';
+
 import Loading from '../Global/Loading'
 
 const mimetype = 'image/jpeg'
@@ -45,7 +47,11 @@ class Capture extends Component {
             user: null,
             facingMode: "user",
             fullscreen: false,
-            reviewingPhoto: false
+            reviewingPhoto: false,
+            savingPhoto: false,
+            selectedEnclosure: '',
+            enclosureSelectOpen: false,
+            enclosureError: false
         }
 
         this.width = 0;
@@ -66,6 +72,9 @@ class Capture extends Component {
         this.clearStreams = this.clearStreams.bind(this)
         this.goFullscreen = this.goFullscreen.bind(this)
         this.stopImageReview = this.stopImageReview.bind(this)
+        this.renderEnclosureSelect = this.renderEnclosureSelect.bind(this)
+        this.toggleEnclosureSelect = this.toggleEnclosureSelect.bind(this)
+        this.selectEnclosure = this.selectEnclosure.bind(this)
     }
 
     /**
@@ -122,7 +131,8 @@ class Capture extends Component {
         let mediaConstraints = {
             audio: false,
             video: {
-                facingMode: _this.state.facingMode
+                facingMode: _this.state.facingMode,
+                focusMode: "continuous"
             }
         }
 
@@ -196,16 +206,23 @@ class Capture extends Component {
         let context = this.canvas.getContext('2d');
 
         if (this.width && this.height) {
-            // this.canvas.width = window.innerWidth;
-            // this.canvas.height = window.innerHeight;
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
             // this.canvas.width = this.width;
             // this.canvas.height = this.height;
 
-            let canvasX = Math.round((this.width - this.canvas.width) / 2);
-            console.log('Canvas X', canvasX);
+            let canvasX = Math.round((this.width - this.canvas.width) / 2) * -1;
 
-            // context.drawImage(this.video, 0, 0, this.width, this.height);
-            context.drawImage(this.video, canvasX, 0, this.canvas.width, this.canvas.height, 0, 0, this.canvas.width, this.canvas.height);
+            if (this.state.facingMode === "user") {
+                context.translate(this.canvas.width, 0);
+                context.scale(-1, 1);
+            }
+
+            //ctx.drawImage(image, dx, dy, dWidth, dHeight);
+            context.drawImage(this.video, canvasX, 0, this.width, this.height);
+            
+            // ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+            // context.drawImage(this.video, 0, 0, 257, 667, 0, 0, 375, 667);
 
             // Converts the canvas to a Image Blob to save into Firebase Storage
             this.canvas.toBlob(function(blob) {
@@ -251,11 +268,18 @@ class Capture extends Component {
             e.preventDefault();
         }
 
+        if (this.state.selectedEnclosure === '') {
+            this.setState({
+                enclosureError: true
+            })
+            return false;
+        }
+
         let file = this.photo_blob;
         let metadata = {
             contentType: mimetype,
             customMetadata: {
-                'enclosure': 'lion'
+                'enclosure': _this.state.selectedEnclosure
             }
         }
 
@@ -267,29 +291,22 @@ class Capture extends Component {
         let uploadTask = storageRef.child(referencePath).put(file, metadata);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-            // Processing
-            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
-            switch (snapshot.state) {
-                case firebase.storage.TaskState.PAUSED:
-                    console.log('Upload is paused');
-                    break;
-                case firebase.storage.TaskState.RUNNING:
-                    console.log('Upload is running');
-                    break;
-                default:
-                    console.log('Stupid eslint');
-            }
+            // In Progress
+            _this.setState({
+                savingPhoto: true
+            })
         }, (err) => {
             // Error
             alert(err);
             console.error(err)
         }, () => {
             // Success
-            let downloadURL = uploadTask.snapshot.downloadURL;
-            console.log('Completed', downloadURL);
             _this.setState({
-                reviewingPhoto: false
+                reviewingPhoto: false,
+                savingPhoto: false,
+                selectedEnclosure: '',
+                enclosureSelectOpenfalse: false,
+                enclosureError: false
             })
         })
     }
@@ -362,6 +379,43 @@ class Capture extends Component {
         })
     }
 
+    toggleEnclosureSelect(e) {
+        e.preventDefault();
+        this.setState({
+            enclosureSelectOpen: !this.state.enclosureSelectOpen
+        })
+    }
+
+    selectEnclosure(enclosure) {
+        this.setState({
+            selectedEnclosure: enclosure,
+            enclosureError: false
+        })
+    }
+
+    renderEnclosureSelect() {
+        let enclosurses = Enclosures.enclosures;
+
+        let selectOptions = enclosurses.map((enclosure) => (
+            <li 
+                key={enclosure} 
+                onClick={ () => this.selectEnclosure(enclosure) }
+                className={`${this.state.selectedEnclosure === enclosure ? 'active' : ''}`}
+            >{enclosure}</li>
+        ))
+
+        return (
+            <div className={`enclosure-select ${this.state.enclosureSelectOpen ? 'open' : ''} ${this.state.enclosureError ? 'error' : ''}`}>
+                <ul className="enclosures">
+                    { selectOptions }
+                </ul>
+                <a className="enclosure-trigger" onClick={ (e) => this.toggleEnclosureSelect(e) }>
+                    { this.state.selectedEnclosure !== '' ? this.state.selectedEnclosure : 'Select Enclosure' }
+                </a>
+            </div>
+        )
+    }
+
     /**
      * React Render function
      * 
@@ -370,7 +424,7 @@ class Capture extends Component {
      */
     render() {
         return (
-            <div className={`camera-feed ${ this.state.reviewingPhoto ? 'review-image' : '' }`}>
+            <div className={`camera-feed ${ this.state.reviewingPhoto ? 'review-image' : '' } ${ this.state.savingPhoto ? 'saving' : '' }`}>
                 { this.state.initialising === true ? <Loading fullscreen={true} /> : '' }
                 <video id="main-camera" className={`${this.state.facingMode}`} />
                 <canvas id="image-copy" className={`${this.state.facingMode}`} />
@@ -391,13 +445,21 @@ class Capture extends Component {
                     <div className="capture-bar">
                         {
                             this.state.reviewingPhoto ? (
-                                <a className="save-photo" onClick={ (e) => this.savePhoto(e) }><span className="save-icon">Save</span></a>
+                                <Fragment>
+                                    { this.renderEnclosureSelect() }
+                                    <a className="save-photo" onClick={ (e) => this.savePhoto(e) }><span className="save-icon">Save</span></a>
+                                </Fragment>
                             ) : (
                                 <a className="take-photo" onClick={ (e) => this.takePhoto(e) }>Take Photo</a>
                             )
                         }
                     </div>
                 </div>
+                {
+                    this.state.savingPhoto ? (
+                        <Loading fullscreen={true} />
+                    ) : ('')
+                }
             </div>
         )
     }
