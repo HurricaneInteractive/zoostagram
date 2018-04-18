@@ -42,10 +42,20 @@ h1{
 //Quiz list item styling
 div > div:nth-child(2) > div > div > li {
     text-align: center;
-    padding-bottom: 85px;
-    list-style-type:
+    padding-top: 85px;
+    padding-bottom: 75px;
+    list-style-type: none;
 }
 
+//Question 1 Tile styling 
+div > div:nth-child(2) > div > div > li:nth-child(1) {
+    background: url(images/quizshape-one.png) no-repeat center center; 
+}
+
+//Question 2 Tile styling
+div > div:nth-child(2) > div > div > li:nth-child(2) {
+    background: url(images/quizshape-two.png) no-repeat center center; 
+}
 
 
 
