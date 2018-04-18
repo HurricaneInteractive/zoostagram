@@ -17,6 +17,7 @@ import Loading from './Global/Loading'
 
 // Journey Components
 import Journey from './Journey/Journey'
+import JourneySingle from './Journey/JourneySingle'
 import Capture from './Journey/Capture'
 
 // Learn Components
@@ -87,8 +88,13 @@ export default class AppRouter extends Component {
         const PrivateRoutes = () => (
             <Switch>
                 <Route exact path="/" component={Entry} />
-                <Route path="/journey" component={Journey} />
-                <Route path="/journey/capture" component={Capture} />
+                <Route exact path="/journey" render={(routeProps) => (
+                    <Journey routerProps={routeProps} authUser={user} />
+                )} />
+                <Route exact path="/journey/capture" component={Capture} />
+                <Route path="/journey/view/:id" render={(routeProps) => (
+                    <JourneySingle routerProps={routeProps} authUser={user} />
+                )} />
                 <Route path="/learn" component={Learn} />
                 <Route path="/quizfinish" component={QuizFinish} />
                 <Route path="/doquiz/:id" component={SingleQuiz} />
