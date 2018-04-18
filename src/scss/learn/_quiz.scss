@@ -21,7 +21,7 @@
     }
 }
 
-// Body styling
+// Learn styling
 
 body{
      height:100vh;
@@ -34,9 +34,25 @@ body{
 // h1 styling 
 h1{
 	text-align: center;
+	padding-top: 83px;
+	padding-bottom: 130px;
 }
 
 // a styling
 a{
 	text-decoration: none;
+}
+
+//Quiz container
+
+.quiz-container{
+	
+}
+
+// Quiz container li styling
+
+.quiz-container li{
+	text-align: center;
+	padding-bottom: 75px;
+	list-style-type: none;
 }
