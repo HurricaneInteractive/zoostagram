@@ -1,27 +1,35 @@
 .sign-in-register {
-    .toggle-pills {
-        @include clearfix();
-        margin-bottom: 20px;
-        a {
-            width: 50%;
-            display: block;
-            float: left;
-            text-align: center;
-            padding: 15px 10px;
-            border: 1px solid $light-grey;
-            &:not(:last-child) {
-                border-right: none;
+    display: grid;
+    grid-template-rows: 40px auto;
+    .sign-in-wrapper {
+        align-self: end;
+        max-width: 225px;
+        width: 100%;
+        margin: 0 auto 45px;
+        .select-path {
+            a:not(:first-child) {
+                margin-top: 15px;
             }
-            &:first-child {
-                border-radius: 5px 0 0 5px;
+        }
+        form {
+            .form-actions {
+                margin-top: 70px;
+                position: relative;
+                .form-error {
+                    font-family: $heebo;
+                    font-size: 10px;
+                    color: white;
+                    position: absolute;
+                    bottom: calc(100% + 4px);
+                }
             }
-            &:last-child {
-                border-radius: 0 5px 5px 0;
-            }
-            &.active {
-                border-color: $purple;
-                background: $purple;
+            .below-button-back {
+                font-size: 14px;
+                text-decoration: underline;
                 color: white;
+                text-align: center;
+                display: block;
+                margin-top: 5px;
             }
         }
     }

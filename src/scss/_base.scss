@@ -16,18 +16,23 @@ body {
 
 * {
     box-sizing: border-box;
+    &:focus, &:active, &:hover {
+        outline: none;
+    }
 }
 
 input {
-    font-family: $font-family;
-    font-size: $base-font-size;
-    border: 1px solid $light-grey;
-    padding: 15px 12px;
+    font-family: $heebo;
+    font-size: 14px;
+    color: white;
+    padding: 0 10px;
     background: transparent;
-    margin: 5px 0;
+    margin: 15px 0 30px;
     width: 100%;
     display: block;
-    border-radius: 5px;
+    border: none;
+    border-bottom: 3px solid white;
+    @include placeholder(white);
 }
 
 img {

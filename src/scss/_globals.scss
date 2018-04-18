@@ -35,14 +35,44 @@
 }
 
 .btn {
+    font-family: $heebo;
+    font-size: 20px;
+    font-weight: bold;
+    border: 1px solid $light-grey;
+    padding: 8px 15px;
+    color: $purple;
+    background: white;
+    width: 100%;
     display: inline-block;
-    background: $purple;
-    color: white;
-    font-size: 13px;
-    text-transform: uppercase;
+    border-radius: 10px;
     border: none;
-    padding: 13px 18px;
-    border-radius: 5px;
+    text-align: center;
+    &.btn-arrow-right {
+        &:after {
+            content: '';
+            width: 15px;
+            height: 15px;
+            background: url('./images/btn-arrow-right-purple.svg') no-repeat center center / 15px 15px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+    }
+    &.btn-secondary {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+    &.btn-outline {
+        color: white;
+        background: transparent;
+        border: 3px solid white;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        &.btn-arrow-right {
+            &:after {
+                background: url('./images/btn-arrow-right-white.svg') no-repeat center center / 15px 15px;
+            }
+        }
+    }
 }
 
 .purple-grain-bg {
@@ -51,4 +81,38 @@
     background-repeat: repeat;
     background-position: top left;
     background-size: 200px 200px;
+    &.silhouette-birds {
+        background-image: url('./images/grain-bg.png'),
+            url('./images/birds.png');
+        background-repeat: repeat,
+            no-repeat;
+        background-size: 200px 200px,
+            contain;
+        background-position: top left,
+            top 30px left 50%;
+    }
+}
+
+.input-wrapper {
+    position: relative;
+    &:after {
+        content: '';
+        height: 3px;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        transform: scaleX(0);
+        transform-origin: center center;
+        transition: transform 250ms ease-in-out;
+    }
+    &:focus, &:hover {
+        &:after {
+            transform: scaleX(1);
+        }
+    }
+    input {
+        border: none;
+    }
 }
