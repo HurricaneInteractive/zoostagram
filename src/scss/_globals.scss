@@ -25,7 +25,16 @@
         }
     }
     svg {
-        stroke: #211f27;
+        stroke: $black;
+        .red {
+            stroke: $red;
+        }
+        .yellow {
+            stroke: $orange-yellow;
+        }
+        .black {
+            stroke: $black;
+        }
     }
 }
 

@@ -6,7 +6,7 @@ const Loading = (props) => {
             <svg width="60" height="60" viewBox="0 0 57 57" xmlns="http://www.w3.org/2000/svg" stroke="#fff">
                 <g fill="none" fillRule="evenodd">
                     <g transform="translate(1 1)" strokeWidth="2">
-                        <circle cx="5" cy="50" r="5">
+                        <circle cx="5" cy="50" r="5" className="red">
                             <animate attributeName="cy"
                                 begin="0s" dur="2.2s"
                                 values="50;5;50;50"
@@ -18,7 +18,7 @@ const Loading = (props) => {
                                 calcMode="linear"
                                 repeatCount="indefinite" />
                         </circle>
-                        <circle cx="27" cy="5" r="5">
+                        <circle cx="27" cy="5" r="5" className="yellow">
                             <animate attributeName="cy"
                                 begin="0s" dur="2.2s"
                                 from="5" to="5"
@@ -32,7 +32,7 @@ const Loading = (props) => {
                                 calcMode="linear"
                                 repeatCount="indefinite" />
                         </circle>
-                        <circle cx="49" cy="50" r="5">
+                        <circle cx="49" cy="50" r="5" className="black">
                             <animate attributeName="cy"
                                 begin="0s" dur="2.2s"
                                 values="50;50;5;50"

@@ -217,7 +217,9 @@
                 background: rgba(0, 0, 0, 0.5);
             }
             svg {
-                stroke: white;
+                circle {
+                    stroke: white;
+                }
             }
         }
     }
