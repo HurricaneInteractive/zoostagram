@@ -1,0 +1,87 @@
+.all-journeys {
+    padding: 27px 30px 20px;
+    height: auto;
+    .create-journey {
+        font-family: $heebo;
+        font-weight: bold;
+        font-size: 14px;
+        text-transform: uppercase;
+        color: $black;
+        text-decoration: none;
+        display: inline-block;
+        margin: 0 0 30px;
+        line-height: 30px;
+        padding-left: 40px;
+        background: url('./images/create-new-journey.svg') no-repeat center left / 30px 30px;
+    }
+    .journeys-wrapper {
+        .journey-listing {
+            .journey-single {
+                &:not(:last-child) {
+                    margin-bottom: 30px
+                }
+                .thumbnail {
+                    background-color: $light-grey;
+                    border-radius: 10px;
+                    min-height: 130px;
+                    margin-bottom: 10px;
+                }
+                a {
+                    display: block;
+                    margin: 0 10px;
+                    text-decoration: none;
+                    color: $black;
+                    background: url('./images/journey-arrow-right.svg') no-repeat center right / 14px 14px;
+                }
+            }
+            .no-results {
+                margin: 0;
+                font-family: $deco-family;
+                color: darken($light-grey, 10%);
+                font-size: 60px;
+                line-height: 1;
+                font-weight: normal;
+            }
+        }
+    }
+    .new-journey-dialogue {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba($black, 0.45);
+        padding: 30px;
+        .dialogue-inner {
+            width: 100%;
+            background: white;
+            border-radius: 10px;
+            padding: 30px 25px;
+            margin-top: 70px;
+            .input-wrapper {
+                margin-bottom: 50px;
+                &:after {
+                    background: $black
+                }
+                input {
+                    color: $black;
+                    @include placeholder($black)
+                }
+            }
+            .btn {
+                background: $orange-yellow;
+                color: white;
+                font-size: 14px;
+                text-transform: uppercase;
+                padding: 12px;
+                &.btn-outline {
+                    background: none;
+                    margin-top: 5px;
+                    color: $black;
+                    border-color: $black;
+                    padding: 10px;
+                }
+            }
+        }
+    }
+}
