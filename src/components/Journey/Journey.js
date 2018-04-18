@@ -5,7 +5,19 @@ import firebase from '../firebase'
 import PageTitle from '../Global/PageTitle'
 import Loading from '../Global/Loading'
 
+/**
+ * Journey Page Component - Displays the all users journeys
+ * 
+ * @export
+ * @class Journey
+ * @extends {Component}
+ */
 export default class Journey extends Component {
+    /**
+     * Creates an instance of Journey.
+     * 
+     * @memberof Journey
+     */
     constructor() {
         super()
         this.state = {
@@ -23,6 +35,12 @@ export default class Journey extends Component {
         this.generateJourneyData = this.generateJourneyData.bind(this)
     }
 
+    /**
+     * React function - See React Lifecycle
+     * Gets the current User and fetches the data
+     * 
+     * @memberof Journey
+     */
     componentWillMount() {
         this.setState({
             user: firebase.auth().currentUser
@@ -31,6 +49,11 @@ export default class Journey extends Component {
         })
     }
 
+    /**
+     * Fetches the Journey data from Firebase based on the User UID
+     * 
+     * @memberof Journey
+     */
     fetchJourneyData() {
         const _this = this;
         let user = this.state.user.uid, 
@@ -55,12 +78,24 @@ export default class Journey extends Component {
         })
     }
 
+    /**
+     * Handles Form on change function
+     * 
+     * @param {object} e Event Object
+     * @memberof Journey
+     */
     onChange(e) {
         this.setState({
             [e.target.name]: e.target.value
         })
     }
 
+    /**
+     * Toggles the Create popup dialogue
+     * 
+     * @param {object} e Anchor Event Object
+     * @memberof Journey
+     */
     toggleCreateState(e) {
         e.preventDefault();
         this.setState({
@@ -68,6 +103,13 @@ export default class Journey extends Component {
         })
     }
 
+    /**
+     * Creates a new Journey in the DB & refetches the content
+     * 
+     * @param {any} e Anchor Event Object
+     * @returns Firebase Response
+     * @memberof Journey
+     */
     createNewJourney(e) {
         e.preventDefault();
         const _this = this;
@@ -103,6 +145,12 @@ export default class Journey extends Component {
             })
     }
 
+    /**
+     * Generates the Journey Tiles
+     * 
+     * @returns DOM
+     * @memberof Journey
+     */
     generateJourneyData() {
         let journeys = this.state.journeys;
 
@@ -118,6 +166,12 @@ export default class Journey extends Component {
         return journeyData;
     }
 
+    /**
+     * React Function - Renders the Component Markup
+     * 
+     * @returns DOM
+     * @memberof Journey
+     */
     render() {
         return (
             <div className="page all-journeys">
