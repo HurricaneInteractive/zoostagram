@@ -21,8 +21,7 @@
     }
 }
 
-// Learn styling
-
+// Learn body gradient styling
 body{
      height:100vh;
      background: -moz-linear-gradient(top, rgba(255,170,0,1) 0%, rgba(255,170,0,0.64) 50%, rgba(107,0,154,1) 100%);
@@ -38,18 +37,16 @@ h1{
 	padding-bottom: 130px;
 }
 
-// a styling
-a{
-	text-decoration: none;
+
+
+//Quiz list item styling
+div > div:nth-child(2) > div > div > li {
+    text-align: center;
+    padding-bottom: 85px;
+    list-style-type:
 }
 
-//Quiz container
 
-.quiz-container{
-	
-}
-
-// Quiz container li styling
 
 
 
