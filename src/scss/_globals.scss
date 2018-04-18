@@ -48,7 +48,7 @@
     font-size: 20px;
     font-weight: bold;
     border: 1px solid $light-grey;
-    padding: 8px 15px;
+    padding: 10px 15px;
     color: $purple;
     background: white;
     width: 100%;
@@ -73,9 +73,9 @@
     &.btn-outline {
         color: white;
         background: transparent;
-        border: 3px solid white;
-        padding-top: 5px;
-        padding-bottom: 5px;
+        border: 2px solid white;
+        padding-top: 8px;
+        padding-bottom: 8px;
         &.btn-arrow-right {
             &:after {
                 background: url('./images/btn-arrow-right-white.svg') no-repeat center center / 15px 15px;
@@ -123,5 +123,29 @@
     }
     input {
         border: none;
+    }
+}
+
+.page-title {
+    position: relative;
+    h1 {
+        font-size: 43px;
+        text-align: center;
+        margin: 0 0 20px;
+        font-family: $deco-family;
+        padding: 0;
+        font-weight: normal;
+    }
+    .back-arrow {
+        width: 14px;
+        height: 22px;
+        background: url('./images/back-arrow-left.svg') no-repeat center center / 14px 22px;
+        display: block;
+        overflow: hidden;
+        text-indent: -99999px;
+        position: absolute;
+        top: 50%;
+        left: 0px;
+        transform: translateY(-50%);
     }
 }
