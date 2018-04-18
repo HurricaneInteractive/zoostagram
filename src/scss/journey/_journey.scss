@@ -1,5 +1,5 @@
-.all-journeys {
-    padding: 27px 30px 20px;
+.journey-page {
+    padding: 27px 30px 40px;
     height: auto;
     .create-journey {
         font-family: $heebo;
@@ -20,13 +20,16 @@
                 &:not(:last-child) {
                     margin-bottom: 30px
                 }
+                a {
+                    text-decoration: none;
+                }
                 .thumbnail {
                     background-color: $light-grey;
                     border-radius: 10px;
                     min-height: 130px;
                     margin-bottom: 10px;
                 }
-                a {
+                p {
                     display: block;
                     margin: 0 10px;
                     text-decoration: none;
@@ -34,15 +37,15 @@
                     background: url('./images/journey-arrow-right.svg') no-repeat center right / 14px 14px;
                 }
             }
-            .no-results {
-                margin: 0;
-                font-family: $deco-family;
-                color: darken($light-grey, 10%);
-                font-size: 60px;
-                line-height: 1;
-                font-weight: normal;
-            }
         }
+    }
+    .no-results {
+        margin: 0;
+        font-family: $deco-family;
+        color: darken($light-grey, 10%);
+        font-size: 60px;
+        line-height: 1;
+        font-weight: normal;
     }
     .new-journey-dialogue {
         position: fixed;
