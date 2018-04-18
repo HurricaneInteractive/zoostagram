@@ -18,13 +18,13 @@ export default class Journey extends Component {
      * 
      * @memberof Journey
      */
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             journeys: null,
             creatingNew: false,
             journeyName: '',
-            user: null,
+            user: this.props.authUser,
             fetching: true
         }
 
@@ -42,11 +42,7 @@ export default class Journey extends Component {
      * @memberof Journey
      */
     componentWillMount() {
-        this.setState({
-            user: firebase.auth().currentUser
-        }, () => {
-            this.fetchJourneyData()
-        })
+        this.fetchJourneyData()
     }
 
     /**
@@ -157,8 +153,10 @@ export default class Journey extends Component {
         let journeyData = Object.keys(journeys).map((key) => {
             return (
                 <div key={key} className="journey-single">
-                    <div className="thumbnail" />
-                    <Link to={`/journey/${journeys[key].id}`}>{journeys[key].journey_name}</Link>
+                    <Link to={`/journey/view/${journeys[key].id}`}>
+                        <div className="thumbnail" />
+                        <p>{journeys[key].journey_name}</p>
+                    </Link>
                 </div>
             )
         })
@@ -174,8 +172,8 @@ export default class Journey extends Component {
      */
     render() {
         return (
-            <div className="page all-journeys">
-                <PageTitle title="Journey" back={() => this.props.history.goBack()} />
+            <div className="journey-page">
+                <PageTitle title="Journey" back={() => this.props.routerProps.history.goBack()} />
                 <a className="create-journey" onClick={(e) => this.toggleCreateState(e)}>Create New</a>
                 <div className="journeys-wrapper">
                     {
