@@ -71,8 +71,6 @@ export default class SignInRegister extends Component {
      * 
      * @param {object} e Event Object
      * @memberof SignInRegister
-     * 
-     * TODO: Handle different possible errors - existing user etc
      */
     onSubmission(e) {
         e.preventDefault();
@@ -144,17 +142,20 @@ export default class SignInRegister extends Component {
      * Handle all errors created by Firebase Objects
      * 
      * @param {object} error Firebase Error Object
-     * 
-     * TODO: Complete functionality
      */
     handleErrors(error) {
-        console.error(error.message);
         this.setState({
             processing: false,
             errorMsg: error.message
         })
     }
 
+    /**
+     * Renders the Form Actions & Error messages
+     * 
+     * @returns DOM
+     * @memberof SignInRegister
+     */
     renderFormActions() {
         return (
             <div className="form-actions">
@@ -169,6 +170,12 @@ export default class SignInRegister extends Component {
         )
     }
 
+    /**
+     * Renders the Sign In Form
+     * 
+     * @returns DOM
+     * @memberof SignInRegister
+     */
     generateSignInForm() {
         return (
             <form id="signin-register-form" onSubmit={ (e) => this.onSubmission(e) }>
@@ -183,6 +190,12 @@ export default class SignInRegister extends Component {
         )
     }
 
+    /**
+     * Renders the Register Form
+     * 
+     * @returns DOM
+     * @memberof SignInRegister
+     */
     generateRegisterForm() {
         return (
             <form id="signin-register-form" onSubmit={ (e) => this.onSubmission(e) }>
