@@ -20,3 +20,27 @@
         background-color: #fff327;
     }
 }
+
+// Body styling
+
+body{
+
+height:100vh;
+
+background: -moz-linear-gradient(top, rgba(255,170,0,1) 0%, rgba(255,170,0,0.64) 50%, rgba(107,0,154,1) 100%);
+background: -webkit-linear-gradient(top, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 50%,rgba(107,0,154,1) 100%);
+background: linear-gradient(to bottom, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 50%,rgba(107,0,154,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaa00', endColorstr='#6b009a',GradientType=0 );
+}
+
+// h1 styling 
+h1{
+	text-align: center;
+
+}
+
+// a styling
+a{
+	text-decoration: none;
+
+}
