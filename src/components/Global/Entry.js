@@ -5,10 +5,21 @@
  */
 
 import React from 'react'
+import { Link } from 'react-router-dom'
+import Logo from './Logo'
 
 const Entry = () => {
     return(
-        <h1>Home</h1>
+        <div className="page app-home purple-grain-bg">
+            <Logo />
+            <div className="app-feature-options">
+                <ul>
+                    <li className="ape-bg"><Link to="/learn">Learn</Link></li>
+                    <li className="elephant-bg"><Link to="/journey">Journey</Link></li>
+                </ul>
+            </div>
+            <p className="user-message">Select One To Start</p>
+        </div>
     )
 }
 
