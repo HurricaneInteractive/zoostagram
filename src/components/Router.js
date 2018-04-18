@@ -7,7 +7,7 @@
  */
 
 import React, { Component, Fragment } from 'react'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import firebase from 'firebase'
 
 // Global Components
@@ -109,11 +109,6 @@ export default class AppRouter extends Component {
                             {
                                 user ? (
                                     <Fragment>
-                                        <div className="navigation">
-                                            <Link to="/journey">Journey</Link>
-                                            <Link to="/learn">Learn</Link>
-                                        </div>
-
                                         <PrivateRoutes />
                                     </Fragment>
                                 ) : (
