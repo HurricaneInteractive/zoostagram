@@ -1,8 +1,22 @@
 // put your sass code here
 
-.button {
+// default quesion styling
+.quizOption {
     background-color: #787878;
 }
+// when quesion is selected styling
 .active {
     background-color: green;
+}
+
+// progression bar styling
+// .progression bar is the container (bg colour here is the background colour you see)
+.progressionBar {
+    background-color: #ffaa00;
+    height: 25px;
+    // this elements width is auto adjusted (DONT ADD WIDTH TAG). change bg color to change progression bar colour
+    div {
+        height: 100%;
+        background-color: #fff327;
+    }
 }

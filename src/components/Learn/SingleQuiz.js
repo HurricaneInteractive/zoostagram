@@ -26,38 +26,42 @@ class SingleQuiz extends React.Component {
     componentDidMount() {
         const _this = this;
 
+        // gets quiz information based on the url params
         databaseRef.ref(`quiz/${this.props.match.params.id}`).once('value').then(function(snapshot) {
             let databaseState = snapshot.val();
-            // console.log(databaseState);
             _this.setState({
                 allLearnData: databaseState
             });
         });
 
+        // gets the quiz name based on the url params
         databaseRef.ref(`quiz/${this.props.match.params.id}`).once('value').then(function(snapshot) {
             let quizNameYo = snapshot.key;
-            // console.log(quizNameYo);
             _this.setState({
                 quizName: quizNameYo
             });
         });
-
     }
-    /* 
-        make the questions go through as a slideshow
-        create onClick event that goes to the next question
-        keep users data until they have submitted - not like its currently adding to the score straight away
-            (just incase they go back and change their answers)
-    */
 
-    clickHandler(i, selectedQuestion, questionAnswerClass) {
-        console.log("run")
-        selectedQuestion = i
+    clickHandler(question) {
         this.setState({
             optionState: !this.state.optionState
         })
-        questionAnswerClass = 'active'
-        return questionAnswerClass
+
+        if (typeof this.state.userAnswers[this.state.userProgression] === 'undefined') {
+            let newAnswers = this.state.userAnswers;
+            newAnswers.push(question);
+            this.setState({
+                userAnswers: newAnswers
+            })
+        } 
+        else {
+            let updatedAnswers = this.state.userAnswers;
+            updatedAnswers[this.state.userProgression] = question;
+            this.setState({
+                userAnswers: updatedAnswers
+            })
+        }
     }
 
     renderQuiz() {
@@ -74,11 +78,19 @@ class SingleQuiz extends React.Component {
         let quizProgression = quiz[keys[this.state.userProgression]];
 
         console.log('Progression', quizProgression);
+        console.log(quizProgression);
+        let progressionPercentage = this.state.userProgression / 3 * 100;
 
             return (
                 <div>
+                    <div className="progressionBar">
+                        <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
+                    </div>
+                    
+                    {/* get thes current question*/}
                     <h2>{ quizProgression.question }</h2>
                     {
+                        // onClick progression goes back a question
                         <button onClick={()=>{
                             _this.setState({
                                 userProgression: this.state.userProgression - 1
@@ -91,73 +103,30 @@ class SingleQuiz extends React.Component {
                         {
                             
                             
-                            quizProgression.options.map(i => {        
-                                // console.log('answers', this.state.userProgression);
-                                // console.log('i', i);
-                                // let clickedAnswer = "";
-                                // console.log(clickedAnswer);
-                                // let questionClass = ""
-                                // let nameOfClass = ""
-                                let selectedQuestion = null;
-                                let questionAnswerClass = "button";
+                            quizProgression.options.map((question, i) => {
+                                let selectedQuestion = question;
+                                let questionAnswerClass = "quizOption";
                                 console.log(selectedQuestion)
+
+                                if (typeof this.state.userAnswers[this.state.userProgression] !== 'undefined') {
+                                    if (this.state.userAnswers[this.state.userProgression] === question) {
+                                        questionAnswerClass += ' active';
+                                    }
+                                }
+
                                 return (
                                     <li key={i}
-                                    // {
-                                    //     if (clickedAnswer = 'active') {
-                                    //         questionClass = "toggle"
-                                    //     }
-                                    // }
-                                    // if statement should match the key that was clicked and give it an active class
-                                        
-                                    // if (clickedAnswer = "active") {
-                                        //     questionClass = "toggle"
-                                        // }
-
-                                    // className={(questionClass)}
-                                    className={(questionAnswerClass)}
-                                    // onClick={
-                                    //     this.clickHandler.bind(this)
-                                    // }
-                                    onClick={()=>{
-                                        let fuAnswer = this.clickHandler(i, selectedQuestion, questionAnswerClass)
-                                        console.log(fuAnswer)
-                                        questionAnswerClass = fuAnswer
-                                        console.log(questionAnswerClass)
-
-
-                                        // need to figure out a way to refresh the className variable to update to active
-                                        // clickHandler function returns 'active' - so just need to assign this to the className variable
-
-
-                                        // selectedQuestion = i
-                                        // clickedAnswer = i
-                                        // console.log(this.clickHandler)
-                                        // console.log("clicked answer " + clickedAnswer)
-                                        // // if (clickedAnswer = "active") {
-                                        // //     questionClass = "toggle"
-                                        // // }
-                                        // console.log("option state " + this.state.optionState)
-                                        // this.setState({optionState: !this.state.optionState})
-
-                                        // if (clickedAnswer === i) {
-                                        //     nameOfClass="button active"
-                                        //     console.log("if" + nameOfClass)
-                                        // }
-                                        // else {
-                                        //     nameOfClass="button"
-                                        //     console.log("else" + nameOfClass)
-                                        // }
-                                    }}
+                                        className={`${questionAnswerClass}`}
+                                        onClick={ () => this.clickHandler(question) }
                                     >
-                                        {/* {console.log('i = ', i)} */}
-                                        {i}
+                                        {question}
                                     </li>
                                 )
                             })
                         }
                     </ul>
                     {
+                        // onClick progression goes forward a question
                         <button onClick={()=>{
                             _this.setState({
                                 userProgression: this.state.userProgression + 1
@@ -167,78 +136,6 @@ class SingleQuiz extends React.Component {
                     }
                 </div>
             )
-
-        // let quizProgression = Object.keys(quiz[this.state.userProgression]) ((key, i) => {
-        //     let quizData = quiz[key];
-        //     console.log(key);
-        //     console.log(i);
-        //     console.log(quizData);
-        //     console.log(quizProgression);
-            
-        //     return (
-        //         <div key={i}>
-        //             <h2>{ quizData.question }</h2>
-        //             <ul>
-        //                 {
-        //                     quizData.options.map(i => {              
-        //                         return (
-        //                             <li key={i} onClick={()=>{
-        //                                     _this.setState({
-        //                                         userProgression: this.state.userProgression + 1
-        //                                     })
-        //                                 }}>
-        //                                 {console.log(i)}
-        //                                 {i}
-        //                             </li>
-                                    
-        //                         )
-        //                     })
-        //                 }
-        //             </ul>
-        //         </div>
-        //     )
-        // })
-
-        // return quizProgression;
-        
-        
-
-
-        // let allQuiz = Object.keys(quiz).map((key, i) => {
-        //     let quizData = quiz[key];
-            
-        //     console.log(allQuiz);
-
-        //     let correctAnswer = quizData.answer;
-        //     console.log(correctAnswer);
-        //     return (
-        //         <div key={i}>
-        //             <h2>{ quizData.question }</h2>
-        //             <ul>
-        //                 {
-        //                     quizData.options.map(i => {              
-        //                         return (
-        //                             <li key={i} onClick={()=>{
-        //                                     let userAnswer = i;
-        //                                     userAnswer === quizData.answer &&
-        //                                     _this.setState({
-        //                                         answersCorrect: this.state.answersCorrect + 1
-        //                                     })
-        //                                 }}>
-        //                                 {console.log(i)}
-        //                                 {i}
-        //                             </li>
-                                    
-        //                         )
-        //                     })
-        //                 }
-        //             </ul>
-        //         </div>
-        //     )
-        // })
-
-        // return allQuiz;
-    //}
     }
 
     render() {
