@@ -79,6 +79,7 @@ class SingleQuiz extends React.Component {
 
         console.log('Progression', quizProgression);
         console.log(quizProgression);
+        // adjust the value of 3 to fit with how many questions are in the quiz
         let progressionPercentage = this.state.userProgression / 3 * 100;
 
             return (

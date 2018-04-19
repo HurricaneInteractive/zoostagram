@@ -7,7 +7,7 @@
  */
 
 import React, { Component, Fragment } from 'react'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import firebase from 'firebase'
 
 // Global Components
@@ -16,6 +16,8 @@ import SignInRegister from './Global/SignInRegister'
 import Loading from './Global/Loading'
 
 // Journey Components
+import Journey from './Journey/Journey'
+import JourneySingle from './Journey/JourneySingle'
 import Capture from './Journey/Capture'
 
 // Learn Components
@@ -86,7 +88,15 @@ export default class AppRouter extends Component {
         const PrivateRoutes = () => (
             <Switch>
                 <Route exact path="/" component={Entry} />
-                <Route path="/journey" component={Capture} />
+                <Route exact path="/journey" render={(routeProps) => (
+                    <Journey routerProps={routeProps} authUser={user} />
+                )} />
+                <Route path="/journey/view/:id" render={(routeProps) => (
+                    <JourneySingle routerProps={routeProps} authUser={user} />
+                )} />
+                <Route exact path="/journey/capture/:id" render={(routeProps) => (
+                    <Capture routerProps={routeProps} authUser={user} />
+                )} />
                 <Route path="/learn" component={Learn} />
                 <Route path="/quizfinish" component={QuizFinish} />
                 <Route path="/doquiz/:id" component={SingleQuiz} />
@@ -109,11 +119,6 @@ export default class AppRouter extends Component {
                             {
                                 user ? (
                                     <Fragment>
-                                        <div className="navigation">
-                                            <Link to="/journey">Journey</Link>
-                                            <Link to="/learn">Learn</Link>
-                                        </div>
-
                                         <PrivateRoutes />
                                     </Fragment>
                                 ) : (

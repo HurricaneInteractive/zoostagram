@@ -1,0 +1,64 @@
+.journey-single {
+    .single-wrapper {
+        h3 {
+            margin: 0 0 30px;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-family: $heebo;
+        }
+    }
+    .journey-listing {
+        margin-right: -10px;
+        margin-left: -10px;
+        padding: 0;
+        @include clearfix();
+        .single-image {
+            overflow: hidden;
+            margin-bottom: 20px;
+            padding: 0 10px;
+            width: 50%;
+            img {
+                border-radius: 10px;
+                display: block;
+                border: 1px solid $light-grey;
+            }
+        }
+        .no-results {
+            grid-column-start: 1;
+            grid-column-end: 3;
+        }
+    }
+    .capture-bar {
+        position: fixed;
+        bottom: 30px;
+        left: 0;
+        width: 100%;
+        .capture-icon {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 72px;
+            border-radius: 50%;
+            background: white;
+            display: inline-block;
+            cursor: pointer;
+            text-indent: -99999px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px 0 rgba($black, 0.2);
+            &:after {
+                content: '';
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                position: absolute;
+                width: 18px;
+                height: 18px;
+                border: 3px solid $black;
+                border-radius: 50%;
+            }
+        }
+    }
+}

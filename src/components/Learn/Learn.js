@@ -84,7 +84,7 @@ click through questions
 
 const Learn = () => {
     return (
-        <div>
+        <div id="learn">
             <h1>Learn</h1>
             <QuizSelect/>
         </div>
