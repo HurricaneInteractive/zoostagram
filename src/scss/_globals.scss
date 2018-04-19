@@ -109,7 +109,7 @@
         height: 3px;
         width: 100%;
         position: absolute;
-        top: 100%;
+        top: calc(100% - 1px);
         left: 0;
         background: white;
         transform: scaleX(0);
@@ -123,6 +123,7 @@
     }
     input {
         border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 }
 
