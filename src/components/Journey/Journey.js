@@ -151,10 +151,20 @@ export default class Journey extends Component {
         let journeys = this.state.journeys;
 
         let journeyData = Object.keys(journeys).map((key) => {
+
+            let url = null;
+
+            if (journeys[key].images !== null && typeof journeys[key].images !== 'undefined') {
+                let images = journeys[key].images;
+                url = images[Object.keys(images)[0]].image_url;
+            }
+
             return (
                 <div key={key} className="journey-single">
                     <Link to={`/journey/view/${journeys[key].id}`}>
-                        <div className="thumbnail" />
+                        <div className="thumbnail" style={{
+                            backgroundImage: url !== null ? ( `url(${url})` ) : ('')
+                        }} />
                         <p>{journeys[key].journey_name}</p>
                     </Link>
                 </div>

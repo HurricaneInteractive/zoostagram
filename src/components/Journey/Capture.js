@@ -299,10 +299,12 @@ class Capture extends Component {
             console.error(err)
         }, () => {
             // Success
+            let downloadURL = uploadTask.snapshot.downloadURL;
             let journeyRef = firebase.database().ref(`journeys/${_this.state.user.uid}/${journeyID}/images`);
             let newKey = journeyRef.push();
             newKey.set({
-                image_name: name
+                image_name: name,
+                image_url: downloadURL
             })
             .then(() => {
                 _this.setState({
