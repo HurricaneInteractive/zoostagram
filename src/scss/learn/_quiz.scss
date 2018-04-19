@@ -32,7 +32,10 @@
 }
 
 // h1 styling 
-h1{
+#learn h1{
+    font-family: $deco-family;
+    font-size: 40px;
+    color: #fff;
 	text-align: center;
 	padding-top: 83px;
 	padding-bottom: 130px;
@@ -40,10 +43,16 @@ h1{
 
 //Quiz list item styling
 #learn li {
+    font-family:'Heebo', sans-serif;
+    font-size: 35px;
     text-align: center;
     padding-top: 85px;
     padding-bottom: 75px;
     list-style-type: none;
+}
+
+#learn li a{
+    text-decoration: none;
 }
 
 //Question 1 Tile styling 
