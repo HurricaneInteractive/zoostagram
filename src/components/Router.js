@@ -91,9 +91,11 @@ export default class AppRouter extends Component {
                 <Route exact path="/journey" render={(routeProps) => (
                     <Journey routerProps={routeProps} authUser={user} />
                 )} />
-                <Route exact path="/journey/capture" component={Capture} />
                 <Route path="/journey/view/:id" render={(routeProps) => (
                     <JourneySingle routerProps={routeProps} authUser={user} />
+                )} />
+                <Route exact path="/journey/capture/:id" render={(routeProps) => (
+                    <Capture routerProps={routeProps} authUser={user} />
                 )} />
                 <Route path="/learn" component={Learn} />
                 <Route path="/quizfinish" component={QuizFinish} />
