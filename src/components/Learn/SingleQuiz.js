@@ -17,7 +17,8 @@ class SingleQuiz extends React.Component {
             answersCorrect: 0,
             userAnswers: [],
             userProgression: 0,
-            optionState: false
+            optionState: false,
+            totalQuestions: 0
         }
 
        this.renderQuiz = this.renderQuiz.bind(this)
@@ -35,8 +36,11 @@ class SingleQuiz extends React.Component {
                 quizName: quizNameYo
             });
         });
+        
+        
     }
 
+    // checks if the option has been selected and updates the userAnswers state
     clickHandler(question) {
         this.setState({
             optionState: !this.state.optionState
@@ -65,16 +69,17 @@ class SingleQuiz extends React.Component {
         let quiz = this.state.allLearnData;
         let keys = Object.keys(quiz);
         
-        console.log(keys);
-        console.log(this.state.userProgression);
-        console.log(this.state.userAnswers);
+        // console.log(keys);
+        console.log(keys.length);
 
+        // gets the current state based on which question they are upto
         let quizProgression = quiz[keys[this.state.userProgression]];
 
-        console.log('Progression', quizProgression);
-        console.log(quizProgression);
-        // adjust the value of 3 to fit with how many questions are in the quiz
-        let progressionPercentage = this.state.userProgression / 3 * 100;
+        // gets the total number of questions
+        let progressionPercentage = this.state.userProgression / keys.length * 100;
+
+        // if statement to match total number of questions to the current question number
+        // will display the results screen 
 
             return (
                 <div>
@@ -95,9 +100,7 @@ class SingleQuiz extends React.Component {
                     }
                     <ul>
                         
-                        {
-                            
-                            
+                        {    
                             quizProgression.options.map((question, i) => {
                                 let selectedQuestion = question;
                                 let questionAnswerClass = "quizOption";
