@@ -70,11 +70,12 @@
                 }
                 input {
                     color: $black;
-                    @include placeholder($black)
+                    @include placeholder($black);
+                    border-bottom-color: rgba($black, 0.2);
                 }
             }
             .btn {
-                background: $orange-yellow;
+                background: $red;
                 color: white;
                 font-size: 14px;
                 text-transform: uppercase;
