@@ -311,7 +311,7 @@ class Capture extends Component {
                     reviewingPhoto: false,
                     savingPhoto: false,
                     selectedEnclosure: '',
-                    enclosureSelectOpenfalse: false,
+                    enclosureSelectOpen: false,
                     enclosureError: false
                 })
             })
