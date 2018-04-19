@@ -14,7 +14,7 @@
  */
 
 import React, { Component, Fragment } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import firebase from '../firebase'
 import CryptoJS from 'crypto-js'
 
@@ -39,12 +39,12 @@ class Capture extends Component {
      * 
      * @memberof Capture
      */
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             stream: null,
             initialising: true,
-            user: null,
+            user: this.props.authUser,
             facingMode: "user",
             fullscreen: false,
             reviewingPhoto: false,
@@ -104,9 +104,6 @@ class Capture extends Component {
      * @memberof Capture
      */
     componentDidMount() {
-        this.setState({
-            user: firebase.auth().currentUser
-        })
         this.initialiseStream();
     }
 
@@ -263,6 +260,7 @@ class Capture extends Component {
     savePhoto(e = null) {
 
         const _this = this;
+        let journeyID = this.props.routerProps.match.params.id;
 
         if (e !== null) {
             e.preventDefault();
@@ -286,7 +284,7 @@ class Capture extends Component {
         let name = CryptoJS.SHA256(String(new Date())).words.join('') + '.jpg';
         let folder = this.state.user.uid;
 
-        let referencePath = `journey/${folder}/${name}`;
+        let referencePath = `journey/${folder}/${journeyID}/${name}`;
 
         let uploadTask = storageRef.child(referencePath).put(file, metadata);
 
@@ -301,13 +299,24 @@ class Capture extends Component {
             console.error(err)
         }, () => {
             // Success
-            _this.setState({
-                reviewingPhoto: false,
-                savingPhoto: false,
-                selectedEnclosure: '',
-                enclosureSelectOpenfalse: false,
-                enclosureError: false
+            let journeyRef = firebase.database().ref(`journeys/${_this.state.user.uid}/${journeyID}/images`);
+            let newKey = journeyRef.push();
+            newKey.set({
+                image_name: name
             })
+            .then(() => {
+                _this.setState({
+                    reviewingPhoto: false,
+                    savingPhoto: false,
+                    selectedEnclosure: '',
+                    enclosureSelectOpenfalse: false,
+                    enclosureError: false
+                })
+            })
+            .catch((err) => {
+                console.error(err.message);
+            })
+            
         })
     }
 
@@ -436,7 +445,7 @@ class Capture extends Component {
                             ) : (
                                 <Fragment>
                                     <a id="camera-flip" onClick={ (e) => this.flipCameraFacingMode(e) }>Flip View</a>
-                                    <Link id="stop-capturing" to="/">Stop</Link>
+                                    <a id="stop-capturing" onClick={ () => this.props.routerProps.history.goBack() }>Stop</a>
                                 </Fragment>
                             )
                         }
