@@ -449,7 +449,7 @@ class Capture extends Component {
                                 </Fragment>
                             )
                         }
-                        <a id="fullscreen" className={`${this.state.fullscreen ? 'exit' : ''}`} onClick={ (e) => this.goFullscreen(e) }>Fullscreen</a>
+                        { /* <a id="fullscreen" className={`${this.state.fullscreen ? 'exit' : ''}`} onClick={ (e) => this.goFullscreen(e) }>Fullscreen</a> */ }
                     </div>
                     <div className="capture-bar">
                         {
