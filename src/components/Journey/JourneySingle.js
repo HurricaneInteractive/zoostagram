@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import Masonry from 'react-masonry-component'
 import firebase from '../firebase'
 
 import PageTitle from '../Global/PageTitle'
 import Loading from '../Global/Loading'
+
+const masonryOptions = {
+    transitionDuration: 0
+};
 
 /**
  * JourneySingle Component - Renders the Journey images
@@ -57,9 +62,8 @@ export default class JourneySingle extends Component {
 
         ref.once('value', (snap) => {
             _this.setState({
-                journey: snap.val()
-            }, () => {
-                _this.fetchJourneyImages()
+                journey: snap.val(),
+                fetching: false
             })
         })
     }
@@ -68,6 +72,7 @@ export default class JourneySingle extends Component {
      * Fetches all the images for a Journey from the Cloud Storage
      * 
      * @memberof JourneySingle
+     * @deprecated
      */
     fetchJourneyImages() {
         const _this = this;
@@ -101,24 +106,17 @@ export default class JourneySingle extends Component {
      * @memberof JourneySingle
      */
     generateImageGallery() {
-        if (this.state.journey !== null) {
-            if (this.state.journeyImages.length !== 0) {
-                let images = this.state.journeyImages.map((url, i) => {
-                    return (
-                        <div className="single-image" key={i}>
-                            <img src={url} alt="Zoo" />
-                        </div>
-                    )
-                })
+        let images = this.state.journey.images;
+        if (images !== null && typeof images !== 'undefined') {
+            let imageDOM = Object.keys(images).map((key) => {
+                return (
+                    <div className="single-image" key={key}>
+                        <img src={images[key].image_url} alt="Zoo" />
+                    </div>
+                )
+            })
 
-                return images;
-            } 
-            else {
-                return <h2 className="no-results">Capture the moment</h2>
-            }
-        } 
-        else {
-            return <Loading />
+            return imageDOM;
         }
     }
 
@@ -143,9 +141,21 @@ export default class JourneySingle extends Component {
                         ) : (
                             <div className="single-wrapper">
                                 <h3>{journey.journey_name}</h3>
-                                <div className="journey-listing">
-                                    { this.generateImageGallery() }
-                                </div>
+                                {
+                                    journey.images === null || typeof journey.images === 'undefined' ? (
+                                        <h2 className="no-results">Capture the moment</h2>
+                                    ) : (
+                                        <Masonry
+                                            className={'journey-listing'} // default ''
+                                            elementType={'ul'} // default 'div'
+                                            options={masonryOptions}
+                                            disableImagesLoaded={false} // default false
+                                            updateOnEachImageLoad={true}
+                                        >
+                                            { this.generateImageGallery() }
+                                        </Masonry>
+                                    )
+                                }
                             </div>
                         )
                     )

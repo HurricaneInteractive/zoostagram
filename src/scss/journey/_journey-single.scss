@@ -9,15 +9,20 @@
         }
     }
     .journey-listing {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: auto;
-        grid-column-gap: 20px;
-        grid-row-gap: 20px;
+        margin-right: -10px;
+        margin-left: -10px;
+        padding: 0;
+        @include clearfix();
         .single-image {
-            border-radius: 10px;
             overflow: hidden;
-            border: 1px solid $light-grey;
+            margin-bottom: 20px;
+            padding: 0 10px;
+            width: 50%;
+            img {
+                border-radius: 10px;
+                display: block;
+                border: 1px solid $light-grey;
+            }
         }
         .no-results {
             grid-column-start: 1;
