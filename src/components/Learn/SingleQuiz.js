@@ -29,15 +29,9 @@ class SingleQuiz extends React.Component {
         // gets quiz information based on the url params
         databaseRef.ref(`quiz/${this.props.match.params.id}`).once('value').then(function(snapshot) {
             let databaseState = snapshot.val();
-            _this.setState({
-                allLearnData: databaseState
-            });
-        });
-
-        // gets the quiz name based on the url params
-        databaseRef.ref(`quiz/${this.props.match.params.id}`).once('value').then(function(snapshot) {
             let quizNameYo = snapshot.key;
             _this.setState({
+                allLearnData: databaseState,
                 quizName: quizNameYo
             });
         });
