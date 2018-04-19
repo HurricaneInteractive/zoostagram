@@ -6,6 +6,7 @@ const QuizFinish = () => {
         <div>
             <h1>Yay you finished the quiz</h1>
             <Link to="/">link</Link>
+            
         </div>
         
     )

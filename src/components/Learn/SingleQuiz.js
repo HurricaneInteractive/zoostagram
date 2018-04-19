@@ -1,9 +1,10 @@
 
 import React from 'react'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import firebase from '../firebase'
 
 import Loading from '../Global/Loading'
+import PageTitle from '../Global/PageTitle';
 
 const databaseRef = firebase.database();
 
@@ -18,7 +19,8 @@ class SingleQuiz extends React.Component {
             userAnswers: [],
             userProgression: 0,
             optionState: false,
-            totalQuestions: 0
+            totalQuestions: 0,
+            quizDone: false
         }
 
        this.renderQuiz = this.renderQuiz.bind(this)
@@ -62,15 +64,30 @@ class SingleQuiz extends React.Component {
         }
     }
 
+    isTheQuizOver(keyLength) {
+        if (this.state.userProgression === keyLength) {
+            this.setState ({
+                quizDone: true
+            })
+        }
+        else {
+            this.setState ({
+                quizDone: false
+            })
+        }
+    }
+
     renderQuiz() {
         console.log(this.state);
         const _this = this;
 
         let quiz = this.state.allLearnData;
         let keys = Object.keys(quiz);
-        
+        let keyLength = keys.length;
+        console.log(keyLength);
+
         // console.log(keys);
-        console.log(keys.length);
+        // console.log(keys.length);
 
         // gets the current state based on which question they are upto
         let quizProgression = quiz[keys[this.state.userProgression]];
@@ -81,59 +98,67 @@ class SingleQuiz extends React.Component {
         // if statement to match total number of questions to the current question number
         // will display the results screen 
 
+        console.log("display quiz")
+        if (this.state.userProgression === keyLength) {
+            console.log("break me")
             return (
                 <div>
-                    <div className="progressionBar">
-                        <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
-                    </div>
-                    
-                    {/* get thes current question*/}
-                    <h2>{ quizProgression.question }</h2>
-                    {
-                        // onClick progression goes back a question
-                        <button onClick={()=>{
-                            _this.setState({
-                                userProgression: this.state.userProgression - 1
-                            })
-                        }}
-                        >{"< back"}</button>
-                    }
-                    <ul>
-                        
-                        {    
-                            quizProgression.options.map((question, i) => {
-                                let selectedQuestion = question;
-                                let questionAnswerClass = "quizOption";
-                                console.log(selectedQuestion)
-
-                                if (typeof this.state.userAnswers[this.state.userProgression] !== 'undefined') {
-                                    if (this.state.userAnswers[this.state.userProgression] === question) {
-                                        questionAnswerClass += ' active';
-                                    }
-                                }
-
-                                return (
-                                    <li key={i}
-                                        className={`${questionAnswerClass}`}
-                                        onClick={ () => this.clickHandler(question) }
-                                    >
-                                        {question}
-                                    </li>
-                                )
-                            })
-                        }
-                    </ul>
-                    {
-                        // onClick progression goes forward a question
-                        <button onClick={()=>{
-                            _this.setState({
-                                userProgression: this.state.userProgression + 1
-                            })
-                        }}
-                        >{"forward >"}</button>
-                    }
+                    { console.log("nothing to return") }
+                    <h2>Quiz Complete</h2>
+                    <h3>You got </h3>
+                    <Link to="/">hola</Link>
+                    <PageTitle to="/"></PageTitle>
                 </div>
             )
+        }
+        return (
+            <div>
+                <div className="progressionBar">
+                    <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
+                </div>
+                {/* get thes current question*/}
+                <h2>{ quizProgression.question }</h2>
+                {
+                    // onClick progression goes back a question
+                    <button onClick={()=>{
+                        _this.setState({
+                            userProgression: this.state.userProgression - 1
+                        })
+                    }}
+                    >{"< back"}</button>
+                }
+                <ul> 
+                    {    
+                        quizProgression.options.map((question, i) => {
+                            let questionAnswerClass = "quizOption";
+
+                            if (typeof this.state.userAnswers[this.state.userProgression] !== 'undefined') {
+                                if (this.state.userAnswers[this.state.userProgression] === question) {
+                                    questionAnswerClass += ' active';
+                                }
+                            }
+                            return (
+                                <li key={i}
+                                    className={`${questionAnswerClass}`}
+                                    onClick={ () => this.clickHandler(question) }
+                                >
+                                    {question}
+                                </li>
+                            )
+                        })
+                    }
+                </ul>
+                {
+                    // onClick progression goes forward a question
+                    <button onClick={()=>{
+                        _this.setState({
+                            userProgression: this.state.userProgression + 1
+                        })
+                    }}
+                    >{"forward >"}</button>
+                }
+            </div>
+        )
     }
 
     render() {
@@ -144,7 +169,6 @@ class SingleQuiz extends React.Component {
       
         return (
             <div className="quiz-container">
-                <h3>Correct Answers: {this.state.answersCorrect}</h3>
                 <div>
                     <h2>{this.state.quizName}</h2>
                     { this.renderQuiz() }
@@ -154,11 +178,4 @@ class SingleQuiz extends React.Component {
     }
 }
 
-/*
-
-quiz name
-progression bar
-click through questions
-
-*/
 export default SingleQuiz
