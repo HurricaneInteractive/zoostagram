@@ -420,9 +420,13 @@ class Capture extends Component {
                 <ul className="enclosures">
                     { selectOptions }
                 </ul>
-                <a className="enclosure-trigger" onClick={ (e) => this.toggleEnclosureSelect(e) }>
-                    { this.state.selectedEnclosure !== '' ? this.state.selectedEnclosure : 'Select Enclosure' }
-                </a>
+                {
+                    this.state.selectedEnclosure === '' ? (
+                        <a className="enclosure-trigger" onClick={ (e) => this.toggleEnclosureSelect(e) }>Select Enclosure</a>
+                    ) : (
+                        <a className="save-photo" onClick={ (e) => this.savePhoto(e) }>Save</a>
+                    )
+                }
             </div>
         )
     }
@@ -458,7 +462,6 @@ class Capture extends Component {
                             this.state.reviewingPhoto ? (
                                 <Fragment>
                                     { this.renderEnclosureSelect() }
-                                    <a className="save-photo" onClick={ (e) => this.savePhoto(e) }><span className="save-icon">Save</span></a>
                                 </Fragment>
                             ) : (
                                 <a className="take-photo" onClick={ (e) => this.takePhoto(e) }>Take Photo</a>
