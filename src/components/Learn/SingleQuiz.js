@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import firebase from '../firebase'
 
 import Loading from '../Global/Loading'
-import PageTitle from '../Global/PageTitle';
+// import PageTitle from '../Global/PageTitle';
 
 const databaseRef = firebase.database();
 /**
@@ -22,6 +22,7 @@ class SingleQuiz extends React.Component {
             quizName: null,
             answersCorrect: 0,
             userAnswers: [],
+            correctAnswers: [],
             userProgression: 0,
             totalQuestions: 0,
             quizDone: false
@@ -42,8 +43,6 @@ class SingleQuiz extends React.Component {
                 quizName: quizNameYo
             });
         });
-        
-        
     }
 
     // checks if the option has been selected and updates the userAnswers state
@@ -84,24 +83,35 @@ class SingleQuiz extends React.Component {
         let quiz = this.state.allLearnData;
         let keys = Object.keys(quiz);
         let keyLength = keys.length;
-        // console.log(keyLength);
 
         let quizProgression = quiz[keys[this.state.userProgression]];
         let progressionPercentage = this.state.userProgression / keys.length * 100;
 
-        console.log("display quiz")
         if (this.state.userProgression === keyLength) {
-            console.log("break me")
+            console.log("userAnswers Array 95 = " + this.state.userAnswers)
             return (
                 <div>
                     { console.log("nothing to return") }
-                    <h2>Quiz Complete</h2>
-                    <h3>You got </h3>
-                    <Link to="/">hola</Link>
-                    <PageTitle to="/"></PageTitle>
+                    <h2>Congradulations</h2>
+                    <h3>You completed The Quiz on {this.state.quizName}</h3>
+                    { console.log("userAnswers Array 101 = " + this.state.userAnswers) }
+                    { console.log("userAnswers Array 101 = " + this.state.correctAnswers) }
+                    <div>
+                        <h2>{"" + this.state.userProgression + "%"}</h2>
+                        <h3>{"Questions Answered Correctly"}</h3>
+                    </div>
+                    <Link to="/learn">Back to Quiz Map</Link>
+                    <Link to="/">Take The Quiz Again</Link>
                 </div>
             )
         }
+        
+        let getCorrectAnswers = quizProgression.answer;
+        console.log(getCorrectAnswers);
+        console.log(quiz);
+        // this.setState({
+        //     userAnswers: getCorrectAnswers
+        // })
         return (
             <div>
                 <div className="progressionBar">
@@ -115,7 +125,7 @@ class SingleQuiz extends React.Component {
                     }}
                     >{"< back"}</button>
                 <ul> 
-                    {    
+                    {
                         quizProgression.options.map((question, i) => {
                             let questionAnswerClass = "quizOption";
 
