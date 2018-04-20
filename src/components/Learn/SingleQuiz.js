@@ -7,7 +7,12 @@ import Loading from '../Global/Loading'
 import PageTitle from '../Global/PageTitle';
 
 const databaseRef = firebase.database();
-
+/**
+ * 
+ * 
+ * @class SingleQuiz
+ * @extends {React.Component}
+ */
 class SingleQuiz extends React.Component {
     constructor(props) {
         super(props);
@@ -18,7 +23,6 @@ class SingleQuiz extends React.Component {
             answersCorrect: 0,
             userAnswers: [],
             userProgression: 0,
-            optionState: false,
             totalQuestions: 0,
             quizDone: false
         }
@@ -44,10 +48,6 @@ class SingleQuiz extends React.Component {
 
     // checks if the option has been selected and updates the userAnswers state
     clickHandler(question) {
-        this.setState({
-            optionState: !this.state.optionState
-        })
-
         if (typeof this.state.userAnswers[this.state.userProgression] === 'undefined') {
             let newAnswers = this.state.userAnswers;
             newAnswers.push(question);
@@ -78,25 +78,16 @@ class SingleQuiz extends React.Component {
     }
 
     renderQuiz() {
-        console.log(this.state);
+        // console.log(this.state);
         const _this = this;
 
         let quiz = this.state.allLearnData;
         let keys = Object.keys(quiz);
         let keyLength = keys.length;
-        console.log(keyLength);
+        // console.log(keyLength);
 
-        // console.log(keys);
-        // console.log(keys.length);
-
-        // gets the current state based on which question they are upto
         let quizProgression = quiz[keys[this.state.userProgression]];
-
-        // gets the total number of questions
         let progressionPercentage = this.state.userProgression / keys.length * 100;
-
-        // if statement to match total number of questions to the current question number
-        // will display the results screen 
 
         console.log("display quiz")
         if (this.state.userProgression === keyLength) {
@@ -116,17 +107,13 @@ class SingleQuiz extends React.Component {
                 <div className="progressionBar">
                     <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
                 </div>
-                {/* get thes current question*/}
                 <h2>{ quizProgression.question }</h2>
-                {
-                    // onClick progression goes back a question
                     <button onClick={()=>{
                         _this.setState({
                             userProgression: this.state.userProgression - 1
                         })
                     }}
                     >{"< back"}</button>
-                }
                 <ul> 
                     {    
                         quizProgression.options.map((question, i) => {
@@ -148,21 +135,17 @@ class SingleQuiz extends React.Component {
                         })
                     }
                 </ul>
-                {
-                    // onClick progression goes forward a question
                     <button onClick={()=>{
                         _this.setState({
                             userProgression: this.state.userProgression + 1
                         })
                     }}
                     >{"forward >"}</button>
-                }
             </div>
         )
     }
 
     render() {
-
         if (this.state.allLearnData === null) {
             return <Loading fullscreen={true} />
         }

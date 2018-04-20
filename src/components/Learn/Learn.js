@@ -13,7 +13,12 @@ import firebase from '../firebase'
 import Loading from '../Global/Loading'
 
 const databaseRef = firebase.database();
-
+/**
+ * 
+ * 
+ * @class QuizSelect
+ * @extends {React.Component}
+ */
 class QuizSelect extends React.Component {
     constructor(props) {
         super(props);
@@ -73,14 +78,6 @@ class QuizSelect extends React.Component {
         )
     }
 }
-
-/*
-
-quiz name
-progression bar
-click through questions
-
-*/
 
 const Learn = () => {
     return (
