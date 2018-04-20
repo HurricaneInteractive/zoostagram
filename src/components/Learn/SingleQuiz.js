@@ -24,8 +24,8 @@ class SingleQuiz extends React.Component {
             userAnswers: [],
             correctAnswers: [],
             userProgression: 0,
-            totalQuestions: 0,
-            quizDone: false
+            userPoints: 0,
+            userPercentage: 50
         }
 
        this.renderQuiz = this.renderQuiz.bind(this)
@@ -46,33 +46,59 @@ class SingleQuiz extends React.Component {
     }
 
     // checks if the option has been selected and updates the userAnswers state
-    clickHandler(question) {
+    clickHandler(question, answer, quizProgression) {
         if (typeof this.state.userAnswers[this.state.userProgression] === 'undefined') {
             let newAnswers = this.state.userAnswers;
             newAnswers.push(question);
+
+            let theAnswers = this.state.correctAnswers;
+            theAnswers.push(answer);
+            console.log("the OG answers" + theAnswers)
+
             this.setState({
-                userAnswers: newAnswers
+                userAnswers: newAnswers,
+                correctAnswers: theAnswers
             })
-        } 
+        }
         else {
             let updatedAnswers = this.state.userAnswers;
             updatedAnswers[this.state.userProgression] = question;
+
+            let updatedTheAnswers = this.state.correctAnswers
+            updatedTheAnswers[this.state.userProgression] = answer;
+            console.log("updated answers" + updatedTheAnswers)
+
             this.setState({
-                userAnswers: updatedAnswers
+                userAnswers: updatedAnswers,
+                correctAnswers: updatedTheAnswers
             })
         }
     }
 
-    isTheQuizOver(keyLength) {
-        if (this.state.userProgression === keyLength) {
-            this.setState ({
-                quizDone: true
-            })
-        }
-        else {
-            this.setState ({
-                quizDone: false
-            })
+    checkThemAnswers() {
+        console.log("loop coming");
+
+        const totalQuestionsAsked = this.state.correctAnswers.length;
+        // console.log(this.state.correctAnswers)
+
+        for (let i = 0; i < totalQuestionsAsked; i++) {
+            console.log("correctAnswer from i " + this.state.correctAnswers[i]);
+            console.log("userAnswer from i " + this.state.userAnswers[i]);
+            console.log("just the - " + i);
+
+            let compareUser = JSON.stringify(this.state.userAnswers[i]);
+            let compareCorrect = JSON.stringify(this.state.correctAnswers[i]);
+
+            if (compareUser === compareCorrect) {
+                let updatedPoints = this.state.userPoints;
+                console.log("updated points value = " + updatedPoints)
+                this.setState({
+                    userPoints: updatedPoints + 1
+                })
+            }
+            else {
+                console.log("no points today m8")
+            }
         }
     }
 
@@ -85,19 +111,19 @@ class SingleQuiz extends React.Component {
         let keyLength = keys.length;
 
         let quizProgression = quiz[keys[this.state.userProgression]];
+
         let progressionPercentage = this.state.userProgression / keys.length * 100;
 
         if (this.state.userProgression === keyLength) {
-            console.log("userAnswers Array 95 = " + this.state.userAnswers)
+
+            
             return (
                 <div>
-                    { console.log("nothing to return") }
+                    {this.checkThemAnswers()}
                     <h2>Congradulations</h2>
                     <h3>You completed The Quiz on {this.state.quizName}</h3>
-                    { console.log("userAnswers Array 101 = " + this.state.userAnswers) }
-                    { console.log("userAnswers Array 101 = " + this.state.correctAnswers) }
                     <div>
-                        <h2>{"" + this.state.userProgression + "%"}</h2>
+                        <h2>{"" + this.state.userPercentage + "%"}</h2>
                         <h3>{"Questions Answered Correctly"}</h3>
                     </div>
                     <Link to="/learn">Back to Quiz Map</Link>
@@ -105,13 +131,6 @@ class SingleQuiz extends React.Component {
                 </div>
             )
         }
-        
-        let getCorrectAnswers = quizProgression.answer;
-        console.log(getCorrectAnswers);
-        console.log(quiz);
-        // this.setState({
-        //     userAnswers: getCorrectAnswers
-        // })
         return (
             <div>
                 <div className="progressionBar">
@@ -128,6 +147,8 @@ class SingleQuiz extends React.Component {
                     {
                         quizProgression.options.map((question, i) => {
                             let questionAnswerClass = "quizOption";
+                            let answers = quizProgression.answer
+                            // console.log(answers)
 
                             if (typeof this.state.userAnswers[this.state.userProgression] !== 'undefined') {
                                 if (this.state.userAnswers[this.state.userProgression] === question) {
@@ -137,8 +158,10 @@ class SingleQuiz extends React.Component {
                             return (
                                 <li key={i}
                                     className={`${questionAnswerClass}`}
-                                    onClick={ () => this.clickHandler(question) }
+                                    
+                                    onClick={ () => this.clickHandler(question, answers, quizProgression) }
                                 >
+                                    {/* {console.log(question)} */}
                                     {question}
                                 </li>
                             )
@@ -159,7 +182,7 @@ class SingleQuiz extends React.Component {
         if (this.state.allLearnData === null) {
             return <Loading fullscreen={true} />
         }
-      
+
         return (
             <div className="quiz-container">
                 <div>
