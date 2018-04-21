@@ -72,10 +72,9 @@ $a-tags-hover: 'a:active, a:hover';
 
 //Question 1 Tile styling 
 #learn li:nth-child(1) {
-    background: url(images/quizshape-one.png) no-repeat center center; 
+    background: url(images/quizshape-one.png) no-repeat center center;
 
-#{$a-tags-hover} {
-    width: 10%;
+#{$a-tags:} {
   } 
 }
 
