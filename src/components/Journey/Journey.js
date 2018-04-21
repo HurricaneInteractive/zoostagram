@@ -202,7 +202,7 @@ export default class Journey extends Component {
                 </div>
                 {
                     this.state.creatingNew ? (
-                        <div className="new-journey-dialogue">
+                        <div className="journey-dialogue">
                             <div className="dialogue-inner">
                                 <div className="input-wrapper">
                                     <input placeholder="Journey Name" value={this.state.journeyName} name="journeyName" id="journeyName" onChange={(e) => this.onChange(e)} />

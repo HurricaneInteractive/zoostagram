@@ -195,8 +195,6 @@ class Capture extends Component {
      * 
      * @param {any} e Click event Object
      * @memberof Capture
-     * 
-     * TODO: Display the preview before saving the image
      */
     takePhoto(e) {
         const _this = this;
@@ -252,10 +250,6 @@ class Capture extends Component {
      * Saves the image into the Firebase Storage
      * 
      * @memberof Capture
-     * 
-     * TODO: Update the storage path to save into a specific folder per user & journey ID
-     * TODO: Display the Process to the user
-     * TODO: Save with the enclosure that the user picks
      */
     savePhoto(e = null) {
 
@@ -384,7 +378,9 @@ class Capture extends Component {
         e.preventDefault();
 
         this.setState({
-            reviewingPhoto: false
+            reviewingPhoto: false,
+            enclosureSelectOpen: false,
+            selectedEnclosure: ''
         }, () => {
             this.clearPhoto()
         })
@@ -417,6 +413,9 @@ class Capture extends Component {
 
         return (
             <div className={`enclosure-select ${this.state.enclosureSelectOpen ? 'open' : ''} ${this.state.enclosureError ? 'error' : ''}`}>
+                {
+                    this.state.enclosureSelectOpen === true ? (<h2 className="message">Select Enclosure</h2>) : ('')
+                }
                 <ul className="enclosures">
                     { selectOptions }
                 </ul>
