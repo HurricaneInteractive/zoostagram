@@ -85,7 +85,9 @@ const Learn = () => {
             <h1>Learn</h1>
                 <div className="dune-bg">
                 <div className="path-bg">
+                <div className="birds-bg">
                     <QuizSelect/>
+                </div>
                 </div>
                 </div>
         </div>

@@ -104,6 +104,16 @@
 
 .cloud-bg {
     background-image: url('./images/cloud-one.png');
+    background-repeat: no-repeat;
+    background-position: 20% 200px;
+    background-size: 600px 300px;
+}
+
+.cloud-two-bg{
+    background-image: url('./images/cloud-one.png');
+    background-repeat: no-repeat;
+    background-position: 20% 350px;
+    background-size: 40vh 40vh;
 }
 
 
@@ -120,6 +130,13 @@
     background-position:  0.5px 450px;
     background-size: 100% 50vh;
 
+}
+
+.birds-bg{
+    background-image: url('./images/birds.png');
+    background-repeat: no-repeat;
+    background-size: 100vh 50vh;
+    background-position: 50% 300px;
 }
 
 
