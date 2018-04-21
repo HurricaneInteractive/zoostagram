@@ -80,6 +80,7 @@ class SingleQuiz extends React.Component {
 
         const totalQuestionsAsked = this.state.correctAnswers.length;
         // console.log(this.state.correctAnswers)
+        let updatedPoints = 0;
 
         for (let i = 0; i < totalQuestionsAsked; i++) {
             console.log("correctAnswer from i " + this.state.correctAnswers[i]);
@@ -89,17 +90,19 @@ class SingleQuiz extends React.Component {
             let compareUser = JSON.stringify(this.state.userAnswers[i]);
             let compareCorrect = JSON.stringify(this.state.correctAnswers[i]);
 
+            
             if (compareUser === compareCorrect) {
-                let updatedPoints = this.state.userPoints;
                 console.log("updated points value = " + updatedPoints)
-                this.setState({
-                    userPoints: updatedPoints + 1
-                })
+                updatedPoints = updatedPoints + 1;
             }
             else {
                 console.log("no points today m8")
             }
+            console.log("i at the end of for loop" + i)
         }
+        console.log("I feel a bit out of the loop")
+
+        return updatedPoints       
     }
 
     renderQuiz() {
@@ -111,23 +114,30 @@ class SingleQuiz extends React.Component {
         let keyLength = keys.length;
 
         let quizProgression = quiz[keys[this.state.userProgression]];
-
         let progressionPercentage = this.state.userProgression / keys.length * 100;
 
-        if (this.state.userProgression === keyLength) {
+        let updateTheScore = 0;
 
-            
+        if (this.state.userProgression === keyLength) {
+            updateTheScore = this.checkThemAnswers();
+
+            let userScoreFraction = JSON.stringify(updateTheScore) + "/" + JSON.stringify(keys.length);
+            let userScorePercentage = updateTheScore / keys.length * 100;
+            let roundedUserScorePercentage = Math.round(userScorePercentage);
+
+            // function here to push user score (updateTheScore) back to the DB
+
             return (
                 <div>
-                    {this.checkThemAnswers()}
+                    { console.log("inside return " + updateTheScore) }
                     <h2>Congradulations</h2>
                     <h3>You completed The Quiz on {this.state.quizName}</h3>
                     <div>
-                        <h2>{"" + this.state.userPercentage + "%"}</h2>
-                        <h3>{"Questions Answered Correctly"}</h3>
+                        <h2>{"" + roundedUserScorePercentage + "%"}</h2>
+                        <h3>{userScoreFraction + " Questions Answered Correctly"}</h3>
                     </div>
                     <Link to="/learn">Back to Quiz Map</Link>
-                    <Link to="/">Take The Quiz Again</Link>
+                    <Link to={"/"}>Take The Quiz Again</Link>
                 </div>
             )
         }
