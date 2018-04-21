@@ -138,6 +138,12 @@
             transform: scaleX(1);
         }
     }
+    &.error {
+        &:after {
+            background: $red !important;
+            transform: scaleX(1);
+        }
+    }
     input {
         border: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);

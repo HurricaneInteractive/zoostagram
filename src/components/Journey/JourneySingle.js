@@ -6,6 +6,8 @@ import firebase from '../firebase'
 import PageTitle from '../Global/PageTitle'
 import Loading from '../Global/Loading'
 
+import JourneyTitle from './elements/JourneyTitle'
+
 const masonryOptions = {
     transitionDuration: 0
 };
@@ -38,6 +40,7 @@ export default class JourneySingle extends Component {
         this.fetchJourneyData = this.fetchJourneyData.bind(this)
         this.fetchJourneyImages = this.fetchJourneyImages.bind(this)
         this.generateImageGallery = this.generateImageGallery.bind(this)
+        this.updateStateWithNewTitle = this.updateStateWithNewTitle.bind(this)
     }
 
     /**
@@ -121,6 +124,21 @@ export default class JourneySingle extends Component {
     }
 
     /**
+     * Updates the state to reflect the new Journey Title
+     * 
+     * @param {string} title New Title
+     * @memberof JourneySingle
+     */
+    updateStateWithNewTitle(title) {
+        let newJourney = {...this.state.journey};
+        newJourney.journey_name = title;
+        
+        this.setState({
+            journey: newJourney
+        })
+    }
+
+    /**
      * React Function - See Documentation
      * Renders the Journey Markup
      * 
@@ -140,16 +158,21 @@ export default class JourneySingle extends Component {
                             <h2 className="no-results">Capture the moment</h2>
                         ) : (
                             <div className="single-wrapper">
-                                <h3>{journey.journey_name}</h3>
+                                <JourneyTitle
+                                    title={journey.journey_name}
+                                    id={journey.id}
+                                    uid={this.state.user.uid}
+                                    updateFakeState={ (title) => this.updateStateWithNewTitle(title) }
+                                />
                                 {
                                     journey.images === null || typeof journey.images === 'undefined' ? (
                                         <h2 className="no-results">Capture the moment</h2>
                                     ) : (
                                         <Masonry
-                                            className={'journey-listing'} // default ''
-                                            elementType={'ul'} // default 'div'
+                                            className={'journey-listing'}
+                                            elementType={'ul'}
                                             options={masonryOptions}
-                                            disableImagesLoaded={false} // default false
+                                            disableImagesLoaded={false}
                                             updateOnEachImageLoad={true}
                                         >
                                             { this.generateImageGallery() }
