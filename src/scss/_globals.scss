@@ -103,19 +103,23 @@
 }
 
 .cloud-bg {
-    width: 100%;
     background-image: url('./images/cloud-one.png');
-    background-repeat: no-repeat;
-    background-position: 0.5px 200px;
-    background-size: contain;
 }
 
 
 .path-bg{
     background-image: url('./images/path.png');
     background-repeat: no-repeat;
-    background-position: center;
-    background-size: 8px 150px;;
+    background-position: 50% 100px;
+    background-size: 8px 200px;;
+}
+
+.dune-bg{
+    background-image: url('./images/dunes.png');
+    background-repeat: no-repeat;
+    background-position:  0.5px 450px;
+    background-size: 100% 50vh;
+
 }
 
 

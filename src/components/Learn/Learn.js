@@ -83,11 +83,11 @@ const Learn = () => {
     return (
         <div id="learn">
             <h1>Learn</h1>
-            <div className="path-bg">
-                <div className="cloud-bg">
+                <div className="dune-bg">
+                <div className="path-bg">
                     <QuizSelect/>
                 </div>
-            </div>
+                </div>
         </div>
         
     )
