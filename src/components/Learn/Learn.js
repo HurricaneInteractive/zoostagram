@@ -83,6 +83,7 @@ const Learn = () => {
     return (
         <div id="learn">
             <h1>Learn</h1>
+               <p> Hint: Pay attention to notice boards at the National Zoo & Aquarium </p>
                 <div className="dune-bg">
                 <div className="path-bg">
                 <div className="birds-bg">
