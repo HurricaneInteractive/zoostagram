@@ -143,6 +143,16 @@
                         box-shadow: 0 1px 4px 1px rgba(255, 0, 0, 0.5);
                     }
                 }
+                .message {
+                    position: absolute;
+                    bottom: calc(50vh + 70px);
+                    left: 0;
+                    font-size: 35px;
+                    font-family: $heebo;
+                    margin: 0;
+                    color: white;
+                    text-align: center;
+                }
                 .enclosures {
                     width: 100%;
                     position: absolute;
