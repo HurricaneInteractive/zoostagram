@@ -24,6 +24,12 @@
     list-style-type: upper-latin;
 }
 
+//Hover variables
+
+$a-tags: 'a, a:active, a:hover, a:visited';
+
+$a-tags-hover: 'a:active, a:hover';
+
 // Learn body gradient styling
 
 #learn{
@@ -54,14 +60,24 @@
     list-style-type: none;
 }
 
-#learn li a{
+#learn a{
     text-decoration: none;
+    color: #FFAA00;
 }
+
+#learn a:visited{
+    color: #FFAA00;
+}
+
 
 //Question 1 Tile styling 
 #learn li:nth-child(1) {
-    background: url(images/quizshape-one.png) no-repeat center center; 
+    background: url(images/quizshape-one.png) no-repeat center center;
+
+#{$a-tags:} {
+  } 
 }
+
 
 //Question 2 Tile styling
 #learn li:nth-child(2) {
