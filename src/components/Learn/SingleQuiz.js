@@ -18,9 +18,10 @@ class SingleQuiz extends React.Component {
         super(props);
 
         this.state = {
+            userID: null,
+            allUserData: null,
             allLearnData: null,
             quizName: null,
-            answersCorrect: 0,
             userAnswers: [],
             correctAnswers: [],
             userProgression: 0,
@@ -43,6 +44,19 @@ class SingleQuiz extends React.Component {
                 quizName: quizNameYo
             });
         });
+
+        _this.setState({
+            userID: firebase.auth().currentUser.uid
+        });
+        // get current users information/stats
+        databaseRef.ref(`users/${firebase.auth().currentUser.uid}`).once('value').then(function(snapshot){
+            console.log("all user data below: ");
+            let userDataHere = snapshot.val();
+            console.log(snapshot.val() );
+            _this.setState({
+                allUserData: userDataHere
+            })
+        })
     }
 
     // checks if the option has been selected and updates the userAnswers state
@@ -53,7 +67,7 @@ class SingleQuiz extends React.Component {
 
             let theAnswers = this.state.correctAnswers;
             theAnswers.push(answer);
-            console.log("the OG answers" + theAnswers)
+            // console.log("the OG answers" + theAnswers)
 
             this.setState({
                 userAnswers: newAnswers,
@@ -66,7 +80,7 @@ class SingleQuiz extends React.Component {
 
             let updatedTheAnswers = this.state.correctAnswers
             updatedTheAnswers[this.state.userProgression] = answer;
-            console.log("updated answers" + updatedTheAnswers)
+            // console.log("updated answers" + updatedTheAnswers)
 
             this.setState({
                 userAnswers: updatedAnswers,
@@ -90,7 +104,6 @@ class SingleQuiz extends React.Component {
             let compareUser = JSON.stringify(this.state.userAnswers[i]);
             let compareCorrect = JSON.stringify(this.state.correctAnswers[i]);
 
-            
             if (compareUser === compareCorrect) {
                 console.log("updated points value = " + updatedPoints)
                 updatedPoints = updatedPoints + 1;
@@ -98,11 +111,57 @@ class SingleQuiz extends React.Component {
             else {
                 console.log("no points today m8")
             }
-            console.log("i at the end of for loop" + i)
         }
-        console.log("I feel a bit out of the loop")
+        return updatedPoints
+    }
 
-        return updatedPoints       
+    // checkWhoIsHigher(old, new) {
+
+    //     if (old > new ) {
+    //         return old;
+    //     }
+    //     else {
+    //         return new;
+    //     }
+    // }
+
+    pushTheData(pointsToPush) {
+        console.log("inside the push");
+        let quizoMizzo = this.state.quizName;
+        let uid = this.state.userID;
+
+        let oldData = this.state.allUserData;
+        console.log(oldData);
+        let oldQuizScore = oldData.quiz_attempts[this.state.quizName].hs;
+        console.log("oldQuizScore" + oldQuizScore);
+        // this.checkWhoIsHigher()
+
+        let quizAttemptHS = 0;
+        console.log("quizAttemptHS before any ifs or else's" + quizAttemptHS);
+
+        if (oldQuizScore > pointsToPush) {
+            console.log("inside the if of oldQuizScore vs userPoints")
+            quizAttemptHS = oldQuizScore;
+        }
+        else {
+            console.log("inside the else of oldQuizScore vs userPoints")
+            quizAttemptHS = pointsToPush
+        }
+        console.log("quizAttemptHS - " + quizAttemptHS);
+
+        let updatedPoints = oldData.points - oldData.quiz_attempts[this.state.quizName].hs + quizAttemptHS;
+
+        let updateThisData = {
+            points: updatedPoints,
+            quiz_attempts: quizoMizzo,
+            hs: quizAttemptHS
+        }
+
+        let dataToPush = {};
+        dataToPush['/points'] = updateThisData.points;
+        dataToPush['/quiz_attempts/' + quizoMizzo + '/hs'] = updateThisData.hs;
+
+        return databaseRef.ref(`users/` + uid).update(dataToPush);
     }
 
     renderQuiz() {
@@ -118,21 +177,31 @@ class SingleQuiz extends React.Component {
 
         let updateTheScore = 0;
 
+        let buttonButton = "Next";
+
+        if (this.state.userProgression === keyLength - 1) {
+            buttonButton = "Results"
+        }
+
         if (this.state.userProgression === keyLength) {
             updateTheScore = this.checkThemAnswers();
+            let pointsToPush = updateTheScore;
 
             let userScoreFraction = JSON.stringify(updateTheScore) + "/" + JSON.stringify(keys.length);
             let userScorePercentage = updateTheScore / keys.length * 100;
             let roundedUserScorePercentage = Math.round(userScorePercentage);
 
             // function here to push user score (updateTheScore) back to the DB
+            console.log("before the push");
+            this.pushTheData(pointsToPush);
+            console.log("after the push");
 
             return (
                 <div>
                     <div className="progressionBar">
                         <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
                     </div>
-                    { console.log("inside return " + updateTheScore) }
+                    {/* { console.log("inside return " + updateTheScore) } */}
                     <h2>Congradulations</h2>
                     <h3>You completed The Quiz on {this.state.quizName}</h3>
                     <div>
@@ -144,6 +213,7 @@ class SingleQuiz extends React.Component {
                 </div>
             )
         }
+
         return (
             <div>
                 <div className="progressionBar">
@@ -159,8 +229,7 @@ class SingleQuiz extends React.Component {
                         {
                             quizProgression.options.map((question, i) => {
                                 let questionAnswerClass = "quizOption";
-                                let answers = quizProgression.answer
-                                // console.log(answers)
+                                let answers = quizProgression.answer;
 
                                 if (typeof this.state.userAnswers[this.state.userProgression] !== 'undefined') {
                                     if (this.state.userAnswers[this.state.userProgression] === question) {
@@ -170,10 +239,8 @@ class SingleQuiz extends React.Component {
                                 return (
                                     <li key={i}
                                         className={`${questionAnswerClass}`}
-                                        
                                         onClick={ () => this.clickHandler(question, answers, quizProgression) }
                                     >
-                                        {/* {console.log(question)} */}
                                         {question}
                                     </li>
                                 )
@@ -182,15 +249,21 @@ class SingleQuiz extends React.Component {
                     </ul>
                 </div>
                 <button className="backArrow" onClick={()=>{
-                    _this.setState({
-                        userProgression: this.state.userProgression - 1
-                    })
+                    if (this.state.userProgression === 0) {
+                        console.log("do nothing :P");
+                    }
+                    else {
+                        _this.setState({
+                            userProgression: this.state.userProgression - 1,
+                        })
+                    }
                 }}>{"<"}</button>
                 <button  className="forwardArrow" onClick={()=>{
+                    // if statement to force users to answer
                     _this.setState({
                         userProgression: this.state.userProgression + 1
                     })
-                }}> {">"} </button>
+                }}> {buttonButton + ">"} </button>
             </div>
         )
     }
