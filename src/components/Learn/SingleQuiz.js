@@ -129,6 +129,9 @@ class SingleQuiz extends React.Component {
 
             return (
                 <div>
+                    <div className="progressionBar">
+                        <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
+                    </div>
                     { console.log("inside return " + updateTheScore) }
                     <h2>Congradulations</h2>
                     <h3>You completed The Quiz on {this.state.quizName}</h3>
@@ -146,44 +149,48 @@ class SingleQuiz extends React.Component {
                 <div className="progressionBar">
                     <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
                 </div>
-                <h2>{ quizProgression.question }</h2>
-                    <button onClick={()=>{
-                        _this.setState({
-                            userProgression: this.state.userProgression - 1
-                        })
-                    }}
-                    >{"< back"}</button>
-                <ul> 
-                    {
-                        quizProgression.options.map((question, i) => {
-                            let questionAnswerClass = "quizOption";
-                            let answers = quizProgression.answer
-                            // console.log(answers)
+                <div>
+                    <p>{ "Question " + (this.state.userProgression + 1) }</p>
+                </div>
+                <div className="questionContainer">
+                    <h2>{ quizProgression.question }</h2>
+                        
+                    <ul className="quizQuestions"> 
+                        {
+                            quizProgression.options.map((question, i) => {
+                                let questionAnswerClass = "quizOption";
+                                let answers = quizProgression.answer
+                                // console.log(answers)
 
-                            if (typeof this.state.userAnswers[this.state.userProgression] !== 'undefined') {
-                                if (this.state.userAnswers[this.state.userProgression] === question) {
-                                    questionAnswerClass += ' active';
+                                if (typeof this.state.userAnswers[this.state.userProgression] !== 'undefined') {
+                                    if (this.state.userAnswers[this.state.userProgression] === question) {
+                                        questionAnswerClass += ' active';
+                                    }
                                 }
-                            }
-                            return (
-                                <li key={i}
-                                    className={`${questionAnswerClass}`}
-                                    
-                                    onClick={ () => this.clickHandler(question, answers, quizProgression) }
-                                >
-                                    {/* {console.log(question)} */}
-                                    {question}
-                                </li>
-                            )
-                        })
-                    }
-                </ul>
-                    <button onClick={()=>{
-                        _this.setState({
-                            userProgression: this.state.userProgression + 1
-                        })
-                    }}
-                    >{"forward >"}</button>
+                                return (
+                                    <li key={i}
+                                        className={`${questionAnswerClass}`}
+                                        
+                                        onClick={ () => this.clickHandler(question, answers, quizProgression) }
+                                    >
+                                        {/* {console.log(question)} */}
+                                        {question}
+                                    </li>
+                                )
+                            })
+                        }
+                    </ul>
+                </div>
+                <button className="backArrow" onClick={()=>{
+                    _this.setState({
+                        userProgression: this.state.userProgression - 1
+                    })
+                }}>{"<"}</button>
+                <button  className="forwardArrow" onClick={()=>{
+                    _this.setState({
+                        userProgression: this.state.userProgression + 1
+                    })
+                }}> {">"} </button>
             </div>
         )
     }
