@@ -87,7 +87,9 @@ const Learn = () => {
                 <div className="dune-bg">
                 <div className="path-bg">
                 <div className="birds-bg">
+                <div className="adax-bg">
                     <QuizSelect/>
+                </div>
                 </div>
                 </div>
                 </div>

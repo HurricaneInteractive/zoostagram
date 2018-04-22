@@ -102,26 +102,12 @@
     }
 }
 
-.cloud-bg {
-    background-image: url('./images/cloud-one.png');
-    background-repeat: no-repeat;
-    background-position: 20% 200px;
-    background-size: 600px 300px;
-}
-
-.cloud-two-bg{
-    background-image: url('./images/cloud-one.png');
-    background-repeat: no-repeat;
-    background-position: 20% 350px;
-    background-size: 40vh 40vh;
-}
-
 
 .path-bg{
     background-image: url('./images/path.png');
     background-repeat: no-repeat;
     background-position: 50% 100px;
-    background-size: 8px 800px;;
+    background-size: 8px 850px;;
 }
 
 .dune-bg{
@@ -136,7 +122,14 @@
     background-image: url('./images/birds.png');
     background-repeat: no-repeat;
     background-size: 100vh 50vh;
-    background-position: 50% 300px;
+    background-position: 50% 350px;
+}
+
+.adax-bg{
+    background-image: url('./images/adax-white.png');
+    background-repeat: no-repeat;
+    background-position: 100% 900px;
+    background-size: 150px 150px;
 }
 
 
