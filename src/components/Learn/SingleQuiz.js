@@ -131,113 +131,61 @@ class SingleQuiz extends React.Component {
         let uid = this.state.userID;
 
         let oldData = this.state.allUserData;
-        let quizAttemptHS = 0;
-        console.log("quizAttemptHS before any ifs or else's" + quizAttemptHS);
-        let oldUserQuizScore = 0;
-
-        
-
-
-        // adds quiz_attempts + points for the first time
-        if (typeof oldData.quiz_attempts !== undefined) {
-            console.log("quiz attemps doesnt exist");
-
-            
-            // firebase.database().ref(`users/${user.uid}`)
-            // .set({
-            //     email: email,
-            //     points: 0
-            // })
-
-            // let postoDato = {
-            //     quiz_attempts: quizoMizzo
-            // }
-
-            // let dataToPushYo = {};
-            // dataToPushYo[pushThisQuizAttempts] = postoDato.quiz_attempts;
-
-            // return firebase.database().ref().update(dataToPushYo);
-        }
-        else {
-            console.log("else - pls run this");
-        }
 
         // adds quiz for the first time
         if (typeof oldData.quiz_attempts === undefined) {
             console.log("specific quiz name doesnt exist");
-
+            
             let pushThisQuizAttempts = databaseRef.ref().child(`users/${uid}/`);
-            return pushThisQuizAttempts.update({
+            pushThisQuizAttempts.update({
                 quiz_attempts: {},
                 points: 0
             })
         }
         else {
+            console.log(oldData.quiz_attempts[quizoMizzo].hs);
             console.log("else of quiz attempts - does it exist?")
         }
-
-
-        // check if user has attempted quiz before
-        // if (typeof oldData.quiz_attempts[this.state.quizName] === undefined) {
-        //     let pushThisQuizNameShizzle = databaseRef.ref().child(`users/${uid}/`);
-        //     return pushThisQuizNameShizzle.update({
-        //         quiz_attempts: {
-        //             quizoMizzo: {
-        //                 hs: pointsToPush
-        //             }
-        //         },
-        //     })
-        // }
-
-        // check if user has attempted quiz before
-        // if (typeof oldData.quiz_attempts[this.state.quizName].hs === undefined) {
-        //     oldUserQuizScore = 0;
-        // }
-        // else {
-        //     oldUserQuizScore = oldData.quiz_attempts[this.state.quizName].hs;
-        // }
 
         // checks if current points exist
         // then checks if new points are larger than the old ones
         let quizSpecificPointsToUpdate = 0;
-        if (oldUserQuizScore === undefined) {
+        if (oldData.quiz_attempts[quizoMizzo].hs === undefined) {
                 quizSpecificPointsToUpdate = pointsToPush;
         }
         else {
-            if (oldUserQuizScore < pointsToPush) {
+            if (oldData.quiz_attempts[quizoMizzo].hs < pointsToPush) {
                 quizSpecificPointsToUpdate = pointsToPush;
             }
             else {
-                quizSpecificPointsToUpdate = oldUserQuizScore;
+                quizSpecificPointsToUpdate = oldData.quiz_attempts[quizoMizzo].hs;
             }
         }
 
-        // checks for current total user points
-        let oldUserPointsTotal = 0;
-        if (oldData.points === undefined) {
-            oldUserPointsTotal = 0;
-        }
-        else {
-            oldUserPointsTotal = oldData.points
-        }
-
-        let updatedPoints = oldUserPointsTotal - oldUserQuizScore + quizSpecificPointsToUpdate;
+        let updatedPoints = oldData.points - oldData.quiz_attempts[quizoMizzo].hs + quizSpecificPointsToUpdate;
 
         let updateThisData = {
             points: updatedPoints,
             quiz_attempts: quizoMizzo,
-            hs: quizAttemptHS
+            hs: quizSpecificPointsToUpdate
         }
-        
-        let pushThisQuizAttempts = databaseRef.ref().child(`users/${uid}/`);
-        return pushThisQuizAttempts.update({
-            quiz_attempts: {
-                quizoMizzo: {
+
+        let pushThisQuizPoints = databaseRef.ref().child(`users/${uid}/`);
+
+        console.log(pushThisQuizPoints);
+        // push user data to DB (without overriding and deleting the whole user DB)
+        let pushThisQuizAttempts = databaseRef.ref().child(`users/${uid}/quiz_attempts/`);
+        return (
+            pushThisQuizAttempts.update({
+                [quizoMizzo] : {
                     hs: updateThisData.hs
                 }
-            },
-            points: updateThisData.points
-        })
+            }),
+            pushThisQuizPoints.update({
+                points: updateThisData.points
+            })
+        )
+            
     }
 
     resetQuiz() {
