@@ -27,7 +27,6 @@ class SingleQuiz extends React.Component {
             userAnswers: [],
             correctAnswers: [],
             userProgression: 0,
-            userPoints: 0,
             userPercentage: 50,
             updatedUserData: null
         }
@@ -115,13 +114,30 @@ class SingleQuiz extends React.Component {
      * @param {int} points Points to replace the current High Score
      * @memberof SingleQuiz
      */
-    updateHighScore(points) {
+    updateHighScore(points, currentHighScore) {
         const { userID, quizName } = this.state;
         const quizAttemptsRef = firebase.database().ref(`users/${userID}/quiz_attempts/${quizName}`);
+        const userPoints = firebase.database().ref(`users/${userID}`);
 
         let updateData = {
             hs: points
         }
+
+        let pointsToAdd = 0;
+
+        console.log(this.state.allUserData.points);
+        console.log(pointsToAdd);
+
+        let pointsToUpdate = {
+            points: this.state.allUserData.points - currentHighScore + points
+        }
+
+        userPoints.update(pointsToUpdate)
+            .then(() => {
+                console.log('successfully updated total points');
+            }).catch((err) => {
+                console.error(err.message);
+            })
 
         quizAttemptsRef.update(updateData)
             .then(() => {
@@ -144,17 +160,26 @@ class SingleQuiz extends React.Component {
         let { allUserData, quizName } = this.state;
 
         if (typeof allUserData.quiz_attempts === 'undefined') {
-            this.updateHighScore(pointsToPush);
+            let currentHighScore = 0;
+            this.updateHighScore(pointsToPush, currentHighScore);
         }
         else {
             if (typeof allUserData.quiz_attempts[quizName] === 'undefined') {
-                this.updateHighScore(pointsToPush);
+                let currentHighScore = 0;
+                this.updateHighScore(pointsToPush, currentHighScore);
             }
             else {
-                let currentHighScore = allUserData.quiz_attempts[quizName].hs;
-                if (currentHighScore < pointsToPush) {
-                    this.updateHighScore(pointsToPush);
+                if (typeof this.state.allUserData.quiz_attempts[quizName].hs === 'undefined') {
+                    let currentHighScore = 0;
+                    this.updateHighScore(pointsToPush, currentHighScore);
                 }
+                else {
+                    let currentHighScore = allUserData.quiz_attempts[quizName].hs;
+                    if (currentHighScore < pointsToPush) {
+                        this.updateHighScore(pointsToPush, currentHighScore);
+                    }
+                }
+                
             }
         }
     }
@@ -164,7 +189,6 @@ class SingleQuiz extends React.Component {
             userAnswers: [],
             correctAnswers: [],
             userProgression: 0,
-            userPoints: 0,
             userPercentage: 0
         })
     }
