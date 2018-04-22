@@ -1,0 +1,46 @@
+.profile-page {
+    padding: 27px 30px 40px;
+    height: auto;
+    .user-details {
+        text-align: center;
+        svg {
+            fill: darken($light-grey, 10%);
+            width: 80px;
+            margin-bottom: 15px;
+        }
+        p {
+            margin: 0 0 10px;
+        }
+        .user-stats {
+            margin-top: 30px;
+            display: grid;
+            grid-gap: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            opacity: 0;
+            transition: opacity 250ms ease-in-out;
+            &.fadeIn {
+                opacity: 1;
+            }
+            .stat {
+                padding: 25px 15px;
+                border-radius: 10px;
+                border: 1px solid $light-grey;
+                &.red {
+                    border-color: $red;
+                }
+                &.purple {
+                    border-color: $purple;
+                }
+                strong {
+                    display: block;
+                    font-size: 30px;
+                    font-weight: bold;
+                    font-family: $heebo;
+                }
+                p {
+                    margin: 0;
+                }
+            }
+        }
+    }
+}

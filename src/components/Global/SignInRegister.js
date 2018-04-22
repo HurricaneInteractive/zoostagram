@@ -127,7 +127,8 @@ export default class SignInRegister extends Component {
         return firebase.database().ref(`users/${user.uid}`)
             .set({
                 email: email,
-                points: 0
+                points: 0,
+                achievements: 0
             })
             .then(() => {
                 return user.updateProfile({
