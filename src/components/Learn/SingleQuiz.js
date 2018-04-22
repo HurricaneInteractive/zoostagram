@@ -161,10 +161,6 @@ class SingleQuiz extends React.Component {
 
     resetQuiz() {
         this.setState({
-            userID: null,
-            allUserData: null,
-            allLearnData: null,
-            quizName: null,
             userAnswers: [],
             correctAnswers: [],
             userProgression: 0,
@@ -203,6 +199,8 @@ class SingleQuiz extends React.Component {
             // function here to push user score (updateTheScore) back to the DB
             this.pushTheData(pointsToPush);
 
+            let leQuizName = this.state.quizName;
+
             return (
                 <div>
                     <div className="progressionBar">
@@ -216,7 +214,7 @@ class SingleQuiz extends React.Component {
                         <h3>{userScoreFraction + " Questions Answered Correctly"}</h3>
                     </div>
                     <Link to="/learn">Back to Quiz Map</Link>
-                    <Link to={"/"} onClick={ () => this.resetQuiz()}>Take The Quiz Again</Link>
+                    <Link to={`/doquiz/${leQuizName}`} onClick={ () => this.resetQuiz()}>Take The Quiz Again</Link>
                 </div>
             )
         }
