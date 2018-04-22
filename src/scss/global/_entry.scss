@@ -1,6 +1,16 @@
 .app-home {
     display: grid;
     grid-template-rows: 40px auto 50px;
+    .user-profile {
+        width: 25px;
+        height: 25px;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background: url('./images/default_user.svg') no-repeat center center / 25px 25px;
+        text-indent: -9999px;
+        overflow: hidden;
+    }
     .app-feature-options {
         align-self: center;
         ul {

@@ -13,6 +13,7 @@ import firebase from 'firebase'
 // Global Components
 import Entry from './Global/Entry'
 import SignInRegister from './Global/SignInRegister'
+import Profile from './Global/Profile'
 import Loading from './Global/Loading'
 
 // Journey Components
@@ -100,6 +101,9 @@ export default class AppRouter extends Component {
                 <Route path="/learn" component={Learn} />
                 <Route path="/quizfinish" component={QuizFinish} />
                 <Route path="/doquiz/:id" component={SingleQuiz} />
+                <Route exact path="/profile" render={(routeProps) => (
+                    <Profile routerProps={routeProps} authUser={user} />
+                )} />
             </Switch>
         )
 

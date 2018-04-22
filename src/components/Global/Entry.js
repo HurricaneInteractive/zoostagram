@@ -11,6 +11,7 @@ import Logo from './Logo'
 const Entry = () => {
     return(
         <div className="page app-home purple-grain-bg">
+            <Link className="user-profile" to="/profile">Profile</Link>
             <Logo />
             <div className="app-feature-options">
                 <ul>
