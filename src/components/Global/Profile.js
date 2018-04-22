@@ -52,7 +52,9 @@ export default class Profile extends Component {
         let allStats = stats.map((stat, key) => {
             return (
                 <div className={`stat ${stat.theme}`} key={`${stat.name}__${key}`}>
-                    <strong>{stat.value}</strong>
+                    <strong>{
+                        state.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
+                    }</strong>
                     <p>{stat.name}</p>
                 </div>
             )
