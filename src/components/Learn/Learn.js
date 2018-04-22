@@ -87,24 +87,15 @@ export default class Learn extends Component {
             <PageTitle title="Learn" back={() => this.props.routerProps.history.goBack()} />
                <p> Hint: Pay attention to notice boards at the National Zoo & Aquarium </p>
                 <div className="dune-bg">
-                <div className="path-bg">
-                <div className="birds-bg">
-                <div className="adax-bg">
-                    <QuizSelect/>
+                    <div className="path-bg">
+                        <div className="birds-bg">
+                            <div className="adax-bg">
+                                <QuizSelect/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                </div>
-                </div>
-<<<<<<< HEAD
             </div>
         )
     }
 }
-=======
-                </div>
-        </div>
-        
-    )
-}
-
-export default Learn
->>>>>>> bb858b96944d9f87396caada909d4046fa62b74a
