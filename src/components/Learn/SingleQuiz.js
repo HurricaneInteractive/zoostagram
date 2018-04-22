@@ -1,4 +1,6 @@
-
+/**
+ * @requires BETTER VARIABLE NAMES PLEASE!
+ */
 import React from 'react'
 import { Link } from 'react-router-dom'
 import firebase from '../firebase'
@@ -31,6 +33,8 @@ class SingleQuiz extends React.Component {
         }
 
        this.renderQuiz = this.renderQuiz.bind(this)
+       this.pushTheData = this.pushTheData.bind(this)
+       this.updateHighScore = this.updateHighScore.bind(this)
     }
 
     componentDidMount() {
@@ -51,9 +55,7 @@ class SingleQuiz extends React.Component {
         });
         // get current users information/stats
         databaseRef.ref(`users/${firebase.auth().currentUser.uid}`).once('value').then(function(snapshot){
-            console.log("all user data below: ");
             let userDataHere = snapshot.val();
-            console.log(snapshot.val() );
             _this.setState({
                 allUserData: userDataHere
             })
@@ -91,93 +93,70 @@ class SingleQuiz extends React.Component {
     }
 
     checkThemAnswers() {
-        console.log("loop coming");
-
         const totalQuestionsAsked = this.state.correctAnswers.length;
         // console.log(this.state.correctAnswers)
         let updatedPoints = 0;
 
         for (let i = 0; i < totalQuestionsAsked; i++) {
-            console.log("correctAnswer from i " + this.state.correctAnswers[i]);
-            console.log("userAnswer from i " + this.state.userAnswers[i]);
-            console.log("just the - " + i);
 
             let compareUser = JSON.stringify(this.state.userAnswers[i]);
             let compareCorrect = JSON.stringify(this.state.correctAnswers[i]);
 
             if (compareUser === compareCorrect) {
-                console.log("updated points value = " + updatedPoints)
                 updatedPoints = updatedPoints + 1;
-            }
-            else {
-                console.log("no points today m8")
             }
         }
         return updatedPoints
     }
 
-    pushTheData(pointsToPush) {
-        console.log("inside the push");
-        let quizoMizzo = this.state.quizName;
-        let uid = this.state.userID;
+    /**
+     * Calls the Firebase update method on quiz_attempts for this quiz
+     * 
+     * @param {int} points Points to replace the current High Score
+     * @memberof SingleQuiz
+     */
+    updateHighScore(points) {
+        const { userID, quizName } = this.state;
+        const quizAttemptsRef = firebase.database().ref(`users/${userID}/quiz_attempts/${quizName}`);
 
-        let oldData = this.state.allUserData;
-
-        // adds specific quiz data for the first time
-        console.log(oldData.quiz_attempts[quizoMizzo]);
-        if (oldData.quiz_attempts.quizoMizzo !== quizoMizzo) {
-            console.log("run add quiz name and hs value of 0");
+        let updateData = {
+            hs: points
         }
 
-        // checks if current points exist
-        // then checks if new points are larger than the old ones
-        let quizSpecificPointsToUpdate = 0;
-        console.log(quizoMizzo);
-        // if (oldData.quiz_attempts[quizoMizzo].hs === 0) {
-        //         quizSpecificPointsToUpdate = pointsToPush;
-        // }
-        // else {
-            if (oldData.quiz_attempts[quizoMizzo].hs < pointsToPush) {
-                quizSpecificPointsToUpdate = pointsToPush;
+        quizAttemptsRef.update(updateData)
+            .then(() => {
+                console.log('Successfully Added');
+            }).catch((err) => {
+                console.error(err.message);
+            })
+    }
+
+    /**
+     * Updates the Users High Score for quiz
+     * Firstly: checks to see if quiz_attempts exists,
+     * Secondly: checks if the quiz has been done before
+     * Thirdly: compares the current High Score to `pointsToPush`
+     * 
+     * @param {int} pointsToPush Points to compare to the current High Score
+     * @memberof SingleQuiz
+     */
+    pushTheData(pointsToPush) {
+        let { allUserData, quizName } = this.state;
+
+        if (typeof allUserData.quiz_attempts === 'undefined') {
+            this.updateHighScore(pointsToPush);
+        }
+        else {
+            if (typeof allUserData.quiz_attempts[quizName] === 'undefined') {
+                this.updateHighScore(pointsToPush);
             }
             else {
-                quizSpecificPointsToUpdate = oldData.quiz_attempts[quizoMizzo].hs;
+                let currentHighScore = allUserData.quiz_attempts[quizName].hs;
+                if (currentHighScore < pointsToPush) {
+                    this.updateHighScore(pointsToPush);
+                }
             }
-        // }
-
-        let updatedPoints = oldData.points - oldData.quiz_attempts[quizoMizzo].hs + quizSpecificPointsToUpdate;
-
-        let updateThisData = {
-            points: updatedPoints,
-            quiz_attempts: quizoMizzo,
-            hs: quizSpecificPointsToUpdate
         }
-
-        // let pushThisQuizPoints = databaseRef.ref().child(`users/${uid}/`);
-
-        // console.log(pushThisQuizPoints);
-        // push user data to DB (without overriding and deleting the whole user DB)
-        // let pushThisQuizAttempts = databaseRef.ref().child(`users/${uid}/quiz_attempts/`);
-        // return (
-        //     pushThisQuizAttempts.update({
-        //         [quizoMizzo] : {
-        //             hs: updateThisData.hs
-        //         }
-        //     }),
-        //     pushThisQuizPoints.update({
-        //         points: updateThisData.points
-        //     })
-        // )
-        return (
-            firebase.database().ref(`users/${uid}/quiz_attempts/${this.state.quizName}`).update({
-                hs: updateThisData.hs
-            }).then(() => {
-                // success
-            }).catch((err) => {
-                console.error(err.message)
-            })
-        )
-        
     }
 
     resetQuiz() {
@@ -209,34 +188,6 @@ class SingleQuiz extends React.Component {
 
         let buttonButton = "Next";
 
-        // let useTheDataOfUser = this.state.allUserData;
-        // console.log(this.state.allUserData);
-
-        // // adds quiz_attempts for the first time
-        // console.log(useTheDataOfUser);
-        // if (typeof useTheDataOfUser.quiz_attempts === undefined) {
-        //     console.log("specific quiz name doesnt exist");
-            
-        //     let pushThisQuizAttempts = databaseRef.ref().child(`users/${this.state.UserID}/`);
-        //     pushThisQuizAttempts.update({
-        //         quiz_attempts: {},
-        //         points: 0
-        //     })
-        // }
-
-        // // adds specific quiz data for the first time
-        // let quizNameo = useTheDataOfUser.quizName;
-
-        // if (useTheDataOfUser.quiz_attempts.quizNameo !== this.state.quizName) {
-        //     console.log("run add quiz name and hs value of 0");
-        //     let pushThisQuizAttempts = databaseRef.ref().child(`users/${this.state.UserID}/quiz_attempts`);
-        //     pushThisQuizAttempts.update({
-        //         [quizNameo]: {
-        //             hs: 0
-        //         }
-        //     })
-        // }
-
         if (this.state.userProgression === keyLength - 1) {
             buttonButton = "Results"
         }
@@ -250,9 +201,7 @@ class SingleQuiz extends React.Component {
             let roundedUserScorePercentage = Math.round(userScorePercentage);
 
             // function here to push user score (updateTheScore) back to the DB
-            console.log("before the push");
             this.pushTheData(pointsToPush);
-            console.log("after the push");
 
             return (
                 <div>
@@ -332,7 +281,7 @@ class SingleQuiz extends React.Component {
         }
 
         return (
-            <div className="quiz-container">
+            <div className="page quiz-container">
                 <div>
                     <h2>{this.state.quizName}</h2>
                     { this.renderQuiz() }
