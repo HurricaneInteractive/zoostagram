@@ -26,7 +26,8 @@ class SingleQuiz extends React.Component {
             correctAnswers: [],
             userProgression: 0,
             userPoints: 0,
-            userPercentage: 50
+            userPercentage: 50,
+            updatedUserData: null
         }
 
        this.renderQuiz = this.renderQuiz.bind(this)
@@ -56,7 +57,7 @@ class SingleQuiz extends React.Component {
             _this.setState({
                 allUserData: userDataHere
             })
-        })
+        });
     }
 
     // checks if the option has been selected and updates the userAnswers state
@@ -115,16 +116,6 @@ class SingleQuiz extends React.Component {
         return updatedPoints
     }
 
-    // checkWhoIsHigher(old, new) {
-
-    //     if (old > new ) {
-    //         return old;
-    //     }
-    //     else {
-    //         return new;
-    //     }
-    // }
-
     pushTheData(pointsToPush) {
         console.log("inside the push");
         let quizoMizzo = this.state.quizName;
@@ -142,25 +133,34 @@ class SingleQuiz extends React.Component {
                 points: 0
             })
         }
-        else {
-            console.log(oldData.quiz_attempts[quizoMizzo].hs);
-            console.log("else of quiz attempts - does it exist?")
+
+        // adds specific quiz data for the first time
+        console.log(oldData.quiz_attempts[`${quizoMizzo}`]);
+        if (oldData.quiz_attempts.quizoMizzo !== quizoMizzo) {
+            console.log("run add quiz name and hs value of 0");
+            let pushThisQuizAttempts = databaseRef.ref().child(`users/${uid}/quiz_attempts`);
+            pushThisQuizAttempts.update({
+                [quizoMizzo]: {
+                    hs: 0
+                }
+            })
         }
 
         // checks if current points exist
         // then checks if new points are larger than the old ones
         let quizSpecificPointsToUpdate = 0;
-        if (oldData.quiz_attempts[quizoMizzo].hs === undefined) {
-                quizSpecificPointsToUpdate = pointsToPush;
-        }
-        else {
+        console.log(quizoMizzo);
+        // if (oldData.quiz_attempts[quizoMizzo].hs === 0) {
+        //         quizSpecificPointsToUpdate = pointsToPush;
+        // }
+        // else {
             if (oldData.quiz_attempts[quizoMizzo].hs < pointsToPush) {
                 quizSpecificPointsToUpdate = pointsToPush;
             }
             else {
                 quizSpecificPointsToUpdate = oldData.quiz_attempts[quizoMizzo].hs;
             }
-        }
+        // }
 
         let updatedPoints = oldData.points - oldData.quiz_attempts[quizoMizzo].hs + quizSpecificPointsToUpdate;
 
@@ -216,6 +216,34 @@ class SingleQuiz extends React.Component {
         let updateTheScore = 0;
 
         let buttonButton = "Next";
+
+        let useTheDataOfUser = this.state.allUserData;
+        console.log(this.state.allUserData);
+
+        // adds quiz_attempts for the first time
+        console.log(useTheDataOfUser);
+        if (typeof useTheDataOfUser.quiz_attempts === undefined) {
+            console.log("specific quiz name doesnt exist");
+            
+            let pushThisQuizAttempts = databaseRef.ref().child(`users/${this.state.UserID}/`);
+            pushThisQuizAttempts.update({
+                quiz_attempts: {},
+                points: 0
+            })
+        }
+
+        // adds specific quiz data for the first time
+        let quizNameo = useTheDataOfUser.quizName;
+
+        if (useTheDataOfUser.quiz_attempts.quizNameo !== this.state.quizName) {
+            console.log("run add quiz name and hs value of 0");
+            let pushThisQuizAttempts = databaseRef.ref().child(`users/${this.state.UserID}/quiz_attempts`);
+            pushThisQuizAttempts.update({
+                [quizNameo]: {
+                    hs: 0
+                }
+            })
+        }
 
         if (this.state.userProgression === keyLength - 1) {
             buttonButton = "Results"
