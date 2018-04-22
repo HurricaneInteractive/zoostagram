@@ -123,27 +123,10 @@ class SingleQuiz extends React.Component {
 
         let oldData = this.state.allUserData;
 
-        // adds quiz for the first time
-        if (typeof oldData.quiz_attempts === undefined) {
-            console.log("specific quiz name doesnt exist");
-            
-            let pushThisQuizAttempts = databaseRef.ref().child(`users/${uid}/`);
-            pushThisQuizAttempts.update({
-                quiz_attempts: {},
-                points: 0
-            })
-        }
-
         // adds specific quiz data for the first time
-        console.log(oldData.quiz_attempts[`${quizoMizzo}`]);
+        console.log(oldData.quiz_attempts[quizoMizzo]);
         if (oldData.quiz_attempts.quizoMizzo !== quizoMizzo) {
             console.log("run add quiz name and hs value of 0");
-            let pushThisQuizAttempts = databaseRef.ref().child(`users/${uid}/quiz_attempts`);
-            pushThisQuizAttempts.update({
-                [quizoMizzo]: {
-                    hs: 0
-                }
-            })
         }
 
         // checks if current points exist
@@ -170,22 +153,31 @@ class SingleQuiz extends React.Component {
             hs: quizSpecificPointsToUpdate
         }
 
-        let pushThisQuizPoints = databaseRef.ref().child(`users/${uid}/`);
+        // let pushThisQuizPoints = databaseRef.ref().child(`users/${uid}/`);
 
-        console.log(pushThisQuizPoints);
+        // console.log(pushThisQuizPoints);
         // push user data to DB (without overriding and deleting the whole user DB)
-        let pushThisQuizAttempts = databaseRef.ref().child(`users/${uid}/quiz_attempts/`);
+        // let pushThisQuizAttempts = databaseRef.ref().child(`users/${uid}/quiz_attempts/`);
+        // return (
+        //     pushThisQuizAttempts.update({
+        //         [quizoMizzo] : {
+        //             hs: updateThisData.hs
+        //         }
+        //     }),
+        //     pushThisQuizPoints.update({
+        //         points: updateThisData.points
+        //     })
+        // )
         return (
-            pushThisQuizAttempts.update({
-                [quizoMizzo] : {
-                    hs: updateThisData.hs
-                }
-            }),
-            pushThisQuizPoints.update({
-                points: updateThisData.points
+            firebase.database().ref(`users/${uid}/quiz_attempts/${this.state.quizName}`).update({
+                hs: updateThisData.hs
+            }).then(() => {
+                // success
+            }).catch((err) => {
+                console.error(err.message)
             })
         )
-            
+        
     }
 
     resetQuiz() {
@@ -217,33 +209,33 @@ class SingleQuiz extends React.Component {
 
         let buttonButton = "Next";
 
-        let useTheDataOfUser = this.state.allUserData;
-        console.log(this.state.allUserData);
+        // let useTheDataOfUser = this.state.allUserData;
+        // console.log(this.state.allUserData);
 
-        // adds quiz_attempts for the first time
-        console.log(useTheDataOfUser);
-        if (typeof useTheDataOfUser.quiz_attempts === undefined) {
-            console.log("specific quiz name doesnt exist");
+        // // adds quiz_attempts for the first time
+        // console.log(useTheDataOfUser);
+        // if (typeof useTheDataOfUser.quiz_attempts === undefined) {
+        //     console.log("specific quiz name doesnt exist");
             
-            let pushThisQuizAttempts = databaseRef.ref().child(`users/${this.state.UserID}/`);
-            pushThisQuizAttempts.update({
-                quiz_attempts: {},
-                points: 0
-            })
-        }
+        //     let pushThisQuizAttempts = databaseRef.ref().child(`users/${this.state.UserID}/`);
+        //     pushThisQuizAttempts.update({
+        //         quiz_attempts: {},
+        //         points: 0
+        //     })
+        // }
 
-        // adds specific quiz data for the first time
-        let quizNameo = useTheDataOfUser.quizName;
+        // // adds specific quiz data for the first time
+        // let quizNameo = useTheDataOfUser.quizName;
 
-        if (useTheDataOfUser.quiz_attempts.quizNameo !== this.state.quizName) {
-            console.log("run add quiz name and hs value of 0");
-            let pushThisQuizAttempts = databaseRef.ref().child(`users/${this.state.UserID}/quiz_attempts`);
-            pushThisQuizAttempts.update({
-                [quizNameo]: {
-                    hs: 0
-                }
-            })
-        }
+        // if (useTheDataOfUser.quiz_attempts.quizNameo !== this.state.quizName) {
+        //     console.log("run add quiz name and hs value of 0");
+        //     let pushThisQuizAttempts = databaseRef.ref().child(`users/${this.state.UserID}/quiz_attempts`);
+        //     pushThisQuizAttempts.update({
+        //         [quizNameo]: {
+        //             hs: 0
+        //         }
+        //     })
+        // }
 
         if (this.state.userProgression === keyLength - 1) {
             buttonButton = "Results"
