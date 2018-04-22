@@ -53,7 +53,7 @@ export default class Profile extends Component {
             return (
                 <div className={`stat ${stat.theme}`} key={`${stat.name}__${key}`}>
                     <strong>{
-                        state.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
+                        stat.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
                     }</strong>
                     <p>{stat.name}</p>
                 </div>
