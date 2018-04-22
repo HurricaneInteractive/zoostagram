@@ -7,26 +7,134 @@
  */
 
 import React, { Component, Fragment } from 'react'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import firebase from 'firebase'
 
+// Global Components
 import Entry from './Global/Entry'
-import Capture from './Journey/Capture'
-import Learn from './Learn/Learn';
+import SignInRegister from './Global/SignInRegister'
+import Profile from './Global/Profile'
+import Loading from './Global/Loading'
 
+// Journey Components
+import Journey from './Journey/Journey'
+import JourneySingle from './Journey/JourneySingle'
+import Capture from './Journey/Capture'
+
+// Learn Components
+import Learn from './Learn/Learn';
+import QuizFinish from './Learn/QuizFinish'
+import SingleQuiz from './Learn/SingleQuiz'
+
+/**
+ * AppRouter Class - Handles which component is shown based on URL
+ * 
+ * @export
+ * @class AppRouter
+ * @extends {Component}
+ */
 export default class AppRouter extends Component {
+    /**
+     * Creates an instance of AppRouter.
+     * 
+     * @memberof AppRouter
+     */
+    constructor() {
+        super()
+        this.state = {
+            user: null,
+            checkingAuth: true
+        }
+    }
+
+    /**
+     * React Function - See React Lifestyle
+     * Checks if a user is logged in and sets state
+     * 
+     * @memberof AppRouter
+     */
+    componentDidMount() {
+        const _this = this;
+
+        firebase.auth().onAuthStateChanged((user) => {
+            _this.setState({
+                user: user,
+                checkingAuth: false
+            })
+        })
+    }
+
+    /**
+     * Renders the Application
+     * 
+     * @returns DOM
+     * @memberof AppRouter
+     */
     render() {
+        let user = this.state.user;
+
+        // All Public Routes - users will be able to access this without signing in
+        const PublicRoutes = () => (
+            <Switch>
+                <Route path="*" component={SignInRegister} />
+            </Switch>
+        )
+
+        /**
+         * All Private Routes - users will need to sign in
+         * 
+         * @returns <Switch>
+         * @memberof AppRouter
+         */
+        const PrivateRoutes = () => (
+            <Switch>
+                <Route exact path="/" component={Entry} />
+                <Route exact path="/journey" render={(routeProps) => (
+                    <Journey routerProps={routeProps} authUser={user} />
+                )} />
+                <Route path="/journey/view/:id" render={(routeProps) => (
+                    <JourneySingle routerProps={routeProps} authUser={user} />
+                )} />
+                <Route exact path="/journey/capture/:id" render={(routeProps) => (
+                    <Capture routerProps={routeProps} authUser={user} />
+                )} />
+                {/* <Route path="/learn" component={Learn} /> */}
+                <Route exact path="/learn" render={(routeProps) => (
+                    <Learn routerProps={routeProps} authUser={user} />
+                )} />
+                <Route path="/quizfinish" component={QuizFinish} />
+                <Route path="/doquiz/:id" component={SingleQuiz} />
+                <Route exact path="/profile" render={(routeProps) => (
+                    <Profile routerProps={routeProps} authUser={user} />
+                )} />
+            </Switch>
+        )
+
+        /**
+         * Returns either the `PublicRoutes` or the `PrivateRoutes` based on user state
+         * 
+         * @returns DOM
+         * @memberof AppRouter
+         */
         return (
             <Router>
-                <Fragment>
-                    <div className="navigation">
-                        <Link to="/journey">Journey</Link>
-                        <Link to="/learn">Learn</Link>
-                    </div>
-
-                    <Route exact path="/" component={Entry} />
-                    <Route path="/journey" component={Capture} />
-                    <Route path="/learn" component={Learn} />
-                </Fragment>
+                {
+                    this.state.checkingAuth === true ? (
+                        <Loading fullscreen={true} />
+                    ) : (
+                        <Fragment>
+                            {
+                                user ? (
+                                    <Fragment>
+                                        <PrivateRoutes />
+                                    </Fragment>
+                                ) : (
+                                    <PublicRoutes />
+                                )
+                            }
+                        </Fragment>
+                    )
+                }
             </Router>
         )
     }

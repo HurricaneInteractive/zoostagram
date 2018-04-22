@@ -1,21 +1,10 @@
-/**
- * Placeholder Capture Component
- * 
- * Currently being used by AJ to test image capturing
- * 
- * TODO: Include proper user flow & UI
- * 
- * User Flow
- * - Camera with live feed to take the image
- * - Once captured
- * -- Show the image with UI to Save & tag the enclosure
- * -- Also close button to delete that image and take a new photo
- */
-
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component, Fragment } from 'react'
 import firebase from '../firebase'
 import CryptoJS from 'crypto-js'
+
+import Enclosures from '../config/enclosures';
+
+import Loading from '../Global/Loading'
 
 const mimetype = 'image/jpeg'
 
@@ -34,14 +23,23 @@ class Capture extends Component {
      * 
      * @memberof Capture
      */
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
-            stream: null
+            stream: null,
+            initialising: true,
+            user: this.props.authUser,
+            facingMode: "user",
+            fullscreen: false,
+            reviewingPhoto: false,
+            savingPhoto: false,
+            selectedEnclosure: '',
+            enclosureSelectOpen: false,
+            enclosureError: false
         }
 
-        this.width = 640;
-        this.height = 0;
+        this.width = 0;
+        this.height = 960;
         this.streaming = false;
         this.video = null;
         this.canvas = null;
@@ -54,6 +52,13 @@ class Capture extends Component {
         this.clearPhoto = this.clearPhoto.bind(this);
         this.saveBlob = this.saveBlob.bind(this);
         this.savePhoto = this.savePhoto.bind(this);
+        this.flipCameraFacingMode = this.flipCameraFacingMode.bind(this);
+        this.clearStreams = this.clearStreams.bind(this)
+        this.goFullscreen = this.goFullscreen.bind(this)
+        this.stopImageReview = this.stopImageReview.bind(this)
+        this.renderEnclosureSelect = this.renderEnclosureSelect.bind(this)
+        this.toggleEnclosureSelect = this.toggleEnclosureSelect.bind(this)
+        this.selectEnclosure = this.selectEnclosure.bind(this)
     }
 
     /**
@@ -64,7 +69,7 @@ class Capture extends Component {
      */
     componentWillUnmount() {
         this.clearPhoto();
-        this.state.stream.getTracks()[0].stop();
+        this.clearStreams();
     }
 
     /**
@@ -74,6 +79,7 @@ class Capture extends Component {
      */
     componentWillMount() {
         this.width = window.innerWidth
+        this.height = window.innerHeight
     }
 
     /**
@@ -93,16 +99,21 @@ class Capture extends Component {
     initialiseStream() {
         const _this = this;
 
+        if (this.state.stream !== null) {
+            this.clearStreams();
+        }
+
         // Gets all the component elements
         this.video = document.getElementById('main-camera');
         this.canvas = document.getElementById('image-copy');
-        this.photo = document.getElementById('photo-preview');
+        // this.photo = document.getElementById('photo-preview');
 
         // Contraints for the camera
-        const mediaConstraints = {
+        let mediaConstraints = {
             audio: false,
             video: {
-                facingMode: "user"
+                facingMode: _this.state.facingMode,
+                focusMode: "continuous"
             }
         }
 
@@ -127,17 +138,20 @@ class Capture extends Component {
         // Sets the height and width of the video & canvas elements when the stream starts
         this.video.addEventListener('canplay', (e) => {
             if (!_this.streaming) {
-                _this.height = _this.video.videoHeight / (_this.video.videoWidth / _this.width);
 
-                if (isNaN(_this.height)) {
-                    _this.height = _this.width / (4 / 3);
-                }
+                _this.height = window.innerHeight;
+                _this.width = _this.video.videoWidth / (_this.video.videoHeight / _this.height);
 
                 _this.video.setAttribute('width', _this.width);
                 _this.video.setAttribute('height', _this.height);
-                _this.canvas.setAttribute('width', _this.width);
-                _this.canvas.setAttribute('height', _this.height);
+
+                _this.canvas.setAttribute('width', window.innerWidth);
+                _this.canvas.setAttribute('height', window.innerHeight);
                 _this.streaming = true;
+                
+                _this.setState({
+                    initialising: false
+                })
             }
         }, false)
 
@@ -152,11 +166,8 @@ class Capture extends Component {
      */
     clearPhoto() {
         let context = this.canvas.getContext('2d');
-        context.fillStyle = "#AAA";
+        context.fillStyle = "#FFF";
         context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        let data = this.canvas.toDataURL(mimetype);
-        this.photo.setAttribute('src', data);
 
         this.photo_blob = null;
     }
@@ -168,26 +179,33 @@ class Capture extends Component {
      * 
      * @param {any} e Click event Object
      * @memberof Capture
-     * 
-     * TODO: Display the preview before saving the image
      */
     takePhoto(e) {
         const _this = this;
         let context = this.canvas.getContext('2d');
 
         if (this.width && this.height) {
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
-            context.drawImage(this.video, 0, 0, this.width, this.height);
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
 
-            let data = this.canvas.toDataURL(mimetype);
-            this.photo.setAttribute('src', data);
+            let canvasX = Math.round((this.width - this.canvas.width) / 2) * -1;
+
+            if (this.state.facingMode === "user") {
+                context.translate(this.canvas.width, 0);
+                context.scale(-1, 1);
+            }
+
+            context.drawImage(this.video, canvasX, 0, this.width, this.height);
 
             // Converts the canvas to a Image Blob to save into Firebase Storage
             this.canvas.toBlob(function(blob) {
                 _this.saveBlob(blob)
-                _this.savePhoto();
+                // _this.savePhoto();
             }, mimetype);
+
+            this.setState({
+                reviewingPhoto: true
+            })
         }
         else {
             this.clearPhoto();
@@ -210,38 +228,44 @@ class Capture extends Component {
      * Saves the image into the Firebase Storage
      * 
      * @memberof Capture
-     * 
-     * TODO: Update the storage path to save into a specific folder per user
-     * TODO: Display the Process to the user
-     * TODO: Save with the enclosure that the user picks
      */
-    savePhoto() {
+    savePhoto(e = null) {
+
+        const _this = this;
+        let journeyID = this.props.routerProps.match.params.id;
+
+        if (e !== null) {
+            e.preventDefault();
+        }
+
+        if (this.state.selectedEnclosure === '') {
+            this.setState({
+                enclosureError: true
+            })
+            return false;
+        }
+
         let file = this.photo_blob;
         let metadata = {
+            cacheControl: 'public,max-age=2500000',
             contentType: mimetype,
             customMetadata: {
-                'enclosure': 'lion'
+                'enclosure': _this.state.selectedEnclosure
             }
         }
 
         let name = CryptoJS.SHA256(String(new Date())).words.join('') + '.jpg';
+        let folder = this.state.user.uid;
 
-        let uploadTask = storageRef.child('images/' + name).put(file, metadata);
+        let referencePath = `journey/${folder}/${journeyID}/${name}`;
+
+        let uploadTask = storageRef.child(referencePath).put(file, metadata);
 
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-            // Processing
-            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
-            switch (snapshot.state) {
-                case firebase.storage.TaskState.PAUSED:
-                    console.log('Upload is paused');
-                    break;
-                case firebase.storage.TaskState.RUNNING:
-                    console.log('Upload is running');
-                    break;
-                default:
-                    console.log('Stupid eslint');
-            }
+            // In Progress
+            _this.setState({
+                savingPhoto: true
+            })
         }, (err) => {
             // Error
             alert(err);
@@ -249,8 +273,171 @@ class Capture extends Component {
         }, () => {
             // Success
             let downloadURL = uploadTask.snapshot.downloadURL;
-            console.log('Completed', downloadURL);
+            let journeyRef = firebase.database().ref(`journeys/${_this.state.user.uid}/${journeyID}/images`);
+            let newKey = journeyRef.push();
+            newKey.set({
+                image_name: name,
+                image_url: downloadURL
+            })
+            .then(() => {
+                _this.setState({
+                    reviewingPhoto: false,
+                    savingPhoto: false,
+                    selectedEnclosure: '',
+                    enclosureSelectOpen: false,
+                    enclosureError: false
+                })
+            })
+            .catch((err) => {
+                console.error(err.message);
+            })
+            
         })
+    }
+
+    /**
+     * Stops all the current streaming Tracks
+     * 
+     * @memberof Capture
+     */
+    clearStreams() {
+        this.streaming = false;
+        this.state.stream.getTracks().forEach(function(track) {
+            track.stop();
+        });
+    }
+
+    /**
+     * Flips the camera view to either take an `environment` or a `user` shot
+     * 
+     * @param {object} e Anchor event object
+     * @memberof Capture
+     */
+    flipCameraFacingMode(e) {
+        e.preventDefault();
+        let mode = this.state.facingMode === "user" ? "environment" : "user";
+
+        this.setState({
+            facingMode: mode
+        }, () => {
+            this.initialiseStream();
+        })
+    }
+
+    /**
+     * Toggles the state of Fullscreen
+     * 
+     * @param {any} e Anchor Event Object
+     * @memberof Capture
+     * @deprecated
+     */
+    goFullscreen(e) {
+        e.preventDefault()
+        let elem = document.body;
+        
+        switch(this.state.fullscreen) {
+            case true:
+                let exitFullScreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+                exitFullScreen.call(document);
+
+                this.setState({
+                    fullscreen: false
+                }, () => {
+                    this.initialiseStream();
+                })
+                break;
+
+            default:
+                let requestFullScreen = elem.requestFullscreen || elem.msRequestFullscreen || elem.mozRequestFullScreen || elem.webkitRequestFullscreen;
+                requestFullScreen.call(elem);
+
+                this.setState({
+                    fullscreen: true
+                }, () => {
+                    this.initialiseStream();
+                })
+                break;
+        }
+    }
+
+    /**
+     * Clears the captured photo and returns back to camera
+     * 
+     * @param {any} e Anchor Event Object
+     * @memberof Capture
+     */
+    stopImageReview(e) {
+        e.preventDefault();
+
+        this.setState({
+            reviewingPhoto: false,
+            enclosureSelectOpen: false,
+            selectedEnclosure: ''
+        }, () => {
+            this.clearPhoto()
+        })
+    }
+
+    /**
+     * Toggles the state of the Select Enclosure popup
+     * 
+     * @param {any} e Anchor Event Object
+     * @memberof Capture
+     */
+    toggleEnclosureSelect(e) {
+        e.preventDefault();
+        this.setState({
+            enclosureSelectOpen: !this.state.enclosureSelectOpen
+        })
+    }
+
+    /**
+     * Sets the state to a selected Enclosure
+     * 
+     * @param {string} enclosure Enclosure Name
+     * @memberof Capture
+     */
+    selectEnclosure(enclosure) {
+        this.setState({
+            selectedEnclosure: enclosure,
+            enclosureError: false
+        })
+    }
+
+    /**
+     * Renders the Select Enclosure toggle, popup and title
+     * 
+     * @returns DOM
+     * @memberof Capture
+     */
+    renderEnclosureSelect() {
+        let enclosurses = Enclosures.enclosures;
+
+        let selectOptions = enclosurses.map((enclosure) => (
+            <li 
+                key={enclosure} 
+                onClick={ () => this.selectEnclosure(enclosure) }
+                className={`${this.state.selectedEnclosure === enclosure ? 'active' : ''}`}
+            >{enclosure}</li>
+        ))
+
+        return (
+            <div className={`enclosure-select ${this.state.enclosureSelectOpen ? 'open' : ''} ${this.state.enclosureError ? 'error' : ''}`}>
+                {
+                    this.state.enclosureSelectOpen === true ? (<h2 className="message">Select Enclosure</h2>) : ('')
+                }
+                <ul className="enclosures">
+                    { selectOptions }
+                </ul>
+                {
+                    this.state.selectedEnclosure === '' ? (
+                        <a className="enclosure-trigger" onClick={ (e) => this.toggleEnclosureSelect(e) }>Select Enclosure</a>
+                    ) : (
+                        <a className="save-photo" onClick={ (e) => this.savePhoto(e) }>Save</a>
+                    )
+                }
+            </div>
+        )
     }
 
     /**
@@ -261,14 +448,41 @@ class Capture extends Component {
      */
     render() {
         return (
-            <div className="camera-feed">
-                <video id="main-camera" />
-                <canvas id="image-copy" />
-                <img id="photo-preview" alt="preview of stream" />
+            <div className={`camera-feed ${ this.state.reviewingPhoto ? 'review-image' : '' } ${ this.state.savingPhoto ? 'saving' : '' }`}>
+                { this.state.initialising === true ? <Loading fullscreen={true} /> : '' }
+                <video id="main-camera" className={`${this.state.facingMode}`} />
+                <canvas id="image-copy" className={`${this.state.facingMode}`} />
                 <div className="camera-controls">
-                    <Link to="/">Stop</Link>
-                    <a className="take-photo" onClick={ (e) => this.takePhoto(e) }>Take Photo</a>
+                    <div className="user-controls-bar">
+                        {
+                            this.state.reviewingPhoto ? (
+                                <a id="stop-capturing" onClick={ (e) => this.stopImageReview(e) }>Return to camera</a>
+                            ) : (
+                                <Fragment>
+                                    <a id="camera-flip" onClick={ (e) => this.flipCameraFacingMode(e) }>Flip View</a>
+                                    <a id="stop-capturing" onClick={ () => this.props.routerProps.history.goBack() }>Stop</a>
+                                </Fragment>
+                            )
+                        }
+                        { /* <a id="fullscreen" className={`${this.state.fullscreen ? 'exit' : ''}`} onClick={ (e) => this.goFullscreen(e) }>Fullscreen</a> */ }
+                    </div>
+                    <div className="capture-bar">
+                        {
+                            this.state.reviewingPhoto ? (
+                                <Fragment>
+                                    { this.renderEnclosureSelect() }
+                                </Fragment>
+                            ) : (
+                                <a className="take-photo" onClick={ (e) => this.takePhoto(e) }>Take Photo</a>
+                            )
+                        }
+                    </div>
                 </div>
+                {
+                    this.state.savingPhoto ? (
+                        <Loading fullscreen={true} />
+                    ) : ('')
+                }
             </div>
         )
     }

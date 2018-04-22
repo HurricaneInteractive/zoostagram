@@ -1,0 +1,75 @@
+.app-home {
+    display: grid;
+    grid-template-rows: 40px auto 50px;
+    .user-profile {
+        width: 25px;
+        height: 25px;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        background: url('./images/default_user.svg') no-repeat center center / 25px 25px;
+        text-indent: -9999px;
+        overflow: hidden;
+    }
+    .app-feature-options {
+        align-self: center;
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            li {
+                margin: 30px 15px;
+                position: relative;
+                &:after {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    display: block;
+                    transform: translateY(-50%);
+                    z-index: 2;
+                    pointer-events: none;
+                }
+                a {
+                    font-family: $deco-family;
+                    font-size: 40px;
+                    color: white;
+                    padding: 18px 25px 20px;
+                    display: block;
+                    border: 3px solid white;
+                    border-radius: 10px;
+                }
+                &.ape-bg {
+                    &:after {
+                        width: 141px;
+                        height: 155px;
+                        background: url('./images/ape-bg.svg') no-repeat center center / 141px 155px;
+                        right: 10px;
+                    }
+                    a {
+                        border-color: $orange-yellow;
+                    }
+                }
+                &.elephant-bg {
+                    &:after {
+                        width: 165px;
+                        height: 127px;
+                        background: url('./images/elephant-bg.svg') no-repeat center center / 165px 127px;
+                        left: -12px;
+                    }
+                    text-align: right;
+                    a {
+                        border-color: $red;
+                    }
+                }
+            }
+        }
+    }
+    .user-message {
+        margin: 0;
+        text-align: center;
+        font-size: 17px;
+        font-family: $heebo;
+        font-weight: bold;
+        color: white;
+    }
+}

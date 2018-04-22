@@ -1,0 +1,146 @@
+// put your sass code here
+
+// default quesion styling
+.quizOption {
+    background-color: #787878;
+}
+// when quesion is selected styling
+.active {
+    background-color: green;
+}
+
+// progression bar styling
+// .progression bar is the container (bg colour here is the background colour you see)
+.progressionBar {
+    background-color: #ffaa00;
+    height: 25px;
+    // this elements width is auto adjusted (DONT ADD WIDTH TAG). change bg color to change progression bar colour
+    div {
+        height: 100%;
+        background-color: #fff327;
+    }
+}
+.quizQuestions {
+    list-style-type: upper-latin;
+}
+
+//Hover variables
+
+$a-tags: 'a, a:active, a:hover, a:visited';
+
+$a-tags-hover: 'a:active, a:hover';
+
+// Learn body gradient styling
+
+#learn {
+     height: auto;
+     margin: 0;
+     background: -moz-linear-gradient(top, rgba(255,170,0,1) 0%, rgba(255,170,0,0.64) 100%);
+     background: -webkit-linear-gradient(top, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
+     background: linear-gradient(to bottom, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
+     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaa00', endColorstr='#a3ffaa00',GradientType=0 );
+
+}
+
+// Quiz container styling 
+.quiz-container{
+    height: auto;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+// Learn h1 styling 
+#learn h1{
+    font-family: $deco-family;
+    font-size: 40px;
+    color: #fff;
+	text-align: center;
+    margin: 0;
+	padding-top: 83px;
+	padding-bottom: 130px;
+}
+
+//Learn p styling
+#learn p{
+    font-family:'Raleway', sans-serif;
+    font-size: 14px;
+    text-align: center;
+    color: #fff;
+    padding-left: 10vh;
+    padding-right: 10vh;
+    position: relative;
+}
+
+//Learn list item styling
+#learn li {
+    font-family:'Heebo', sans-serif;
+    font-size: 35px;
+    text-align: center;
+    padding-top: 85px;
+    padding-bottom: 75px;
+    list-style-type: none;
+}
+
+
+
+//Learn Question 1 Tile styling 
+#learn li:nth-child(1) {
+    background: url(images/quizshape-one.png) no-repeat center center;
+     margin: 0;
+
+}
+
+
+//Learn Question 2 Tile styling
+
+// @Will have you thought of possibly using a function for the nth-child selector?
+// e.g.
+
+// #learn li:nth-child(2n) {
+//     background: url(images/quizshape-two.png) no-repeat center center;
+//      margin: 0;
+// }
+// 2n will select every second child element
+// could do the same and make it so the 5 bg images we have, get resused every 5 quizes
+
+// read more here - https://css-tricks.com/almanac/selectors/n/nth-child/ 
+
+#learn li:nth-child(2) {
+    background: url(images/quizshape-two.png) no-repeat center center;
+     margin: 0;
+}
+
+
+#learn li:nth-child(3) {
+    background: url(images/quizshape-three.png) no-repeat center center;
+     margin: 0;
+}
+
+#learn li:nth-child(4) {
+    background: url(images/quizshape-four.png) no-repeat center center;
+     margin: 0;
+}
+
+
+#learn li:nth-child(5) {
+    background: url(images/quizshape-five.png) no-repeat center center;
+     margin: 0;
+}
+
+
+#learn li:nth-child(6) {
+    background: url(images/quizshape-six.png) no-repeat center center;
+     margin: 0;
+}
+
+#learn li:nth-child(7) {
+    background: url(images/quizshape-seven.png) no-repeat center center;
+     margin: 0;
+}
+
+#learn li:nth-child(8) {
+    background: url(images/quizshape-eight.png) no-repeat center center;
+     margin: 0;
+}
+

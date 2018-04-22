@@ -11,8 +11,32 @@ body {
     margin: 0;
     padding: 0;
     font-size: $base-font-size;
+    font-family: $font-family;
 }
 
 * {
     box-sizing: border-box;
+    &:focus, &:active, &:hover {
+        outline: none;
+    }
+}
+
+input {
+    font-family: $heebo;
+    font-size: 14px;
+    color: white;
+    padding: 0 10px;
+    background: transparent;
+    margin: 15px 0 30px;
+    width: 100%;
+    display: block;
+    border: none;
+    border-bottom: 3px solid white;
+    @include placeholder(white);
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
 }

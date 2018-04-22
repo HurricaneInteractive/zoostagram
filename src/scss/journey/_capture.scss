@@ -4,14 +4,33 @@
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    background: #222;
+    background: $black;
+    video, canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
     video {
         margin: 0;
         padding: 0;
-        top: 0;
-        left: 0;
-        height: 100%;
+        left: 50%;
+        z-index: 1;
+        transform: scaleX(1) translateX(-50%);
+        &.user {
+            transform: scaleX(-1) translateX(50%);
+        }
+    }
+    canvas {
+        z-index: 2;
+        transform: translateX(100%);
+        transition: none;
+    }
+    &.review-image {
+        canvas {
+            transition: transform 300ms ease-in-out;
+            transform: translateX(-50%);
+            left: 50%;
+        }
     }
     .camera-controls {
         position: absolute;
@@ -19,21 +38,166 @@
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 2;
-        .take-photo {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: white;
-            border: 8px solid #ddd;
-            display: inline-block;
-            text-indent: -99999px;
-            overflow: hidden;
-            cursor: pointer;
+        z-index: 3;
+        .user-controls-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: -moz-linear-gradient(top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 15%, rgba(0,0,0,0) 100%);
+            background: -webkit-linear-gradient(top, rgba(0,0,0,0.4) 0%,rgba(0,0,0,0.2) 15%,rgba(0,0,0,0) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%,rgba(0,0,0,0.2) 15%,rgba(0,0,0,0) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#66000000', endColorstr='#0d000000',GradientType=0 );
+            > a {
+                display: block;
+                text-indent: -9999px;
+                overflow: hidden;
+                position: absolute;
+                cursor: pointer;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            #stop-capturing {
+                width: 25px;
+                height: 25px;
+                background: url('./images/capture-close.svg') no-repeat center center / 25px 25px;
+                left: 30px;
+            }
+            #camera-flip {
+                width: 40px;
+                height: 40px;
+                background: url('./images/capture-flip.svg') no-repeat center center / 40px 40px;
+                // right: calc(30px + 30px + 20px);    // #fullscreen width + fullscreen right + spacing in XD
+                right: 30px;
+            }
+            #fullscreen {
+                width: 30px;
+                height: 30px;
+                background: url('./images/capture-fullscreen.svg') no-repeat center center / 30px 30px;
+                right: 30px;
+                &.exit {
+                    background: url('./images/capture-exit-fullscreen.svg') no-repeat center center / 30px 30px;
+                }
+            }
+        }
+        .capture-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 90px;
+            background: -moz-linear-gradient(top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%);
+            background: -webkit-linear-gradient(top, rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#000000',GradientType=0 );
+            .take-photo,
+            .save-photo,
+            .enclosure-trigger {
+                position: absolute;
+                top: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 56px;
+                height: 55px;
+                border-radius: 50%;
+                background: white;
+                display: inline-block;
+                cursor: pointer;
+            }
+            .take-photo {
+                text-indent: -99999px;
+                &:after {
+                    content: '';
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    position: absolute;
+                    width: 18px;
+                    height: 18px;
+                    border: 3px solid $black;
+                    border-radius: 50%;
+                }
+            }
+            .save-photo {
+                text-align: center;
+                text-indent: -9999px;
+                background: white url('./images/capture-save.svg') no-repeat center center / 24px 24px;
+            }
+            .enclosure-select {
+                max-width: 270px;
+                width: 100%;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                font-family: $heebo;
+                font-weight: bold;
+                &:not(.open) {
+                    .enclosures {
+                        pointer-events: none;
+                        transform: scale(0) translateX(-50%);
+                    }
+                }
+                &.error {
+                    .enclosure-trigger {
+                        box-shadow: 0 1px 4px 1px rgba(255, 0, 0, 0.5);
+                    }
+                }
+                .message {
+                    position: absolute;
+                    bottom: calc(50vh + 70px);
+                    left: 0;
+                    font-size: 35px;
+                    font-family: $heebo;
+                    margin: 0;
+                    color: white;
+                    text-align: center;
+                }
+                .enclosures {
+                    width: 100%;
+                    position: absolute;
+                    bottom: calc(100% + 40px);
+                    left: 50%;
+                    transform: scale(1) translateX(-50%);
+                    transform-origin: center left;
+                    height: 50vh;
+                    overflow-y: auto;
+                    margin: 0;
+                    padding: 10px 0;
+                    background: white;
+                    border-radius: 10px;
+                    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+                    transition: transform 300ms ease-in-out;
+                    li {
+                        padding: 20px;
+                        text-transform: uppercase;
+                        font-size: 14px;
+                        cursor: pointer;
+                        &:not(:first-child) {
+                            border-top: 1px solid #eee;
+                        }
+                        &.active {
+                            background: #eee;
+                        }
+                    }
+                }
+                .enclosure-trigger {
+                    text-indent: -9999px;
+                    background: white url('./images/capture-select-enclosure.svg') no-repeat center center / 46px 46px;
+                }
+            }
+        }
+    }
+    &.saving {
+        .loading-svg {
+            &.fullscreen {
+                background: rgba(0, 0, 0, 0.5);
+            }
+            svg {
+                circle {
+                    stroke: white;
+                }
+            }
         }
     }
 }

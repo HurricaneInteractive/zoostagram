@@ -1,0 +1,36 @@
+.sign-in-register {
+    display: grid;
+    grid-template-rows: 40px auto;
+    .sign-in-wrapper {
+        align-self: end;
+        max-width: 225px;
+        width: 100%;
+        margin: 0 auto 45px;
+        .select-path {
+            a:not(:first-child) {
+                margin-top: 15px;
+            }
+        }
+        form {
+            .form-actions {
+                margin-top: 70px;
+                position: relative;
+                .form-error {
+                    font-family: $heebo;
+                    font-size: 10px;
+                    color: white;
+                    position: absolute;
+                    bottom: calc(100% + 4px);
+                }
+            }
+            .below-button-back {
+                font-size: 14px;
+                text-decoration: underline;
+                color: white;
+                text-align: center;
+                display: block;
+                margin-top: 5px;
+            }
+        }
+    }
+}
