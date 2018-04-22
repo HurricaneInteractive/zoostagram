@@ -7,6 +7,7 @@ import PageTitle from '../Global/PageTitle'
 import Loading from '../Global/Loading'
 
 import JourneyTitle from './elements/JourneyTitle'
+import JourneyImage from './elements/JourneyImage'
 
 const masonryOptions = {
     transitionDuration: 0
@@ -112,10 +113,9 @@ export default class JourneySingle extends Component {
         let images = this.state.journey.images;
         if (images !== null && typeof images !== 'undefined') {
             let imageDOM = Object.keys(images).map((key) => {
+                let imageRef = firebase.storage().ref(`journey/${this.state.user.uid}/${this.state.journey.id}/${images[key].image_name}`);
                 return (
-                    <div className="single-image" key={key}>
-                        <img src={images[key].image_url} alt="Zoo" />
-                    </div>
+                    <JourneyImage key={key} imageURL={images[key].image_url} storageRef={imageRef} />
                 )
             })
 
