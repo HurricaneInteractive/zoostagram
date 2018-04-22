@@ -5,12 +5,13 @@
  */
 
 // eslint-disable-next-line
-import React from 'react'
+import React, { Component }from 'react'
 // eslint-disable-next-line
 import { Link, Route, Router } from 'react-router-dom'
 import firebase from '../firebase'
 
 import Loading from '../Global/Loading'
+import PageTitle from '../Global/PageTitle'
 
 const databaseRef = firebase.database();
 /**
@@ -79,10 +80,11 @@ class QuizSelect extends React.Component {
     }
 }
 
-const Learn = () => {
-    return (
-        <div id="learn">
-            <h1>Learn</h1>
+export default class Learn extends Component {
+    render() {
+        return (
+            <div id="learn">
+            <PageTitle title="Learn" back={() => this.props.routerProps.history.goBack()} />
                <p> Hint: Pay attention to notice boards at the National Zoo & Aquarium </p>
                 <div className="dune-bg">
                 <div className="path-bg">
@@ -91,9 +93,7 @@ const Learn = () => {
                 </div>
                 </div>
                 </div>
-        </div>
-        
-    )
+            </div>
+        )
+    }
 }
-
-export default Learn
