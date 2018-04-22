@@ -71,7 +71,7 @@ export default class Profile extends Component {
                 <PageTitle title="Profile" back={() => this.props.routerProps.history.goBack()} />
                 <div className="user-details">
                     <DefaultUserImage />
-                    <p>{ user.displayName !== null ? this.displayName : 'Anonymous Rabbit' }</p>
+                    <p>{ user.displayName !== null ? user.displayName : 'Anonymous Rabbit' }</p>
                     <p>{ user.email.replace('@', '[at]') }</p>
                     <div className={`user-stats ${ userDetails !== null ? 'fadeIn' : '' }`}>
                         { userDetails === null ? ('') : ( this.renderUserStats() ) }
