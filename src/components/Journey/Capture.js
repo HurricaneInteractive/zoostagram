@@ -1,20 +1,4 @@
-/**
- * Placeholder Capture Component
- * 
- * Currently being used by AJ to test image capturing
- * 
- * TODO: Include proper user flow & UI
- * TODO: Camera Flip Functionality
- * 
- * User Flow
- * - Camera with live feed to take the image
- * - Once captured
- * -- Show the image with UI to Save & tag the enclosure
- * -- Also close button to delete that image and take a new photo
- */
-
 import React, { Component, Fragment } from 'react'
-// import { Link } from 'react-router-dom'
 import firebase from '../firebase'
 import CryptoJS from 'crypto-js'
 
@@ -203,8 +187,6 @@ class Capture extends Component {
         if (this.width && this.height) {
             this.canvas.width = window.innerWidth;
             this.canvas.height = window.innerHeight;
-            // this.canvas.width = this.width;
-            // this.canvas.height = this.height;
 
             let canvasX = Math.round((this.width - this.canvas.width) / 2) * -1;
 
@@ -213,11 +195,7 @@ class Capture extends Component {
                 context.scale(-1, 1);
             }
 
-            //ctx.drawImage(image, dx, dy, dWidth, dHeight);
             context.drawImage(this.video, canvasX, 0, this.width, this.height);
-            
-            // ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-            // context.drawImage(this.video, 0, 0, 257, 667, 0, 0, 375, 667);
 
             // Converts the canvas to a Image Blob to save into Firebase Storage
             this.canvas.toBlob(function(blob) {
@@ -269,6 +247,7 @@ class Capture extends Component {
 
         let file = this.photo_blob;
         let metadata = {
+            cacheControl: 'public,max-age=2500000',
             contentType: mimetype,
             customMetadata: {
                 'enclosure': _this.state.selectedEnclosure
@@ -345,6 +324,13 @@ class Capture extends Component {
         })
     }
 
+    /**
+     * Toggles the state of Fullscreen
+     * 
+     * @param {any} e Anchor Event Object
+     * @memberof Capture
+     * @deprecated
+     */
     goFullscreen(e) {
         e.preventDefault()
         let elem = document.body;
@@ -374,6 +360,12 @@ class Capture extends Component {
         }
     }
 
+    /**
+     * Clears the captured photo and returns back to camera
+     * 
+     * @param {any} e Anchor Event Object
+     * @memberof Capture
+     */
     stopImageReview(e) {
         e.preventDefault();
 
@@ -386,6 +378,12 @@ class Capture extends Component {
         })
     }
 
+    /**
+     * Toggles the state of the Select Enclosure popup
+     * 
+     * @param {any} e Anchor Event Object
+     * @memberof Capture
+     */
     toggleEnclosureSelect(e) {
         e.preventDefault();
         this.setState({
@@ -393,6 +391,12 @@ class Capture extends Component {
         })
     }
 
+    /**
+     * Sets the state to a selected Enclosure
+     * 
+     * @param {string} enclosure Enclosure Name
+     * @memberof Capture
+     */
     selectEnclosure(enclosure) {
         this.setState({
             selectedEnclosure: enclosure,
@@ -400,6 +404,12 @@ class Capture extends Component {
         })
     }
 
+    /**
+     * Renders the Select Enclosure toggle, popup and title
+     * 
+     * @returns DOM
+     * @memberof Capture
+     */
     renderEnclosureSelect() {
         let enclosurses = Enclosures.enclosures;
 
