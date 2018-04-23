@@ -103,7 +103,9 @@ export default class AppRouter extends Component {
                     <Learn routerProps={routeProps} authUser={user} />
                 )} />
                 <Route path="/quizfinish" component={QuizFinish} />
-                <Route path="/doquiz/:id" component={SingleQuiz} />
+                <Route path="/doquiz/:id" render={(routeProps) => (
+                    <SingleQuiz routerProps={routeProps} authUser={user} />
+                )} />
                 <Route exact path="/profile" render={(routeProps) => (
                     <Profile routerProps={routeProps} authUser={user} />
                 )} />
