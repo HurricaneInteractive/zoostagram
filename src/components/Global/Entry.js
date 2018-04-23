@@ -7,11 +7,12 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Logo from './Logo'
+import ProfileImage from './ProfileImage'
 
 const Entry = () => {
     return(
         <div className="page app-home purple-grain-bg">
-            <Link className="user-profile" to="/profile">Profile</Link>
+            <ProfileImage />
             <Logo />
             <div className="app-feature-options">
                 <ul>
