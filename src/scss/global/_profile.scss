@@ -3,10 +3,18 @@
     height: auto;
     .user-details {
         text-align: center;
-        svg {
-            fill: darken($light-grey, 10%);
+        .profile-image {
             width: 80px;
+            margin: 0 auto;
+        }
+        .image-wrapper {
             margin-bottom: 15px;
+            display: block;
+            width: 80px;
+            height: 80px;
+            img, svg {
+                width: 80px;
+            }
         }
         p {
             margin: 0 0 10px;
@@ -40,6 +48,45 @@
                 p {
                     margin: 0;
                 }
+            }
+        }
+    }
+    .upload-image-form {
+        input {
+            color: $black;
+        }
+    }
+}
+
+.profile-image {
+    position: relative;
+    .image-wrapper {
+        border-radius: 50%;
+        overflow: hidden;
+        display: block;
+        border: 1px solid $light-grey;
+        svg {
+            display: block;
+            fill: darken($light-grey, 10%);
+        }
+    }
+    .image {
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    }
+    .settings-dropdown {
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 10px);
+        transform: translateY(-50%);
+        .trigger {
+            width: 16px;
+            line-height: initial;
+            svg {
+                display: block;
             }
         }
     }
