@@ -25,6 +25,8 @@ class SingleQuiz extends React.Component {
     constructor(props) {
         super(props);
 
+        console.log(this.props.authUser.uid);
+
         this.state = {
             userID: this.props.authUser.uid,
             allUserData: null,

@@ -9,6 +9,31 @@
     background-color: green;
 }
 
+.learn-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(33, 33, 33, 0.5);
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    div {
+        width: 450px;
+        height: auto;
+        h1 { // number/quiz tile 
+
+        }
+        .quiz-info {
+            background-color: #FDF4DF;
+        }
+    }
+    p {
+        color: #ffaa00 !important;
+    }
+}
+
 // progression bar styling
 // .progression bar is the container (bg colour here is the background colour you see)
 .progressionBar {
@@ -90,21 +115,6 @@ $a-tags-hover: 'a:active, a:hover';
      margin: 0;
 
 }
-
-
-//Learn Question 2 Tile styling
-
-// @Will have you thought of possibly using a function for the nth-child selector?
-// e.g.
-
-// #learn li:nth-child(2n) {
-//     background: url(images/quizshape-two.png) no-repeat center center;
-//      margin: 0; 
-// }
-// 2n will select every second child element
-// could do the same and make it so the 5 bg images we have, get resused every 5 quizes
-
-// read more here - https://css-tricks.com/almanac/selectors/n/nth-child/ 
 
 #learn li:nth-child(2) {
     background: url(images/quizshape-two.png) no-repeat center center;
