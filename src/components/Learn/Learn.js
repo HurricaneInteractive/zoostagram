@@ -30,7 +30,7 @@ class LearnModal extends React.Component {
                         <div className="quiz-info">
                             <div>
                                 <h2>What do you know about {this.props.itemName}?</h2>
-                                <p>your best score {this.props.userBestScore}</p>
+                                <p>{this.props.userBestScore}%</p>
                             </div>
                             <Link to={`/doquiz/${this.props.itemName}`}>{this.props.firstTimeQuizAttempt ? "Start Quiz" : "Try Again"}</Link>
                         </div>
@@ -59,6 +59,7 @@ export default class Learn extends Component {
         }
 
         this.renderQuiz = this.renderQuizTitles.bind(this)
+        this.quizStateChecker = this.quizStateChecker.bind(this)
     }
 
     componentDidMount() {
@@ -109,22 +110,41 @@ export default class Learn extends Component {
         })
     }
 
+    quizStateChecker(key, item) {
+        let quizClassName = "";
+        console.log(this.state);
+        console.log(this.state.allUserData);
+
+        if (typeof this.state.allUserData.quiz_attempts[key] === "undefined") {
+            quizClassName = "noAttempt"
+        }
+        else if (this.state.allUserData.quiz_attempts[key].hs > this.state.allLearnData[key].length) {
+            quizClassName = "progress";
+        }
+        else {
+            quizClassName = "star"
+        }
+        console.log(quizClassName);
+        return quizClassName
+    }
+
     renderQuizTitles() {
         // console.log(this.state.allLearnData);
 
         let quiz = this.state.allLearnData;
         let keysTitle = Object.keys(quiz);
-        // console.log(keysTitle);
+        console.log(keysTitle);
 
         // console.log(quiz[keys[0]].question);
+        
 
         let quizTiles = keysTitle.map( (key, item) => {
-
-            // console.log(item)
-            // console.log(key)
-            return (<li key={item} onClick={() => this.quizModal(key, item)}>{key}</li>
+            let quizzoClasso = this.quizStateChecker(key, item);
+            console.log(quizzoClasso);
+            return (<li key={item} className={quizzoClasso}
+                onClick={() => this.quizModal(key, item)}><div>{item + 1}</div></li>
         )});
-
+        
 
         return (
             <div>
@@ -144,7 +164,7 @@ export default class Learn extends Component {
     }
 
     render() {
-        if (this.state.allLearnData === null) {
+        if (this.state.allLearnData === null || this.state.allUserData === null) {
             return <Loading fullscreen={true} />
         }
 
