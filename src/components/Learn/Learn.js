@@ -21,18 +21,18 @@ const databaseRef = firebase.database();
 
 class LearnModal extends React.Component {
     render() {
-        console.log(this.props)
         return (
-            <div className="learn-modal">
+            <div className="learn-modal" style={this.props.isOpen ? {display: "block"} : {display: "none"} }>
                 <div>
                     <div>
                         <h1>{this.props.itemId}</h1>
+                        <p onClick={ this.props.closeModalBox }>X</p>
                         <div className="quiz-info">
                             <div>
                                 <h2>What do you know about {this.props.itemName}?</h2>
                                 <p>your best score {this.props.userBestScore}</p>
                             </div>
-                            <Link to={`/doquiz/${this.props.itemName}`}></Link>
+                            <Link to={`/doquiz/${this.props.itemName}`}>{this.props.firstTimeQuizAttempt ? "Start Quiz" : "Try Again"}</Link>
                         </div>
                     </div>
                     
@@ -54,7 +54,8 @@ export default class Learn extends Component {
             openDeleteModal: false,
             activeItemName: null,
             activeItemId: null,
-            activeUserBestScore: null
+            activeUserBestScore: null,
+            firstAttempt: true
         }
 
         this.renderQuiz = this.renderQuizTitles.bind(this)
@@ -82,12 +83,29 @@ export default class Learn extends Component {
     quizModal(key, item) {
         console.log(item);
         console.log(key);
-        console.log(this.state.allUserData.quiz_attempts[`${key}`].hs);
+        // console.log(this.state.allUserData.quiz_attempts[`${key}`].hs);
+        let userHighScore = 0;
+        let firstTime = true;
+        if (typeof this.state.allUserData.quiz_attempts[key] !== "undefined") {
+            userHighScore = this.state.allUserData.quiz_attempts[key].hs;
+            firstTime = false;
+        }
+        console.log(Object.keys(this.state.allLearnData[key]).length)
+
+        let userPercentageScore = userHighScore / Object.keys(this.state.allLearnData[key]).length * 100;
+        console.log(userPercentageScore);
         this.setState({
             openDeleteModal: true,
             activeItemName: key,
             activeItemId: item,
-            activeUserBestScore: this.state.allUserData.quiz_attempts[`${key}`].hs
+            activeUserBestScore: userPercentageScore,
+            firstAttempt: firstTime
+        })
+    }
+
+    toggleModal() {
+        this.setState({
+            openDeleteModal: false
         })
     }
 
@@ -101,6 +119,7 @@ export default class Learn extends Component {
         // console.log(quiz[keys[0]].question);
 
         let quizTiles = keysTitle.map( (key, item) => {
+
             // console.log(item)
             // console.log(key)
             return (<li key={item} onClick={() => this.quizModal(key, item)}>{key}</li>
@@ -116,6 +135,9 @@ export default class Learn extends Component {
                     itemId={this.state.activeItemId}
                     itemName={this.state.activeItemName}
                     userBestScore={this.state.activeUserBestScore}
+                    closeModalBox={ () => this.toggleModal()}
+                    firstTimeQuizAttempt={this.state.firstAttempt}
+                    allLearnData={this.state.allLearnData}
                 />
             </div>
         )
