@@ -114,8 +114,9 @@ export default class JourneySingle extends Component {
         if (images !== null && typeof images !== 'undefined') {
             let imageDOM = Object.keys(images).map((key) => {
                 let imageRef = firebase.storage().ref(`journey/${this.state.user.uid}/${this.state.journey.id}/${images[key].image_name}`);
+                let imageDBRef = firebase.database().ref(`journeys/${this.state.user.uid}/${this.state.journey.id}/images/${key}`);
                 return (
-                    <JourneyImage key={key} imageURL={images[key].image_url} storageRef={imageRef} />
+                    <JourneyImage key={key} imageURL={images[key].image_url} storageRef={imageRef} DBRef={imageDBRef} />
                 )
             })
 

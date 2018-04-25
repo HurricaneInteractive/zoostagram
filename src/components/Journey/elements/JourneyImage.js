@@ -54,6 +54,14 @@ export default class JourneyImage extends Component {
             }
         }
 
+        this.props.DBRef.update({
+            enclosure: this.state.selectedEnclosure
+        }).then(() => {
+            console.log('Success')
+        }).catch((err) => {
+            console.error(err.message)
+        })
+
         this.props.storageRef.updateMetadata(newMeta).then((metadata) => {
             _this.setState({
                 editingImage: !this.state.editingImage,

@@ -277,7 +277,9 @@ class Capture extends Component {
             let newKey = journeyRef.push();
             newKey.set({
                 image_name: name,
-                image_url: downloadURL
+                image_url: downloadURL,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                enclosure: _this.state.selectedEnclosure
             })
             .then(() => {
                 _this.setState({
