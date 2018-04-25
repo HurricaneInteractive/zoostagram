@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import Masonry from 'react-masonry-component'
 import firebase from '../firebase'
@@ -149,6 +149,11 @@ export default class JourneySingle extends Component {
     render() {
         let { journey, fetching } = this.state;
         let journey_id = this.props.routerProps.match.params.id;
+        let totalImages = 0;
+
+        if (journey !== null) {
+            totalImages = typeof journey.images === 'undefined' ? 0 : Object.keys(journey.images).length;
+        }
 
         return (
             <div className="journey-page journey-single">
@@ -164,6 +169,7 @@ export default class JourneySingle extends Component {
                                     id={journey.id}
                                     uid={this.state.user.uid}
                                     updateFakeState={ (title) => this.updateStateWithNewTitle(title) }
+                                    totalImages={totalImages}
                                 />
                                 {
                                     journey.images === null || typeof journey.images === 'undefined' ? (
@@ -176,7 +182,16 @@ export default class JourneySingle extends Component {
                                             disableImagesLoaded={false}
                                             updateOnEachImageLoad={true}
                                         >
-                                            { this.generateImageGallery() }
+                                            <Fragment>
+                                                {
+                                                    typeof journey.generatedMapURL !== 'undefined' ? (
+                                                        <div className="single-image">
+                                                            <img src={journey.generatedMapURL} alt="generate map" />
+                                                        </div>
+                                                    ) : ('')
+                                                }
+                                                { this.generateImageGallery() }
+                                            </Fragment>
                                         </Masonry>
                                     )
                                 }
