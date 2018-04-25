@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import firebase from '../../firebase'
 
 import { SettingsIcon } from '../../Global/Icons'
@@ -134,6 +135,7 @@ export default class JourneyTitle extends Component {
                     <a onClick={ (e) => this.toggleSettings(e) }><SettingsIcon /></a>
                     <ul className={ this.state.settingsOpen === true ? 'open' : '' }>
                         <li><a onClick={ (e) => this.toggleRenameDialogue(e) }>Rename</a></li>
+                        <li><Link to={`/journey/generate/${this.props.id}`}>Generate</Link></li>
                         <li><a>Delete</a></li>
                     </ul>
                 </div>
