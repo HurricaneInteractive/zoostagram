@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
-import PageTitle from '../Global/PageTitle'
+import React, { Component, Fragment } from 'react'
 import firebase from '../firebase'
-import Enclosures from '../config/enclosures'
+import Loading from '../Global/Loading'
 
+import PageTitle from '../Global/PageTitle'
+import Enclosures from '../config/enclosures'
 
 import map from '../../images/zoo_map.jpg'
 const mapWidth = 500;
 const mapHeight = 500;
+const mimetype = 'image/jpeg'
 
 export default class Generate extends Component {
     constructor(props) {
@@ -15,12 +17,15 @@ export default class Generate extends Component {
         this.state = {
             user: this.props.authUser,
             id: this.props.routerProps.match.params.id,
-            journey: null
+            journey: null,
+            mapGenerated: false,
+            uploading: false
         }
 
         this.canvas = null;
 
         this.startGeneration = this.startGeneration.bind(this)
+        this.saveCanvasImage = this.saveCanvasImage.bind(this)
     }
 
     componentDidMount() {
@@ -44,7 +49,6 @@ export default class Generate extends Component {
         let mapImage = new Image();
 
         mapImage.onload = () => {
-            // this.canvas = document.getElementById('generated-map');
             this.canvas = document.createElement('canvas');
             this.canvas.setAttribute('width', mapWidth);
             this.canvas.setAttribute('height', mapHeight);
@@ -95,19 +99,82 @@ export default class Generate extends Component {
             }
 
             wrapper.appendChild(this.canvas);
+
+            this.setState({
+                mapGenerated: true
+            })
         }
         mapImage.src = map;
+    }
+
+    saveCanvasImage(e) {
+        e.preventDefault();
+        this.canvas.toBlob(function(blob) {
+            const { user, id } = this.state
+
+            this.setState({
+                uploading: true
+            })
+
+            let metadata = {
+                cacheControl: 'public,max-age=31536000',
+                contentType: mimetype,
+            }
+
+            let folder = user.uid;
+            let reference = `maps/${folder}/${id}/generatedmap.jpg`;
+            let uploadTask = firebase.storage().ref(reference).put(blob, metadata);
+
+            uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+                // Progress
+            }, (err) => {
+                console.error(err.message);
+                this.setState({
+                    uploading: false
+                })
+            }, () => {
+                // Success
+                let downloadURL = uploadTask.snapshot.downloadURL;
+                firebase.database().ref(`journeys/${user.uid}/${id}`)
+                    .update({
+                        generatedMapURL: downloadURL
+                    })
+                    .then(() => {
+                        this.setState({
+                            uploading: false
+                        }, () => {
+                            this.props.routerProps.history.goBack();
+                        })
+                    })
+                    .catch((err) => {
+                        console.error(err.message);
+                        this.setState({
+                            uploading: false
+                        })
+                    })
+            })
+
+        }.bind(this), mimetype);
     }
 
     render() {
         return (
             <div className="journey-page generate">
+                { this.state.uploading ? <Loading fullscreen={true} /> : '' }
                 <PageTitle title="Generate" back={() => this.props.routerProps.history.goBack()} />
                 <div className="preview-message">
-                    <p>Using this feature will generate a map with the path you took through the Zoo.</p>
-                    <a onClick={(e) => this.startGeneration(e)} className={`btn ${ this.state.journey ? 'fadeIn' : '' }`}>Get Started!</a>
-                    { /* <canvas id="generated-map" /> */ }
+                    {
+                        this.state.mapGenerated !== true ? (
+                            <Fragment>
+                                <p>Using this feature will generate a map with the path you took through the Zoo.</p>
+                                <a onClick={(e) => this.startGeneration(e)} className={`btn ${ this.state.journey ? 'fadeIn' : '' }`}>Get Started!</a>
+                            </Fragment>
+                        ) : ('')
+                    }
+                </div>
+                <div className={`map-preview ${ this.state.mapGenerated ? 'show-map' : '' }`}>
                     <div id="canvas-wrapper" />
+                    <a onClick={(e) => this.saveCanvasImage(e)} className="btn fadeIn">Save</a>
                 </div>
             </div>
         )
