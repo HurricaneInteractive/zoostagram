@@ -18,11 +18,13 @@
     background-color: rgba(33, 33, 33, 0.5);
     display: grid;
     justify-content: center;
+    text-align: center;
     align-content: center;
     position: fixed;
     div {
         width: 450px;
         height: auto;
+        border-radius: 40px;
         h1 { // number/quiz tile 
 
         }
@@ -33,7 +35,19 @@
     p {
         color: $orange-yellow !important;
     }
+    h2{
+    font-family: $hebbo;
+    color: #FFAA00;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+    }
+
+
 }
+
+
+
 
 // progression bar styling
 // .progression bar is the container (bg colour here is the background colour you see)
