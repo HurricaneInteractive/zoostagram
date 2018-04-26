@@ -8,6 +8,7 @@
     background-color: green;
 }
 
+// quiz page modal popup styling
 .learn-modal {
     position: absolute;
     top: 0;
@@ -73,7 +74,7 @@ $a-tags-hover: 'a:active, a:hover';
     padding: 0;
     div {
         div {
-            ul {
+            .quizTiles {
                 display: grid;
                 grid-template-columns: 1fr;
                 grid-template-rows: auto;

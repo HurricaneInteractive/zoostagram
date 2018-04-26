@@ -18,7 +18,12 @@ import PageTitle from '../Global/PageTitle'
 import QuizModal from './QuizModal'
 
 const databaseRef = firebase.database();
-
+/**
+ * 
+ * 
+ * @class LearnModal
+ * @extends {React.Component}
+ */
 class LearnModal extends React.Component {
     render() {
         return (
@@ -41,7 +46,13 @@ class LearnModal extends React.Component {
         )
     }
 }
-
+/**
+ * 
+ * 
+ * @export
+ * @class Learn
+ * @extends {Component}
+ */
 export default class Learn extends Component {
     constructor(props) {
         super(props);
@@ -80,14 +91,24 @@ export default class Learn extends Component {
             })
         });
     }
-
+    /**
+     * 
+     * 
+     * @param {any} key 
+     * @param {any} item 
+     * @memberof Learn
+     */
     quizModal(key, item) {
         console.log(item);
         console.log(key);
         // console.log(this.state.allUserData.quiz_attempts[`${key}`].hs);
         let userHighScore = 0;
         let firstTime = true;
-        if (typeof this.state.allUserData.quiz_attempts[key] !== "undefined") {
+        if (typeof this.state.allUserData.quiz_attempts === "undefined") {
+            firstTime = true;
+            userHighScore = 0;
+        }
+        else if (typeof this.state.allUserData.quiz_attempts[key] !== "undefined") {
             userHighScore = this.state.allUserData.quiz_attempts[key].hs;
             firstTime = false;
         }
@@ -103,19 +124,33 @@ export default class Learn extends Component {
             firstAttempt: firstTime
         })
     }
-
+    /**
+     * 
+     * 
+     * @memberof Learn
+     */
     toggleModal() {
         this.setState({
             openDeleteModal: false
         })
     }
-
+    /**
+     * 
+     * 
+     * @param {any} key 
+     * @param {any} item 
+     * @returns 
+     * @memberof Learn
+     */
     quizStateChecker(key, item) {
         let quizClassName = "";
         console.log(this.state);
         console.log(this.state.allUserData);
 
-        if (typeof this.state.allUserData.quiz_attempts[key] === "undefined") {
+        if (typeof this.state.allUserData.quiz_attempts === "undefined") {
+            quizClassName = "noAttempt"
+        }
+        else if (typeof this.state.allUserData.quiz_attempts[key] === "undefined") {
             quizClassName = "noAttempt"
         }
         else if (this.state.allUserData.quiz_attempts[key].hs > this.state.allLearnData[key].length) {
@@ -127,7 +162,12 @@ export default class Learn extends Component {
         console.log(quizClassName);
         return quizClassName
     }
-
+    /**
+     * 
+     * 
+     * @returns 
+     * @memberof Learn
+     */
     renderQuizTitles() {
         // console.log(this.state.allLearnData);
 
@@ -148,7 +188,7 @@ export default class Learn extends Component {
 
         return (
             <div>
-                <ul>
+                <ul className="quizTiles">
                     { quizTiles }
                 </ul>
                 <LearnModal isOpen={this.state.openDeleteModal}  
@@ -162,7 +202,12 @@ export default class Learn extends Component {
             </div>
         )
     }
-
+    /**
+     * 
+     * 
+     * @returns 
+     * @memberof Learn
+     */
     render() {
         if (this.state.allLearnData === null || this.state.allUserData === null) {
             return <Loading fullscreen={true} />
