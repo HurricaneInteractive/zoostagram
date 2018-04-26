@@ -1,5 +1,4 @@
-// put your sass code here
-
+// *** quiz specific styling *** 
 // default quesion styling
 .quizOption {
     background-color: #787878;
@@ -19,6 +18,7 @@
     display: grid;
     justify-content: center;
     align-content: center;
+    position: fixed;
     div {
         width: 450px;
         height: auto;
@@ -30,14 +30,14 @@
         }
     }
     p {
-        color: #ffaa00 !important;
+        color: $orange-yellow !important;
     }
 }
 
 // progression bar styling
 // .progression bar is the container (bg colour here is the background colour you see)
 .progressionBar {
-    background-color: #ffaa00;
+    background-color: $orange-yellow;
     height: 25px;
     // this elements width is auto adjusted (DONT ADD WIDTH TAG). change bg color to change progression bar colour
     div {
@@ -56,7 +56,6 @@ $a-tags: 'a, a:active, a:hover, a:visited';
 $a-tags-hover: 'a:active, a:hover';
 
 // Learn body gradient styling
-
 #learn {
      height: auto;
      margin: 0;
@@ -71,27 +70,37 @@ $a-tags-hover: 'a:active, a:hover';
 .quiz-container{
     height: auto;
     margin: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
     div {
         div {
             ul {
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                align-content: center;
+                justify-content: center;
+                margin: 0;
+                padding: 0;
                 li {
                     display: grid;
                     grid-template-columns: auto;
                     grid-template-rows: 1fr;
                     align-content: center;
                     justify-content: center;
-                    height: 50px;
-                    width: 50px;
+                    align-self: center;
+                    justify-self: center;
+                    height: 100px;
+                    width: 100px;
+                    margin: 5px;
                     div {
                         height: 100%;
                         width: 100%;
                     }
                 }
                 .noAttempt { //user not done quiz before
+                    color: $orange-yellow;
                     div {
-                        background-color: green;
+                        background: none;
                     }
                 }
                 .progress { // =completed quiz - but not 100%
@@ -108,6 +117,22 @@ $a-tags-hover: 'a:active, a:hover';
                         font-size: 0;
                         background: url(images/quizshape-star.png) no-repeat center center;
                     }
+                }
+                // allows css to be dynamic - targets every multiple of 5 (because 5 different bg images)
+                li:nth-of-type(5n) {
+                    background: url(images/quizshape-one.png) no-repeat center center;
+                }
+                li:nth-of-type(5n + 1) {
+                    background: url(images/quizshape-two.png) no-repeat center center;
+                }
+                li:nth-of-type(5n + 2) {
+                    background: url(images/quizshape-three.png) no-repeat center center;
+                }
+                li:nth-of-type(5n + 3) {
+                    background: url(images/quizshape-four.png) no-repeat center center;
+                }
+                li:nth-of-type(5n + 4) {
+                    background: url(images/quizshape-five.png) no-repeat center center;
                 }
             }
         }
@@ -145,51 +170,3 @@ $a-tags-hover: 'a:active, a:hover';
     padding-bottom: 75px;
     list-style-type: none;
 }
-
-
-
-//Learn Question 1 Tile styling 
-#learn li:nth-child(1) {
-    background-image: url(images/quizshape-one.png) no-repeat center center;
-     margin: 0;
-
-}
-
-#learn li:nth-child(2) {
-    background-image: url(images/quizshape-two.png) no-repeat center center;
-     margin: 0;
-}
-
-
-#learn li:nth-child(3) {
-    background: url(images/quizshape-three.png) no-repeat center center;
-     margin: 0;
-}
-
-#learn li:nth-child(4) {
-    background: url(images/quizshape-four.png) no-repeat center center;
-     margin: 0;
-}
-
-
-#learn li:nth-child(5) {
-    background: url(images/quizshape-five.png) no-repeat center center;
-     margin: 0;
-}
-
-
-#learn li:nth-child(6) {
-    background: url(images/quizshape-six.png) no-repeat center center;
-     margin: 0;
-}
-
-#learn li:nth-child(7) {
-    background: url(images/quizshape-seven.png) no-repeat center center;
-     margin: 0;
-}
-
-#learn li:nth-child(8) {
-    background: url(images/quizshape-eight.png) no-repeat center center;
-     margin: 0;
-}
-
