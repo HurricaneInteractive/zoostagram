@@ -17,6 +17,16 @@ import PageTitle from '../Global/PageTitle'
 // eslint-disable-next-line
 import QuizModal from './QuizModal'
 
+import quizShapeOne from '../../images/quizshape-svg-one.svg'
+// eslint-disable-next-line
+import quizShapeTwo from '../../images/quizshape-svg-two.svg'
+// eslint-disable-next-line
+import quizShapeThree from '../../images/quizshape-svg-three.svg'
+// eslint-disable-next-line
+import quizShapeFour from '../../images/quizshape-svg-four.svg'
+// eslint-disable-next-line
+import quizShapeFive from '../../images/quizshape-svg-five.svg'
+
 const databaseRef = firebase.database();
 /**
  * 
@@ -182,7 +192,10 @@ export default class Learn extends Component {
             let quizzoClasso = this.quizStateChecker(key, item);
             console.log(quizzoClasso);
             return (<li key={item} className={quizzoClasso}
-                onClick={() => this.quizModal(key, item)}><div>{item + 1}</div></li>
+                onClick={() => this.quizModal(key, item)}>
+                    <div className={"quizNumber"}>{item + 1}</div>
+                    <div className={"quizSvgBackground"}><img src={quizShapeOne} alt={quizShapeOne}/></div>
+                </li>
         )});
         
 

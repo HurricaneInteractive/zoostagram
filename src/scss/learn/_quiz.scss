@@ -107,9 +107,24 @@ $a-tags-hover: 'a:active, a:hover';
                     height: 100px;
                     width: 100px;
                     margin: 5px;
-                    div {
+                    position: relative;
+                    .quizNumber {
                         height: 100%;
                         width: 100%;
+                        position: absolute;
+                        z-index: 5;
+                    }
+                    .quizSvgBackground {
+                        height: 100%;
+                        width: 100%;
+                        position: absolute;
+                        fill: green;
+                        img {
+                            color: red;
+                            svg {
+                                color: blue;
+                            }
+                        }
                     }
                 }
                 .noAttempt { //user not done quiz before
