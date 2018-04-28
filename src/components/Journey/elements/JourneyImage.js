@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import Enclosures from '../../config/enclosures';
+import { FACEBOOK_CONFIG } from '../../config/env';
+import FacebookProvider, { Share } from 'react-facebook';
 
 import Loading from '../../Global/Loading'
 
@@ -193,7 +195,11 @@ export default class JourneyImage extends Component {
                         <div className="journey-dialogue">
                             <div className="dialogue-inner">
                                 <div className="image-preview">
-                                    <img src={imageData.image_url} alt="Zoo Journey Single" />
+                                    <FacebookProvider appId={FACEBOOK_CONFIG.APP_ID}>
+                                        <Share href={imageData.image_url}>
+                                            <img src={imageData.image_url} alt="Zoo Journey Single" />
+                                        </Share>
+                                    </FacebookProvider>
                                 </div>
                                 
                                 <div className="image-info">

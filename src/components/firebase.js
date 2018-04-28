@@ -1,13 +1,13 @@
 import * as firebase from 'firebase'
-import FirebaseConfig from './config/firebase-config';
+import { FIREBASE_CONFIG } from './config/env';
 
 var config = {
-    apiKey: FirebaseConfig.APIKEY,
-    authDomain: FirebaseConfig.AUTHDOMAIN,
-    databaseURL: FirebaseConfig.DATABASEURL,
-    projectId: FirebaseConfig.PROJECTID,
-    storageBucket: FirebaseConfig.STORAGEBUCKET,
-    messagingSenderId: FirebaseConfig.MESSAGINGSENDERID
+    apiKey: FIREBASE_CONFIG.APIKEY,
+    authDomain: FIREBASE_CONFIG.AUTHDOMAIN,
+    databaseURL: FIREBASE_CONFIG.DATABASEURL,
+    projectId: FIREBASE_CONFIG.PROJECTID,
+    storageBucket: FIREBASE_CONFIG.STORAGEBUCKET,
+    messagingSenderId: FIREBASE_CONFIG.MESSAGINGSENDERID
 }
 
 firebase.initializeApp(config)

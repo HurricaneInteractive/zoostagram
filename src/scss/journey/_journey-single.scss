@@ -33,6 +33,13 @@
                 display: block;
                 border: 1px solid $light-grey;
             }
+            &.viewing {
+                &.editing {
+                    .journey-dialogue:first-of-type {
+                        display: none;
+                    }
+                }
+            }
             .journey-dialogue {
                 .dialogue-inner {
                     margin-top: 0;
