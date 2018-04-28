@@ -16,6 +16,19 @@
             }
         }
     }
+    #logout {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+        text-transform: uppercase;
+        color: white;
+        font-family: $heebo;
+        opacity: 0.5;
+        cursor: pointer;
+    }
     .app-feature-options {
         align-self: center;
         ul {
