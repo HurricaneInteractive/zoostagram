@@ -17,6 +17,9 @@ import PageTitle from '../Global/PageTitle'
 // eslint-disable-next-line
 import QuizModal from './QuizModal'
 
+import StarImage from '../../images/quizshape-star.png'
+import TickImage from '../../images/quizshape-tick.png'
+
 const databaseRef = firebase.database();
 /**
  * 
@@ -87,16 +90,15 @@ export default class Learn extends Component {
                     </g>
                 </svg>,
                 <svg version="1.1" id="Layer_1" x="0px" y="0px"
-                    viewBox="0 0 90.4 90.4">
-                    <g id="shape_1_completed" transform="translate(11.134) rotate(8)">
-                        <path className="st0" d="M70,76l-60,0c-3.3,0-6-2.7-6-6l0-60c0-3.3,2.7-6,6-6l60,0c3.3,0,6,2.7,6,6l0,60C76,73.3,73.3,76,70,76z"/>
+                    viewBox="0 0 120.2 120.2">
+                    <g id="shape_4_completed" transform="translate(60.104) rotate(45)">
+                        <path className="st0" d="M35,0l15,0c19.3,0,35,15.7,35,35v15c0,19.3-15.7,35-35,35H35C15.7,85,0,69.3,0,50l0-15C0,15.7,15.7,0,35,0z"/>
                     </g>
                 </svg>,
                 <svg version="1.1" id="Layer_1" x="0px" y="0px"
-                    viewBox="0 0 90.4 90.4">
-                    <g id="shape_1_completed" transform="translate(11.134) rotate(8)">
-                        <path className="st0" d="M70,76l-60,0c-3.3,0-6-2.7-6-6l0-60c0-3.3,2.7-6,6-6l60,0c3.3,0,6,2.7,6,6l0,60C76,73.3,73.3,76,70,76z"/>
-                    </g>
+                    viewBox="0 0 127.9 126.1">
+                    <path id="shape_5_completed" className="st0" d="M25.1,47.1l-4.3,19.6c-5.9,27.8,20.6,51.8,47.8,43l18.9-6.1
+	                c19.4-6.3,30.1-27.1,23.8-46.5c-2-6.3-5.7-11.9-10.6-16.3L86,27.3C64.9,8.2,31,19.2,25.1,47.1z"/>
                 </svg>,
                 
             ]
@@ -195,6 +197,23 @@ export default class Learn extends Component {
         // console.log(quizClassName);
         return quizClassName
     }
+    quizDisplayStateChecker(key, item) {
+        let quizDisplay = null;
+        if (typeof this.state.allUserData.quiz_attempts === "undefined") {
+            quizDisplay = <p>{item + 1}</p>;
+
+        }
+        else if (typeof this.state.allUserData.quiz_attempts[key] === "undefined") {
+            quizDisplay = <p>{item + 1}</p>;
+        }
+        else if (this.state.allUserData.quiz_attempts[key].hs > this.state.allLearnData[key].length) {
+            quizDisplay = <img src={StarImage} alt="quiz shape tick"/>;
+        }
+        else {
+            quizDisplay = <img src={TickImage} alt="quiz shape star" />;
+        }
+        return quizDisplay;
+    }
     /**
      * 
      * 
@@ -214,11 +233,17 @@ export default class Learn extends Component {
         let quizTiles = keysTitle.map( (key, item) => {
             let quizzoClasso = this.quizStateChecker(key, item);
             // console.log(quizzoClasso);
+            let quizDisplay = this.quizDisplayStateChecker(key, item);
+            console.log(quizDisplay);
+            let quizQuestionNumber = item;
+            if (item >= 5 && item <= 10) {
+                quizQuestionNumber = item - 5
+            }
             return (<li key={item} className={quizzoClasso}
                 onClick={() => this.quizModal(key, item)}>
-                    <div className={"quizNumber"}>{item + 1}</div>
+                    <div className={"quizNumber"}>{quizDisplay}</div>
                     <div className={"quizSvgBackground"}>
-                        {this.state.svgImage[item]}
+                        {this.state.svgImage[quizQuestionNumber]}
                     </div>
                 </li>
         )});

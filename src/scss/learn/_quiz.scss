@@ -109,8 +109,8 @@ $a-tags-hover: 'a:active, a:hover';
                     margin: 5px;
                     font-size: 35px;
                     text-align: center;
-                    padding-top: 85px;
-                    padding-bottom: 75px;
+                    padding-top: 95px;
+                    padding-bottom: 95px;
                     list-style-type: none;
                     .quizNumber {
                         height: 100%;
@@ -119,38 +119,56 @@ $a-tags-hover: 'a:active, a:hover';
                         justify-self: stretch;
                         grid-column: 1;
                         grid-row: 1;
-                        background: none;
+                        color: white;
+                        background-color: transparent;
+                        z-index: 10;
+                        margin: 0;
+                        padding: 0;
+                        display: grid;
+                        p {
+                            text-align: center;
+                            align-self: center;
+                            justify-self: center;
+                        }
+                        img {
+                            align-self: center;
+                            justify-self: center;
+                        }
                     }
                     .quizSvgBackground {
                         height: 100%;
                         width: 100%;
-                        display: block;
+                        background-color: transparent;
                         grid-column: 1;
                         grid-row: 1;
-                        fill: yellow;
-                        .svg {
+                        fill: $orange-yellow;   
+                        margin: 0;
+                        padding: 0;
+                        display: grid;
+                        align-content: center;
+                        justify-content: center;
+                        svg {
                             width: 100% !important;
-                            background-color: none;
+                            background: none;
                             stroke: white;
+                            stroke-width: 5px;
+                            path {
+                                width: 100%;
+                            }
                         }
                     }
                 }
                 .noAttempt { //user not done quiz before
                     color: $orange-yellow;
-                    .quizNumber {
-                        background: none;
-                    }
                 }
                 .progress { // =completed quiz - but not 100%
                     .quizNumber {
                         font-size: 0;
-                        background: url(images/quizshape-tick.png) no-repeat center center;
                     }
                 }
                 .star { // completed quiz and got 100%
                     .quizNumber {
                         font-size: 0;
-                        background: url(images/quizshape-star.png) no-repeat center center;
                     }
                 }
                 // allows css to be dynamic - targets every multiple of 5 (because 5 different bg images)
@@ -173,35 +191,3 @@ $a-tags-hover: 'a:active, a:hover';
         }
     }
 }
-
-// Learn h1 styling 
-// #learn h1{
-//     font-family: $deco-family;
-//     font-size: 40px;
-//     color: #fff;
-// 	text-align: center;
-//     margin: 0;
-// 	padding-top: 83px;
-// 	padding-bottom: 130px;
-// }
-
-//Learn p styling
-// #learn p{
-//     font-family:'Raleway', sans-serif;
-//     font-size: 14px;
-//     text-align: center;
-//     color: #fff;
-//     padding-left: 10vh;
-//     padding-right: 10vh;
-//     position: relative;
-// }
-
-//Learn list item styling
-// #learn li {
-//     font-family:'Heebo', sans-serif;
-//     font-size: 35px;
-//     text-align: center;
-//     padding-top: 85px;
-//     padding-bottom: 75px;
-//     list-style-type: none;
-// }
