@@ -17,16 +17,6 @@ import PageTitle from '../Global/PageTitle'
 // eslint-disable-next-line
 import QuizModal from './QuizModal'
 
-import quizShapeOne from '../../images/quizshape-svg-one.svg'
-// eslint-disable-next-line
-import quizShapeTwo from '../../images/quizshape-svg-two.svg'
-// eslint-disable-next-line
-import quizShapeThree from '../../images/quizshape-svg-three.svg'
-// eslint-disable-next-line
-import quizShapeFour from '../../images/quizshape-svg-four.svg'
-// eslint-disable-next-line
-import quizShapeFive from '../../images/quizshape-svg-five.svg'
-
 const databaseRef = firebase.database();
 /**
  * 
@@ -76,7 +66,40 @@ export default class Learn extends Component {
             activeItemName: null,
             activeItemId: null,
             activeUserBestScore: null,
-            firstAttempt: true
+            firstAttempt: true,
+            svgImage: [
+                <svg version="1.1" id="Layer_1" x="0px" y="0px"
+                    viewBox="0 0 90.4 90.4">
+                    <g id="shape_1_completed" transform="translate(11.134) rotate(8)">
+                        <path className="st0" d="M70,76l-60,0c-3.3,0-6-2.7-6-6l0-60c0-3.3,2.7-6,6-6l60,0c3.3,0,6,2.7,6,6l0,60C76,73.3,73.3,76,70,76z"/>
+                    </g>
+                </svg>,
+                <svg version="1.1" id="Layer_1" x="0px" y="0px"
+                    viewBox="0 0 107.6 107.6">
+                    <g id="shape_2_completed" transform="matrix(0.891, -0.454, 0.454, 0.891, 0, 36.319)">
+                        <path className="st0" d="M19,0l42,0c10.5,0,19,8.5,19,19v42c0,10.5-8.5,19-19,19H19C8.5,80,0,71.5,0,61l0-42C0,8.5,8.5,0,19,0z"/>
+                    </g>
+                </svg>,
+                <svg version="1.1" id="Layer_1" x="0px" y="0px"
+                    viewBox="0 0 93.8 93.8">
+                    <g id="shape_3_completed" transform="translate(0 15.265) rotate(-11)">
+                        <path className="st0" d="M30,0l20,0c16.6,0,30,13.4,30,30l0,20c0,16.6-13.4,30-30,30H30C13.4,80,0,66.6,0,50l0-20C0,13.4,13.4,0,30,0z"/>
+                    </g>
+                </svg>,
+                <svg version="1.1" id="Layer_1" x="0px" y="0px"
+                    viewBox="0 0 90.4 90.4">
+                    <g id="shape_1_completed" transform="translate(11.134) rotate(8)">
+                        <path className="st0" d="M70,76l-60,0c-3.3,0-6-2.7-6-6l0-60c0-3.3,2.7-6,6-6l60,0c3.3,0,6,2.7,6,6l0,60C76,73.3,73.3,76,70,76z"/>
+                    </g>
+                </svg>,
+                <svg version="1.1" id="Layer_1" x="0px" y="0px"
+                    viewBox="0 0 90.4 90.4">
+                    <g id="shape_1_completed" transform="translate(11.134) rotate(8)">
+                        <path className="st0" d="M70,76l-60,0c-3.3,0-6-2.7-6-6l0-60c0-3.3,2.7-6,6-6l60,0c3.3,0,6,2.7,6,6l0,60C76,73.3,73.3,76,70,76z"/>
+                    </g>
+                </svg>,
+                
+            ]
         }
 
         this.renderQuiz = this.renderQuizTitles.bind(this)
@@ -154,8 +177,8 @@ export default class Learn extends Component {
      */
     quizStateChecker(key, item) {
         let quizClassName = "";
-        console.log(this.state);
-        console.log(this.state.allUserData);
+        // console.log(this.state);
+        // console.log(this.state.allUserData);
 
         if (typeof this.state.allUserData.quiz_attempts === "undefined") {
             quizClassName = "noAttempt"
@@ -169,7 +192,7 @@ export default class Learn extends Component {
         else {
             quizClassName = "star"
         }
-        console.log(quizClassName);
+        // console.log(quizClassName);
         return quizClassName
     }
     /**
@@ -183,18 +206,20 @@ export default class Learn extends Component {
 
         let quiz = this.state.allLearnData;
         let keysTitle = Object.keys(quiz);
-        console.log(keysTitle);
+        // console.log(keysTitle);
 
         // console.log(quiz[keys[0]].question);
         
 
         let quizTiles = keysTitle.map( (key, item) => {
             let quizzoClasso = this.quizStateChecker(key, item);
-            console.log(quizzoClasso);
+            // console.log(quizzoClasso);
             return (<li key={item} className={quizzoClasso}
                 onClick={() => this.quizModal(key, item)}>
                     <div className={"quizNumber"}>{item + 1}</div>
-                    <div className={"quizSvgBackground"}><img src={quizShapeOne} alt={quizShapeOne}/></div>
+                    <div className={"quizSvgBackground"}>
+                        {this.state.svgImage[item]}
+                    </div>
                 </li>
         )});
         

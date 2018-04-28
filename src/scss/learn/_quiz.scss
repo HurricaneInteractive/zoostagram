@@ -107,6 +107,11 @@ $a-tags-hover: 'a:active, a:hover';
                     height: 100px;
                     width: 100px;
                     margin: 5px;
+                    font-size: 35px;
+                    text-align: center;
+                    padding-top: 85px;
+                    padding-bottom: 75px;
+                    list-style-type: none;
                     .quizNumber {
                         height: 100%;
                         width: 100%;
@@ -114,20 +119,19 @@ $a-tags-hover: 'a:active, a:hover';
                         justify-self: stretch;
                         grid-column: 1;
                         grid-row: 1;
+                        background: none;
                     }
                     .quizSvgBackground {
                         height: 100%;
                         width: 100%;
+                        display: block;
                         grid-column: 1;
                         grid-row: 1;
-                        fill: green;
-                        img {
-                            color: red;
-                            width: 100%;
-                            svg {
-                                width: 100%;
-                                color: blue;
-                            }
+                        fill: yellow;
+                        .svg {
+                            width: 100% !important;
+                            background-color: none;
+                            stroke: white;
                         }
                     }
                 }
@@ -150,21 +154,21 @@ $a-tags-hover: 'a:active, a:hover';
                     }
                 }
                 // allows css to be dynamic - targets every multiple of 5 (because 5 different bg images)
-                li:nth-of-type(5n) {
-                    background: url(images/quizshape-one.png) no-repeat center center;
-                }
-                li:nth-of-type(5n + 1) {
-                    background: url(images/quizshape-two.png) no-repeat center center;
-                }
-                li:nth-of-type(5n + 2) {
-                    background: url(images/quizshape-three.png) no-repeat center center;
-                }
-                li:nth-of-type(5n + 3) {
-                    background: url(images/quizshape-four.png) no-repeat center center;
-                }
-                li:nth-of-type(5n + 4) {
-                    background: url(images/quizshape-five.png) no-repeat center center;
-                }
+                // li:nth-of-type(5n) {
+                //     background: url(images/quizshape-one.png) no-repeat center center;
+                // }
+                // li:nth-of-type(5n + 1) {
+                //     background: url(images/quizshape-two.png) no-repeat center center;
+                // }
+                // li:nth-of-type(5n + 2) {
+                //     background: url(images/quizshape-three.png) no-repeat center center;
+                // }
+                // li:nth-of-type(5n + 3) {
+                //     background: url(images/quizshape-four.png) no-repeat center center;
+                // }
+                // li:nth-of-type(5n + 4) {
+                //     background: url(images/quizshape-five.png) no-repeat center center;
+                // }
             }
         }
     }
