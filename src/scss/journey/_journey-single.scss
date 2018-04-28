@@ -24,7 +24,8 @@
             padding: 0 10px;
             width: 50%;
             z-index: 0;
-            &.editing {
+            &.editing,
+            &.viewing {
                 z-index: 10;
             }
             img {
@@ -46,6 +47,17 @@
                             margin: 0 auto;
                             border: none;
                             border-radius: 0;
+                        }
+                    }
+                    .image-info {
+                        margin-bottom: 30px;
+                        p {
+                            margin: 0 0 10px;
+                            text-transform: capitalize;
+                            strong {
+                                font-family: $heebo;
+                                font-weight: bold;
+                            }
                         }
                     }
                     .enclosure-select {

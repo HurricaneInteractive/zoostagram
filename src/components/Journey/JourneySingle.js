@@ -42,6 +42,7 @@ export default class JourneySingle extends Component {
         this.fetchJourneyImages = this.fetchJourneyImages.bind(this)
         this.generateImageGallery = this.generateImageGallery.bind(this)
         this.updateStateWithNewTitle = this.updateStateWithNewTitle.bind(this)
+        this.updateFakeImageState = this.updateFakeImageState.bind(this)
     }
 
     /**
@@ -104,6 +105,22 @@ export default class JourneySingle extends Component {
     }
 
     /**
+     * Updates the state to reflect the new Enclosure value
+     * 
+     * @param {string} id ID of the image
+     * @param {string} newEnclosure Text of the new enclosure
+     * @memberof JourneySingle
+     */
+    updateFakeImageState(id, newEnclosure) {
+        let newJourney = {...this.state.journey};
+        newJourney.images[id].enclosure = newEnclosure;
+
+        this.setState({
+            journey: newJourney
+        })
+    }
+
+    /**
      * Loops through images and displays them to the user
      * 
      * @returns DOM
@@ -116,7 +133,14 @@ export default class JourneySingle extends Component {
                 let imageRef = firebase.storage().ref(`journey/${this.state.user.uid}/${this.state.journey.id}/${images[key].image_name}`);
                 let imageDBRef = firebase.database().ref(`journeys/${this.state.user.uid}/${this.state.journey.id}/images/${key}`);
                 return (
-                    <JourneyImage key={key} imageURL={images[key].image_url} storageRef={imageRef} DBRef={imageDBRef} />
+                    <JourneyImage 
+                        key={key} 
+                        id={key} 
+                        imageData={images[key]} 
+                        storageRef={imageRef} 
+                        DBRef={imageDBRef}
+                        updateFakeState={ (id, enclosure) => this.updateFakeImageState(id, enclosure) }
+                    />
                 )
             })
 
