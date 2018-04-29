@@ -222,19 +222,15 @@ export default class Learn extends Component {
      */
     renderQuizTitles() {
         // console.log(this.state.allLearnData);
-
         let quiz = this.state.allLearnData;
         let keysTitle = Object.keys(quiz);
         // console.log(keysTitle);
-
         // console.log(quiz[keys[0]].question);
-        
 
         let quizTiles = keysTitle.map( (key, item) => {
             let quizzoClasso = this.quizStateChecker(key, item);
             // console.log(quizzoClasso);
             let quizDisplay = this.quizDisplayStateChecker(key, item);
-            console.log(quizDisplay);
             let quizQuestionNumber = item;
             if (item >= 5 && item <= 10) {
                 quizQuestionNumber = item - 5
@@ -277,7 +273,7 @@ export default class Learn extends Component {
         }
 
         return (
-            <div id="learn">
+            <div className="page" id="learn">
             <PageTitle title="Learn" back={() => this.props.routerProps.history.goBack()} />
                <p> Hint: Pay attention to notice boards at the National Zoo & Aquarium </p>
                 <div className="dune-bg">
