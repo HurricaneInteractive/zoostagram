@@ -14,6 +14,7 @@ import firebase from 'firebase'
 import Entry from './Global/Entry'
 import SignInRegister from './Global/SignInRegister'
 import Profile from './Global/Profile'
+import Claim from './Global/Claim'
 import Loading from './Global/Loading'
 
 // Journey Components
@@ -92,6 +93,9 @@ export default class AppRouter extends Component {
                 <Route exact path="/" component={Entry} />
                 <Route exact path="/profile" render={(routeProps) => (
                     <Profile routerProps={routeProps} authUser={user} />
+                )} />
+                <Route exact path="/profile/claim" render={(routeProps) => (
+                    <Claim routerProps={routeProps} authUser={user} />
                 )} />
                 
                 <Route exact path="/journey" render={(routeProps) => (

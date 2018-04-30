@@ -248,6 +248,9 @@
         border-radius: 10px;
         padding: 30px 25px;
         margin-top: 70px;
+        > *:first-child {
+            margin-top: 0;
+        }
         .input-wrapper {
             margin-bottom: 50px;
             &:after {

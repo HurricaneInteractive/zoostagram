@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import firebase from '../firebase';
+import { Link } from 'react-router-dom'
+import firebase from '../firebase'
 
 import PageTitle from './PageTitle'
 import ProfileImage from './ProfileImage'
@@ -68,6 +69,9 @@ export default class Profile extends Component {
                     <p>{ user.email.replace('@', '[at]') }</p>
                     <div className={`user-stats ${ userDetails !== null ? 'fadeIn' : '' }`}>
                         { userDetails === null ? ('') : ( this.renderUserStats() ) }
+                    </div>
+                    <div className="controls">
+                        <Link to="/profile/claim" className="btn">Claim Points</Link>
                     </div>
                 </div>
             </div>

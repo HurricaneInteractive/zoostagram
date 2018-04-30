@@ -56,6 +56,14 @@
             color: $black;
         }
     }
+    .controls {
+        margin-top: 20px;
+        .btn {
+            background: $red;
+            color: white;
+            text-decoration: none;
+        }
+    }
 }
 
 .profile-image {
