@@ -1,0 +1,66 @@
+.claim-page {
+    .user-info {
+        @include clearfix();
+        margin: 0 0 30px;
+        h3, p {
+            font-family: $heebo;
+            line-height: 21px;
+        }
+        h3 {
+            display: inline-block;
+            margin: 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-family: $heebo;
+        }
+        p {
+            margin: 0;
+            float: right;
+            font-size: 14px;
+        }
+    }
+    .prizes-container {
+        opacity: 0;
+        transform: translateY(30px);
+        &.fadeIn {
+            animation: fadeInPrizes 0.5s ease-in-out 0.25s forwards;
+        }
+        .prize {
+            @include clearfix();
+            padding: 20px;
+            border: 1px solid $black;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            &.active {
+                background: none;
+                border-color: $red;
+            }
+            &:not(.buyable) {
+                pointer-events: none;
+                opacity: 0.4;
+            }
+            h4 {
+                margin: 0;
+                display: inline-block;
+            }
+            span {
+                float: right;
+            }
+        }
+    }
+    .controls {
+        margin-top: 30px;
+    }
+}
+
+@keyframes fadeInPrizes {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
