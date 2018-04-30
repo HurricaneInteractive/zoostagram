@@ -420,7 +420,7 @@ class Capture extends Component {
                 key={enclosure} 
                 onClick={ () => this.selectEnclosure(enclosure) }
                 className={`${this.state.selectedEnclosure === enclosure ? 'active' : ''}`}
-            >{enclosure}</li>
+            >{enclosure.replace('_', ' ')}</li>
         ))
 
         return (

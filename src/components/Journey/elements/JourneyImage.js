@@ -161,7 +161,7 @@ export default class JourneyImage extends Component {
                 key={enclosure} 
                 onClick={ () => this.selectEnclosure(enclosure) }
                 className={`${this.state.selectedEnclosure === enclosure ? 'active' : ''}`}
-            >{enclosure}</li>
+            >{enclosure.replace('_', ' ')}</li>
         ))
 
         return (
@@ -203,7 +203,7 @@ export default class JourneyImage extends Component {
                                 </div>
                                 
                                 <div className="image-info">
-                                    <p><strong>Enclosure</strong>: {imageData.enclosure}</p>
+                                    <p><strong>Enclosure</strong>: {imageData.enclosure.replace('_', ' ')}</p>
                                     <p><strong>Date taken</strong>: { new Date(imageData.timestamp).toDateString() }</p>
                                 </div>
 
