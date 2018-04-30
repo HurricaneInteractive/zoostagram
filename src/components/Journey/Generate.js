@@ -5,12 +5,25 @@ import Loading from '../Global/Loading'
 import PageTitle from '../Global/PageTitle'
 import Enclosures from '../config/enclosures'
 
-import map from '../../images/zoo_map.jpg'
-const mapWidth = 500;
-const mapHeight = 500;
+// Map settings
+const mapWidth = 375
+const mapHeight = 800
 const mimetype = 'image/jpeg'
 
+/**
+ * Component to generate the journey map
+ * 
+ * @export
+ * @class Generate
+ * @extends {Component}
+ */
 export default class Generate extends Component {
+    /**
+     * Creates an instance of Generate.
+     * 
+     * @param {any} props 
+     * @memberof Generate
+     */
     constructor(props) {
         super(props)
 
@@ -22,12 +35,24 @@ export default class Generate extends Component {
             uploading: false
         }
 
-        this.canvas = null;
+        this.canvas = null
+        this.canvasBG = '#ff6464'
 
         this.startGeneration = this.startGeneration.bind(this)
         this.saveCanvasImage = this.saveCanvasImage.bind(this)
+        this.setupCanvas = this.setupCanvas.bind(this)
+        this.drawAnimals = this.drawAnimals.bind(this)
+        this.drawConnectingLines = this.drawConnectingLines.bind(this)
+        this.drawMainPointsCircle = this.drawMainPointsCircle.bind(this)
+        this.drawMidPointCircle = this.drawMidPointCircle.bind(this)
     }
 
+    /**
+     * React Function - See React Lifecycle
+     * Fetches the journey data from DB based on URL id
+     * 
+     * @memberof Generate
+     */
     componentDidMount() {
         const _this = this;
         
@@ -42,71 +67,141 @@ export default class Generate extends Component {
             })
     }
 
+    /**
+     * Initial canvas setup
+     * 
+     * @memberof Generate
+     */
+    setupCanvas = (ctx) => {
+        ctx.fillStyle = this.canvasBG
+        ctx.rect(0, 0, mapWidth, mapHeight)
+        ctx.fill()
+    }
+
+    /**
+     * Draws all the animals on the canvas
+     * 
+     * @memberof Generate
+     */
+    drawAnimals = (ctx, key, data, userEnclosures) => {
+        let image = new Image();
+        let alpha = 1.0;
+
+        alpha = userEnclosures.includes(key) ? 1.0 : 0.3;
+
+        image.onload = () => {
+            let x = data.x - (data.width / 2);
+            let y = data.y - (data.height / 2);
+            
+            ctx.globalAlpha = alpha;
+            ctx.drawImage(image, x, y, data.width, data.height);
+        }
+        image.src = data.img;
+    }
+
+    /**
+     * Draws the larger circles for the trip beginning and ending
+     * 
+     * @memberof Generate
+     */
+    drawMainPointsCircle = (ctx, fill, coords) => {
+        ctx.globalAlpha = 1.0;
+        ctx.fillStyle = fill;
+        ctx.beginPath();
+        ctx.arc(coords.x, coords.y, 10, 0, Math.PI * 2, true);
+        ctx.fill();
+    }
+
+    /**
+     * Draws the small circles for the trip mid points
+     * 
+     * @memberof Generate
+     */
+    drawMidPointCircle = (ctx, coords) => {
+        ctx.globalAlpha = 1.0;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(coords.x, coords.y, 3, 0, Math.PI * 2, true);
+        ctx.fill();
+    }
+
+    /**
+     * Draws lines connecting the enclosures based on the images the user took and tagged
+     * 
+     * @memberof Generate
+     */
+    drawConnectingLines = (ctx, allEnclosures) => {
+        let { coordinates } = Enclosures;
+        
+        ctx.lineWidth = 2
+        ctx.lineJoin = 'round'
+        ctx.strokeStyle = 'white'
+
+        ctx.beginPath();
+        for (let i = 0; i < allEnclosures.length; i++) {
+            let coords = coordinates[allEnclosures[i]];
+            if (i === 0) {
+                ctx.moveTo(coords.x, coords.y);
+            } else {
+                ctx.lineTo(coords.x, coords.y);
+            }
+        }
+        ctx.stroke();
+    }
+
+    /**
+     * Generates the journey map based on the users journey images and their tags
+     * 
+     * @param {object} e Anchor Event Object
+     * @memberof Generate
+     */
     startGeneration(e) {
         e.preventDefault();
         let { journey } = this.state;
         let { coordinates } = Enclosures;
-        let mapImage = new Image();
+        let wrapper = document.getElementById('canvas-wrapper');
+        
+        this.canvas = document.createElement('canvas');
+        this.canvas.setAttribute('width', mapWidth);
+        this.canvas.setAttribute('height', mapHeight);
 
-        mapImage.onload = () => {
-            this.canvas = document.createElement('canvas');
-            this.canvas.setAttribute('width', mapWidth);
-            this.canvas.setAttribute('height', mapHeight);
+        let ctx = this.canvas.getContext('2d');
 
-            let ctx = this.canvas.getContext('2d');
+        let allEnclosures = Object.keys(journey.images).map(key => {
+            return journey.images[key].enclosure
+        });
 
-            let allEnclosures = Object.keys(journey.images).map(key => {
-                return journey.images[key].enclosure
-            });
+        this.setupCanvas(ctx)
 
-            ctx.lineWidth = 2;
-            ctx.lineJoin = 'round';
+        this.drawConnectingLines(ctx, allEnclosures)
 
-            ctx.drawImage(mapImage, 0, 0);
-            ctx.beginPath();
-            for (let i = 0; i < allEnclosures.length; i++) {
-                let coords = coordinates[allEnclosures[i]];
-                if (i === 0) {
-                    ctx.moveTo(coords.x, coords.y);
-                } else {
-                    ctx.lineTo(coords.x, coords.y);
-                }
-            }
-            ctx.stroke();
+        Object.keys(coordinates).map((item) => (
+            this.drawAnimals(ctx, item, coordinates[item], allEnclosures)
+        ))
 
-            for (let i = 1; i < allEnclosures.length - 1; i++) {
-                ctx.beginPath();
-                let coords = coordinates[allEnclosures[i]];
-                ctx.arc(coords.x, coords.y, 5, 0, Math.PI * 2, true);
-                ctx.fill();
-            }
-
-            ctx.fillStyle = '#AB629B';
-            ctx.beginPath();
-            let fcoords = coordinates[allEnclosures[0]];
-            ctx.arc(fcoords.x, fcoords.y, 10, 0, Math.PI * 2, true);
-            ctx.fill();
-
-            ctx.fillStyle = '#F7B332';
-            ctx.beginPath();
-            let lcoords = coordinates[allEnclosures[allEnclosures.length - 1]];
-            ctx.arc(lcoords.x, lcoords.y, 10, 0, Math.PI * 2, true);
-            ctx.fill();
-
-            let wrapper = document.getElementById('canvas-wrapper');
-            while(wrapper.firstChild) {
-                wrapper.removeChild(wrapper.firstChild)
-            }
-
-            wrapper.appendChild(this.canvas);
-
-            this.setState({
-                mapGenerated: true
-            })
+        for (let i = 1; i < allEnclosures.length - 1; i++) {
+            this.drawMidPointCircle(ctx, coordinates[allEnclosures[i]])
         }
-        mapImage.src = map;
+        
+        this.drawMainPointsCircle(ctx, 'white', coordinates[allEnclosures[0]])
+        this.drawMainPointsCircle(ctx, 'white', coordinates[allEnclosures[allEnclosures.length - 1]])
+        
+        while(wrapper.firstChild) {
+            wrapper.removeChild(wrapper.firstChild)
+        }
+        wrapper.appendChild(this.canvas);
+
+        this.setState({
+            mapGenerated: true
+        })
     }
 
+    /**
+     * Converts the canvas to a `Blob` and saves the image into the DB & Storage
+     * 
+     * @param {object} e Anchor Event Object
+     * @memberof Generate
+     */
     saveCanvasImage(e) {
         e.preventDefault();
         this.canvas.toBlob(function(blob) {
@@ -157,6 +252,12 @@ export default class Generate extends Component {
         }.bind(this), mimetype);
     }
 
+    /**
+     * Reacts function - Renders the Component Markup
+     * 
+     * @returns DOM
+     * @memberof Generate
+     */
     render() {
         return (
             <div className="journey-page generate">
@@ -173,7 +274,7 @@ export default class Generate extends Component {
                     }
                 </div>
                 <div className={`map-preview ${ this.state.mapGenerated ? 'show-map' : '' }`}>
-                    <div id="canvas-wrapper" />
+                    <div id="canvas-wrapper" height={mapHeight} />
                     <a onClick={(e) => this.saveCanvasImage(e)} className="btn fadeIn">Save</a>
                 </div>
             </div>
