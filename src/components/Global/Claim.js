@@ -5,11 +5,14 @@ import PageTitle from './PageTitle'
 import Loading from './Loading'
 
 const Prize = (props) => {
-    let { name, price, id, active, buyable } = props;
+    let { name, theme, thumbnail, id, active, buyable } = props;
+    
+    if (!buyable) return false;
+
     return (
-        <div className={`prize ${ active ? 'active' : '' } ${ buyable ? 'buyable' : '' }`} onClick={ props.selectPrize(id) }>
-            <h4>{name}</h4>
-            <span>{price}</span>
+        <div className={`prize ${ active ? 'active' : '' }`} onClick={ props.selectPrize(id) }>
+            <div className="prize-thumbnail" style={{ backgroundImage: `url(${thumbnail})` }} />
+            <h4 style={{ color: theme }}>{name}</h4>
         </div>
     )
 }
@@ -24,7 +27,8 @@ export default class Claim extends Component {
             selectedKey: '',
             claimDialogueOpen: false,
             password: '',
-            error: false
+            error: false,
+            lowestPoint: 0
         }
 
         this.validPassword = '0000';
@@ -37,10 +41,23 @@ export default class Claim extends Component {
 
     componentDidMount() {
         const _this = this;
+        let curLow = 10000000;
         
         firebase.database().ref('prizes').once('value', (snap) => {
             _this.setState({
                 prizes: snap.val()
+            }, () => {
+                let lowest = Object.keys(_this.state.prizes).map((prize) => {
+                    if (_this.state.prizes[prize].price <= curLow) {
+                        curLow = _this.state.prizes[prize].price
+                    }
+
+                    return curLow;
+                })
+                
+                _this.setState({
+                    lowestPoint: lowest[lowest.length - 1]
+                })
             })
         })
 
@@ -104,7 +121,7 @@ export default class Claim extends Component {
     }
 
     render() {
-        let { prizes, selectedKey, user, userData, claimDialogueOpen, password, error } = this.state;
+        let { prizes, selectedKey, user, userData, claimDialogueOpen, password, error, lowestPoint } = this.state;
         return (
             <div className="profile-page claim-page">
                 <PageTitle title="Claim Points" back={ () => this.props.routerProps.history.goBack() } />
@@ -116,17 +133,22 @@ export default class Claim extends Component {
                 <div className={`prizes-container ${ prizes !== null ? 'fadeIn' : '' }`}>
                     {
                         prizes !== null && userData !== null ? (
-                            Object.keys(prizes).map(key => (
-                                <Prize 
-                                    key={key} 
-                                    id={key} 
-                                    name={prizes[key].name} 
-                                    price={prizes[key].price} 
-                                    selectPrize={(id) => this.selectPrize(id)}
-                                    active={ selectedKey === key ? true : false }
-                                    buyable={ userData.points < prizes[key].price ? false : true }
-                                />
-                            ))
+                            userData.points < lowestPoint ? (
+                                <h2 className="no-results">You still need a bit more points!</h2>
+                            ) : (
+                                Object.keys(prizes).map(key => (
+                                    <Prize 
+                                        key={key} 
+                                        id={key} 
+                                        name={prizes[key].name} 
+                                        theme={prizes[key].theme} 
+                                        thumbnail={prizes[key].image}
+                                        selectPrize={(id) => this.selectPrize(id)}
+                                        active={ selectedKey === key ? true : false }
+                                        buyable={ userData.points < prizes[key].price ? false : true }
+                                    />
+                                ))
+                            )
                         ) : ''
                     }
                 </div>

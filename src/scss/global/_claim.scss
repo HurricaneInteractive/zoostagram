@@ -28,29 +28,46 @@
         }
         .prize {
             @include clearfix();
-            padding: 20px;
-            border: 1px solid $black;
+            border: 1px solid $light-grey;
             border-radius: 10px;
             margin-bottom: 15px;
             &.active {
                 background: none;
                 border-color: $red;
+                .prize-thumbnail {
+                    border-color: $red;
+                }
             }
-            &:not(.buyable) {
-                pointer-events: none;
-                opacity: 0.4;
+            .prize-thumbnail {
+                width: 63px;
+                height: 63px;
+                border: 1px solid $light-grey;
+                border-radius: 10px;
+                display: inline-block;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: cover;
+                vertical-align: middle;
+                margin: -1px;
             }
             h4 {
-                margin: 0;
+                margin: 0 0 0 28px;
                 display: inline-block;
-            }
-            span {
-                float: right;
+                font-size: 14px;
+                font-weight: bold;
             }
         }
     }
     .controls {
         margin-top: 30px;
+    }
+    .no-results {
+        margin: 0;
+        font-family: $deco-family;
+        color: darken($light-grey, 10%);
+        font-size: 60px;
+        line-height: 1;
+        font-weight: normal;
     }
 }
 
