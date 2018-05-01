@@ -8,17 +8,14 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Logo from './Logo'
 import ProfileImage from './ProfileImage'
-import firebase from '../firebase'
 
 const Entry = () => {
     return(
         <div className="page app-home purple-grain-bg">
-            <ProfileImage />
-            <Logo />
-            <a id="logout" onClick={(e) => {
-                e.preventDefault();
-                firebase.auth().signOut();
-            }}>Log Out</a>
+            <div className="app-header">
+                <Logo />
+                <ProfileImage />
+            </div>
             <div className="app-feature-options">
                 <ul>
                     <li className="ape-bg"><Link to="/learn">Learn</Link></li>

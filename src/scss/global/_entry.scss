@@ -1,33 +1,38 @@
 .app-home {
     display: grid;
     grid-template-rows: 40px auto 50px;
-    .profile-image {
-        width: 32px;
-        height: 32px;
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        text-indent: -9999px;
-        overflow: hidden;
-        .image-wrapper {
-            .image,
-            svg {
-                height: 30px;
+    .app-header {
+        position: relative;
+        .profile-image,
+        #logout {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .profile-image {
+            width: 32px;
+            height: 32px;
+            left: 15px;
+            text-indent: -9999px;
+            overflow: hidden;
+            .image-wrapper {
+                .image,
+                svg {
+                    height: 30px;
+                }
             }
         }
-    }
-    #logout {
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 14px;
-        text-transform: uppercase;
-        color: white;
-        font-family: $heebo;
-        opacity: 0.5;
-        cursor: pointer;
+        // #logout {
+        //     right: 15px;
+        //     text-decoration: none;
+        //     font-weight: bold;
+        //     font-size: 14px;
+        //     text-transform: uppercase;
+        //     color: white;
+        //     font-family: $heebo;
+        //     opacity: 0.5;
+        //     cursor: pointer;
+        // }
     }
     .app-feature-options {
         align-self: center;
@@ -55,6 +60,7 @@
                     display: block;
                     border: 3px solid white;
                     border-radius: 10px;
+                    text-decoration-color: rgba(255, 255, 255, 0.34);
                 }
                 &.ape-bg {
                     &:after {

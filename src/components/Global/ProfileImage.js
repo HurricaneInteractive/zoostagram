@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import firebase from '../firebase'
 
 import { DefaultUserImage, SettingsIcon } from './Icons'
+import { Logout } from './Profile'
 import Loading from './Loading'
 
 const storageRef = firebase.storage().ref();
@@ -140,6 +141,7 @@ export default class ProfileImage extends Component {
                                 <a onClick={ (e) => this.toggleSettings(e) } className="trigger"><SettingsIcon /></a>
                                 <ul className={ this.state.settingsOpen === true ? 'open' : '' }>
                                     <li><a onClick={ (e) => this.togglePopup(e) }>Upload</a></li>
+                                    <li><Logout /></li>
                                 </ul>
                             </div>
                         ) : ('')

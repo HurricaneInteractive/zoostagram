@@ -5,6 +5,15 @@ import firebase from '../firebase'
 import PageTitle from './PageTitle'
 import ProfileImage from './ProfileImage'
 
+export const Logout = () => {
+    return (
+        <a id="logout" onClick={(e) => {
+            e.preventDefault();
+            firebase.auth().signOut();
+        }}>LogOut</a>
+    )
+}
+
 export default class Profile extends Component {
     constructor(props) {
         super(props)
