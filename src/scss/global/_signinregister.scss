@@ -6,6 +6,29 @@
         max-width: 225px;
         width: 100%;
         margin: 0 auto 45px;
+        .register-bg {
+            position: fixed;
+            z-index: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-position: left -20px bottom -30px;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.3;
+            &.giraffe {
+                background-image: url('./images/map/animal_giraffe.svg');
+            }
+            &.cheetah {
+                background-image: url('./images/map/animal_cheetah.svg');
+            }
+        }
+        .select-path, form {
+            position: relative;
+            z-index: 2;
+        }
         .select-path {
             a:not(:first-child) {
                 margin-top: 15px;
