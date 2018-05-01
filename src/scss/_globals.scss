@@ -115,8 +115,10 @@
 .dune-bg{
     background-image: url('./images/dunes.png');
     background-repeat: no-repeat;
-    background-position:  0.5px 1110px;
-    background-size: 100% 50vh;
+    background-size: 100vh 50vh;
+    background-position: 50% 600px;
+    padding: 0;
+    margin: 0;
 
 }
 
