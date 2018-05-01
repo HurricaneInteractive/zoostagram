@@ -54,7 +54,6 @@ export default class ProfileImage extends Component {
     }
 
     dataURItoBlob(dataURI) {
-        console.log(dataURI);
         // convert base64 to raw binary data held in a string
         var byteString = atob(dataURI.split(',')[1]);
     
@@ -78,8 +77,6 @@ export default class ProfileImage extends Component {
         const _this = this;
         let file = this.fileInput.files[0],
             fileReader = new FileReader();
-        
-        console.log('File', file);
 
         if (typeof file === 'undefined' || file === null) {
             console.error('NO FILE');
@@ -102,7 +99,7 @@ export default class ProfileImage extends Component {
             })
 
             uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-                console.log('processing')
+                // Processing
             }, (err) => {
                 console.error(err.message)
             }, () => {

@@ -53,7 +53,11 @@
     }
     .upload-image-form {
         input {
+            @extend .btn;
+            @extend .btn-outline;
             color: $black;
+            font-size: 14px;
+            border-color: $red;
         }
     }
     .controls {
