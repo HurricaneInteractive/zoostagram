@@ -56,11 +56,14 @@
                             border: none;
                             border-radius: 0;
                         }
-                        .share {
+                        .image-actions {
                             position: absolute;
                             bottom: 10px;
                             right: 10px;
                             width: 20px;
+                            > div {
+                                margin-bottom: 10px;
+                            }
                             svg {
                                 fill: #909090;
                             }

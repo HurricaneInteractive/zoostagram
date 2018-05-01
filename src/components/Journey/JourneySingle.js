@@ -43,6 +43,7 @@ export default class JourneySingle extends Component {
         this.generateImageGallery = this.generateImageGallery.bind(this)
         this.updateStateWithNewTitle = this.updateStateWithNewTitle.bind(this)
         this.updateFakeImageState = this.updateFakeImageState.bind(this)
+        this.afterImageDelete = this.afterImageDelete.bind(this)
     }
 
     /**
@@ -65,12 +66,25 @@ export default class JourneySingle extends Component {
         let id = this.id;
         let ref = firebase.database().ref(`journeys/${this.state.user.uid}/${id}`)
 
+        this.setState({
+            fetching: true
+        })
+
         ref.once('value', (snap) => {
             _this.setState({
                 journey: snap.val(),
                 fetching: false
             })
         })
+    }
+
+    /**
+     * Refetches data after deleting image
+     * 
+     * @memberof JourneySingle
+     */
+    afterImageDelete() {
+        this.fetchJourneyData();
     }
 
     /**
@@ -140,6 +154,7 @@ export default class JourneySingle extends Component {
                         storageRef={imageRef} 
                         DBRef={imageDBRef}
                         updateFakeState={ (id, enclosure) => this.updateFakeImageState(id, enclosure) }
+                        afterImageDelete={() => this.afterImageDelete()}
                     />
                 )
             })

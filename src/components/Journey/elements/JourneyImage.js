@@ -4,10 +4,10 @@ import { FACEBOOK_CONFIG } from '../../config/env';
 import FacebookProvider, { Share } from 'react-facebook';
 
 import Loading from '../../Global/Loading'
-import { ShareIcon } from '../../Global/Icons'
+import { ShareIcon, DeleteIcon } from '../../Global/Icons'
 
 const ImageInformation = (props) => {
-    let { imageData, toggleEditingState, toggleViewingState } = props
+    let { imageData, toggleEditingState, toggleViewingState, deleteJourneyPhoto } = props
 
     return (
         <Fragment>
@@ -15,11 +15,17 @@ const ImageInformation = (props) => {
                 <img src={imageData.image_url} alt="Zoo Journey Single" />
                 
                 <FacebookProvider appId={FACEBOOK_CONFIG.APP_ID}>
-                    <Share href={imageData.image_url}>
-                        <div className="share">
-                            <ShareIcon />
-                        </div>
-                    </Share>
+                    <div className="image-actions">
+                        <Share href={imageData.image_url}>
+                            <div>
+                                <ShareIcon />
+                            </div>
+                        </Share>
+
+                        <a onClick={(e) => deleteJourneyPhoto(e)}>
+                            <DeleteIcon />
+                        </a>
+                    </div>
                 </FacebookProvider>
             </div>
             
@@ -57,7 +63,8 @@ export default class JourneyImage extends Component {
             selectEnclosureOpen: false,
             selectedEnclosure: '',
             error: false,
-            saving: false
+            saving: false,
+            deleting: false
         }
 
         this.toggleEditingState = this.toggleEditingState.bind(this)
@@ -66,6 +73,7 @@ export default class JourneyImage extends Component {
         this.toggleSelectEnclosure = this.toggleSelectEnclosure.bind(this)
         this.renderSelectEnclosure = this.renderSelectEnclosure.bind(this)
         this.selectEnclosure = this.selectEnclosure.bind(this)
+        this.deleteJourneyPhoto = this.deleteJourneyPhoto.bind(this)
     }
 
     /**
@@ -152,6 +160,26 @@ export default class JourneyImage extends Component {
     }
 
     /**
+     * Deletes image from DB and Storage
+     * 
+     * @param {any} e Anchor Event Object
+     * @memberof JourneyImage
+     */
+    deleteJourneyPhoto(e) {
+        e.preventDefault();
+        let { DBRef, storageRef, afterImageDelete } = this.props;
+
+        this.setState({
+            saving: true
+        })
+
+        DBRef.remove();
+        storageRef.delete().then(() => {
+            afterImageDelete()
+        });
+    }
+
+    /**
      * Toggles the state of the enclosure select box
      * 
      * @param {any} e Anchor Event Object
@@ -227,6 +255,7 @@ export default class JourneyImage extends Component {
                                     imageData={imageData} 
                                     toggleEditingState={(e) => this.toggleEditingState(e)} 
                                     toggleViewingState={(e) => this.toggleViewingState(e)}
+                                    deleteJourneyPhoto={(e) => this.deleteJourneyPhoto(e)}
                                 />
                             </div>
                         </div>
