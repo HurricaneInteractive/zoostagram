@@ -177,10 +177,9 @@ export default class Learn extends Component {
      * @returns 
      * @memberof Learn
      */
-    quizStateChecker(key, item) {
+    quizStateChecker(key, item, quizLength) {
         let quizClassName = "";
         // console.log(this.state);
-        // console.log(this.state.allUserData);
 
         if (typeof this.state.allUserData.quiz_attempts === "undefined") {
             quizClassName = "noAttempt"
@@ -188,16 +187,19 @@ export default class Learn extends Component {
         else if (typeof this.state.allUserData.quiz_attempts[key] === "undefined") {
             quizClassName = "noAttempt"
         }
-        else if (this.state.allUserData.quiz_attempts[key].hs > this.state.allLearnData[key].length) {
-            quizClassName = "progress";
+        else if (this.state.allUserData.quiz_attempts[key].hs < quizLength.length) {
+            quizClassName = "progress"
+        }
+        else if (this.state.allUserData.quiz_attempts[key].hs === quizLength.length) {
+            quizClassName = "star"
         }
         else {
-            quizClassName = "star"
+            quizClassName = "error"
         }
         // console.log(quizClassName);
         return quizClassName
     }
-    quizDisplayStateChecker(key, item) {
+    quizDisplayStateChecker(key, item, quizLength) {
         let quizDisplay = null;
         if (typeof this.state.allUserData.quiz_attempts === "undefined") {
             quizDisplay = <p>{item + 1}</p>;
@@ -206,7 +208,7 @@ export default class Learn extends Component {
         else if (typeof this.state.allUserData.quiz_attempts[key] === "undefined") {
             quizDisplay = <p>{item + 1}</p>;
         }
-        else if (this.state.allUserData.quiz_attempts[key].hs > this.state.allLearnData[key].length) {
+        else if (this.state.allUserData.quiz_attempts[key].hs === quizLength.length) {
             quizDisplay = <img src={StarImage} alt="quiz shape tick"/>;
         }
         else {
@@ -228,9 +230,11 @@ export default class Learn extends Component {
         // console.log(quiz[keys[0]].question);
 
         let quizTiles = keysTitle.map( (key, item) => {
-            let quizzoClasso = this.quizStateChecker(key, item);
+            let quizLength = Object.keys(this.state.allLearnData[key]);
+
+            let quizzoClasso = this.quizStateChecker(key, item, quizLength);
             // console.log(quizzoClasso);
-            let quizDisplay = this.quizDisplayStateChecker(key, item);
+            let quizDisplay = this.quizDisplayStateChecker(key, item, quizLength);
             let quizQuestionNumber = item;
             if (item >= 5 && item <= 10) {
                 quizQuestionNumber = item - 5

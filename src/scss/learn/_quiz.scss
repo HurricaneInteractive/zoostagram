@@ -126,9 +126,12 @@ $a-tags-hover: 'a:active, a:hover';
                         padding: 0;
                         display: grid;
                         p {
+                            font-family: $heebo;
                             text-align: center;
                             align-self: center;
                             justify-self: center;
+                            color: $orange-yellow;
+                            font-weight: bold;
                         }
                         img {
                             align-self: center;
@@ -154,12 +157,15 @@ $a-tags-hover: 'a:active, a:hover';
                             stroke-width: 5px;
                             path {
                                 width: 100%;
+                                height: auto;
                             }
                         }
                     }
                 }
                 .noAttempt { //user not done quiz before
-                    color: $orange-yellow;
+                    .quizSvgBackground {
+                        fill: white;
+                    }
                 }
                 .progress { // =completed quiz - but not 100%
                     .quizNumber {
@@ -170,6 +176,9 @@ $a-tags-hover: 'a:active, a:hover';
                     .quizNumber {
                         font-size: 0;
                     }
+                }
+                li:last-of-type {
+                    margin-bottom: -60px;
                 }
                 // allows css to be dynamic - targets every multiple of 5 (because 5 different bg images)
                 // li:nth-of-type(5n) {
