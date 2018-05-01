@@ -8,6 +8,8 @@ import firebase from '../firebase'
 import Loading from '../Global/Loading'
 import PageTitle from '../Global/PageTitle';
 
+import Enclosures from '../config/enclosures';
+
 const databaseRef = firebase.database();
 /**
  * Single Quiz page Component
@@ -254,20 +256,26 @@ class SingleQuiz extends React.Component {
 
             // function here to push user score (updateTheScore) back to the DB
             this.pushTheData(pointsToPush);
+            console.log(this.state.allLearnData)
+            let animalImage = (`${quizName}`); // use this value for image
+            console.log(quizName);
+            console.log(animalImage);
 
             return (
                 <div className="quiz-completed">
-                    <div className="progressionBar">
-                        <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
+                    <div className="animal-background" style={{backgroundImage: `url(${animalImage})`}}>
+                        <div className="progressionBar">
+                            <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
+                        </div>
+                        <h2>Congratulations</h2>
+                        <h3>You completed The Quiz on {quizName}</h3>
+                        <div>
+                            <h2>{"" + roundedUserScorePercentage + "%"}</h2>
+                            <h3>{userScoreFraction + " Questions Answered Correctly"}</h3>
+                        </div>
+                        <Link className="btn" to="/learn">Back to Quiz Map</Link>
+                        <Link className="btn" to={`/doquiz/${quizName}`} onClick={ () => this.resetQuiz()}>Take The Quiz Again</Link>
                     </div>
-                    <h2>Congratulations</h2>
-                    <h3>You completed The Quiz on {quizName}</h3>
-                    <div>
-                        <h2>{"" + roundedUserScorePercentage + "%"}</h2>
-                        <h3>{userScoreFraction + " Questions Answered Correctly"}</h3>
-                    </div>
-                    <Link className="btn" to="/learn">Back to Quiz Map</Link>
-                    <Link className="btn" to={`/doquiz/${quizName}`} onClick={ () => this.resetQuiz()}>Take The Quiz Again</Link>
                 </div>
             )
         }
@@ -326,9 +334,16 @@ class SingleQuiz extends React.Component {
             return <Loading fullscreen={true} />
         }
 
+        let { quizName } = this.state;
+
+        let animalImage = quizName; // use this value for image
+            console.log(quizName);
+            console.log(animalImage);
+
         return (
-            <div className="page quiz-container">
-                <div>
+            <div className="page quiz-container" id="individual_quiz">
+                <div className="animal-background" style={{backgroundImage: `url(${Enclosures.coordinates[animalImage].img})`}}/>
+                <div className="single-quiz-container">
                     <PageTitle title={this.state.quizName} back={() => this.props.routerProps.history.goBack()} />
                     { this.renderQuiz() }
                 </div>
