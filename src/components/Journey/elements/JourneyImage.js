@@ -1,9 +1,38 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import Enclosures from '../../config/enclosures';
 import { FACEBOOK_CONFIG } from '../../config/env';
 import FacebookProvider, { Share } from 'react-facebook';
 
 import Loading from '../../Global/Loading'
+import { ShareIcon } from '../../Global/Icons'
+
+const ImageInformation = (props) => {
+    let { imageData, toggleEditingState, toggleViewingState } = props
+
+    return (
+        <Fragment>
+            <div className="image-preview">
+                <img src={imageData.image_url} alt="Zoo Journey Single" />
+                
+                <FacebookProvider appId={FACEBOOK_CONFIG.APP_ID}>
+                    <Share href={imageData.image_url}>
+                        <div className="share">
+                            <ShareIcon />
+                        </div>
+                    </Share>
+                </FacebookProvider>
+            </div>
+            
+            <div className="image-info">
+                <p><strong>Enclosure</strong>: {imageData.enclosure.replace('_', ' ')}</p>
+                <p><strong>Date taken</strong>: { new Date(imageData.timestamp).toDateString() }</p>
+            </div>
+
+            <button className="btn" onClick={ (e) => toggleEditingState(e) }>Edit</button>
+            <button className="btn btn-outline" onClick={(e) => toggleViewingState(e)}>Close</button>
+        </Fragment>
+    )
+}
 
 /**
  * Component for the images for the Journey
@@ -194,21 +223,11 @@ export default class JourneyImage extends Component {
                     this.state.viewingImage ? (
                         <div className="journey-dialogue">
                             <div className="dialogue-inner">
-                                <div className="image-preview">
-                                    <FacebookProvider appId={FACEBOOK_CONFIG.APP_ID}>
-                                        <Share href={imageData.image_url}>
-                                            <img src={imageData.image_url} alt="Zoo Journey Single" />
-                                        </Share>
-                                    </FacebookProvider>
-                                </div>
-                                
-                                <div className="image-info">
-                                    <p><strong>Enclosure</strong>: {imageData.enclosure.replace('_', ' ')}</p>
-                                    <p><strong>Date taken</strong>: { new Date(imageData.timestamp).toDateString() }</p>
-                                </div>
-
-                                <button className="btn" onClick={ (e) => this.toggleEditingState(e) }>Edit</button>
-                                <button className="btn btn-outline" onClick={(e) => this.toggleViewingState(e)}>Cancel</button>
+                                <ImageInformation 
+                                    imageData={imageData} 
+                                    toggleEditingState={(e) => this.toggleEditingState(e)} 
+                                    toggleViewingState={(e) => this.toggleViewingState(e)}
+                                />
                             </div>
                         </div>
                     ) : ('')
