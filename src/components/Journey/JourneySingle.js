@@ -10,7 +10,7 @@ import JourneyTitle from './elements/JourneyTitle'
 import JourneyImage from './elements/JourneyImage'
 
 const masonryOptions = {
-    transitionDuration: 0
+    transitionDuration: 200
 };
 
 /**
