@@ -42,7 +42,22 @@
     padding-right: 50px;
     padding-top: 20px;
     }
-
+    .pop-option{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 0;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    background-color:#fff;
+    a{
+    font-family: Arial;
+    color: #FFAA00;
+    text-decoration: none;
+    }
+    a:visited{
+    color: #FFAA00;
+    }
+}
 
 }
 

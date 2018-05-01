@@ -40,7 +40,9 @@ class LearnModal extends React.Component {
                                 <h2>What do you know about {this.props.itemName}?</h2>
                                 <p>{this.props.userBestScore}%</p>
                             </div>
+                        <div className="pop-option">
                             <Link to={`/doquiz/${this.props.itemName}`}>{this.props.firstTimeQuizAttempt ? "Start Quiz" : "Try Again"}</Link>
+                        </div>
                         </div>
                     </div>
                     
