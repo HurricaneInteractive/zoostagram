@@ -136,7 +136,7 @@ export default class Claim extends Component {
                     {
                         prizes !== null && userData !== null ? (
                             userData.points < lowestPoint ? (
-                                <h2 className="no-results">You still need a bit more points!</h2>
+                                <h2 className="no-results">You need some more points</h2>
                             ) : (
                                 Object.keys(prizes).map(key => (
                                     <Prize 
