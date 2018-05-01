@@ -4,6 +4,8 @@ import firebase from 'firebase'
 import PageTitle from './PageTitle'
 import Loading from './Loading'
 
+import Prizes from '../config/prizes'
+
 const Prize = (props) => {
     let { name, theme, thumbnail, id, active, buyable } = props;
     
@@ -11,7 +13,7 @@ const Prize = (props) => {
 
     return (
         <div className={`prize ${ active ? 'active' : '' }`} onClick={ props.selectPrize(id) }>
-            <div className="prize-thumbnail" style={{ backgroundImage: `url(${thumbnail})` }} />
+            <div className="prize-thumbnail" style={{ backgroundImage: `url(${ Prizes.prizes[thumbnail].image })` }} />
             <h4 style={{ color: theme }}>{name}</h4>
         </div>
     )
