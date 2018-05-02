@@ -26,9 +26,6 @@ class SingleQuiz extends React.Component {
      */
     constructor(props) {
         super(props);
-
-        console.log(this.props.authUser.uid);
-
         this.state = {
             userID: this.props.authUser.uid,
             allUserData: null,
@@ -143,14 +140,14 @@ class SingleQuiz extends React.Component {
 
         userPoints.update(pointsToUpdate)
             .then(() => {
-                console.log('successfully updated total points');
+                // console.log('successfully updated total points');
             }).catch((err) => {
                 console.error(err.message);
             })
 
         quizAttemptsRef.update(updateData)
             .then(() => {
-                console.log('Successfully Added');
+                // console.log('Successfully Added');allUserData.quiz_number_attempts
             }).catch((err) => {
                 console.error(err.message);
             })
@@ -194,18 +191,63 @@ class SingleQuiz extends React.Component {
 
         // quiz 100%
     }
-    updateAchievementProgress() {
-        // quiz achievements here
+    updateAchievementProgress(quizName, keyLength, userScore) {
+        const { userID, allUserData } = this.state;
+        const currentQuizName = quizName;
+        const userPoints = firebase.database().ref(`users/${userID}`);
 
-        // quiz_number_attempts
-        // quiz_number_completed
+        let quizAttempt = 0;
+        let quizCompleted = 0;
+        if (typeof allUserData.quiz_number_attempts !== "undefined") {
+            quizAttempt = allUserData.quiz_number_attempts;
+        }
+        if (typeof allUserData.quiz_number_attempts !== "undefined") {
+            quizCompleted = allUserData.quiz_number_completed;
+        }
 
-        const userData = firebase.database().ref(`users/${this.state.userID}`);
-        console.log(userData);
-        // let currentAttempts = this.state.allUserData.quiz_number_attempts;
-        // let currentCompleted = this.state.allUserData.quiz_number_completed;
+        console.log("key Length: " + keyLength);
+        console.log("current user score: " + userScore);
+        console.log("current quiz_number_completd: " + this.state.allUserData.quiz_number_completed);
+        if (userScore === keyLength) {
+            console.log("quiz 100% checker '1st if'");
+            if (typeof allUserData.quiz_attempts[currentQuizName] === "undefined") {
+                quizCompleted = allUserData.quiz_number_completed;
+            }
+            else if (allUserData.quiz_attempts[currentQuizName].hs !== userScore) {
+                quizCompleted = allUserData.quiz_number_completed;
+                console.log("quiz 100% checker '2nd if'");
+            }
+            else {
+                quizCompleted = allUserData.quiz_number_completed + 1;
+                console.log("quiz 100% checker 'else'");
+            }
+        }
 
-        
+        /*
+        if currentscore = keylength
+            if currentscore = highscore {
+                break
+            }
+            else {
+                totalCompleted = totalcompleted + 1
+            }
+
+        */
+
+        let pointsToUpdate = {
+            quiz_number_attempts: quizAttempt + 1,
+            quiz_number_completed: quizCompleted
+        }
+
+        userPoints.update(pointsToUpdate)
+            .then(() => {
+                console.log('successfully updated total points');
+            }).catch((err) => {
+                console.error(err.message);
+            })
+        console.log("Achievements updated");
+        console.log("current quiz_number_completd (After update): " + this.state.allUserData.quiz_number_completed);
+
     }
 
     /**
@@ -273,8 +315,8 @@ class SingleQuiz extends React.Component {
             let roundedUserScorePercentage = Math.round(userScorePercentage);
 
             // function here to push user score (updateTheScore) back to the DB
+            this.updateAchievementProgress(quizName, keyLength, pointsToPush);
             this.pushTheData(pointsToPush);
-            this.updateAchievementProgress();
             let animalImage = (`${quizName}`); // use this value for image
             // console.log(quizName);
             // console.log(animalImage);
