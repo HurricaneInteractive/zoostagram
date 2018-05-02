@@ -185,9 +185,27 @@ class SingleQuiz extends React.Component {
                         this.updateHighScore(pointsToPush, currentHighScore);
                     }
                 }
-                
             }
         }
+
+        // quiz achievements here
+
+        // quiz attempts
+
+        // quiz 100%
+    }
+    updateAchievementProgress() {
+        // quiz achievements here
+
+        // quiz_number_attempts
+        // quiz_number_completed
+
+        const userData = firebase.database().ref(`users/${this.state.userID}`);
+        console.log(userData);
+        // let currentAttempts = this.state.allUserData.quiz_number_attempts;
+        // let currentCompleted = this.state.allUserData.quiz_number_completed;
+
+        
     }
 
     /**
@@ -256,10 +274,10 @@ class SingleQuiz extends React.Component {
 
             // function here to push user score (updateTheScore) back to the DB
             this.pushTheData(pointsToPush);
-            console.log(this.state.allLearnData)
+            this.updateAchievementProgress();
             let animalImage = (`${quizName}`); // use this value for image
-            console.log(quizName);
-            console.log(animalImage);
+            // console.log(quizName);
+            // console.log(animalImage);
 
             return (
                 <div className="quiz-completed">
@@ -333,12 +351,9 @@ class SingleQuiz extends React.Component {
         if (this.state.allLearnData === null) {
             return <Loading fullscreen={true} />
         }
-
         let { quizName } = this.state;
 
         let animalImage = quizName; // use this value for image
-            console.log(quizName);
-            console.log(animalImage);
 
         return (
             <div className="page quiz-container" id="individual_quiz">

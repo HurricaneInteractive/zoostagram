@@ -280,21 +280,23 @@ export default class Learn extends Component {
 
         return (
             <div className="page" id="learn">
-            <PageTitle title="Learn" back={() => this.props.routerProps.history.goBack()} />
+            {console.log(this.props.routerProps)}
+            {console.log(this.props)}
+            <PageTitle title="Learn" back={() => this.props.routerProps.history.push('/')} />
             <div className="hint">
                <p> Hint: Pay attention to notice boards at the National Zoo & Aquarium </p>
             </div>
-                    <div className="path-bg">
-                       <div className="dune-bg">
-                        <div className="birds-bg">
-                                <div className="quiz-container">
-                                    <div>
-                                        { this.renderQuizTitles() }
-                                    </div>
-                              </div>
-                          </div>
-                       </div>
-                  </div>
+                <div className="path-bg">
+                    <div className="dune-bg">
+                    <div className="birds-bg">
+                            <div className="quiz-container">
+                                <div>
+                                    { this.renderQuizTitles() }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
