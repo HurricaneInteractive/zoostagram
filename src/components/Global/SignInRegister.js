@@ -30,6 +30,7 @@ export default class SignInRegister extends Component {
             register: null,
             processing: false,
             errorMsg: '',
+            errorName: '',
             homeImage: agouti
         }
 
@@ -92,10 +93,16 @@ export default class SignInRegister extends Component {
         const _this = this;
         let { name, email, password, register } = this.state;
 
+        this.setState({
+            errorMsg: '',
+            errorName: ''
+        })
+
         if (register === true) {
             if (name === '') {
                 this.setState({
-                    errorMsg: 'Name field is required'
+                    errorMsg: 'Name field is required',
+                    errorName: 'name'
                 })
                 return false;
             }
@@ -160,9 +167,15 @@ export default class SignInRegister extends Component {
      * @param {object} error Firebase Error Object
      */
     handleErrors(error) {
+        let name = '';
+
+        name = error.message.includes('email') > 0 ? 'email' : '';
+        name = error.message.includes('password') > 0 ? 'password' : name;
+
         this.setState({
             processing: false,
-            errorMsg: error.message
+            errorMsg: error.message,
+            errorName: name
         })
     }
 
@@ -197,11 +210,25 @@ export default class SignInRegister extends Component {
             <Fragment>
                 <div className="register-bg giraffe" />
                 <form id="signin-register-form" onSubmit={ (e) => this.onSubmission(e) }>
-                    <div className="input-wrapper">
-                        <input placeholder="Email Address" name="email" id="email" type="email" value={this.state.email} onChange={ (e) => this.onChange(e) } />
+                    <div className={`input-wrapper ${ this.state.errorName === 'email' ? 'cross error' : '' } ${ this.state.errorName === 'password' ? 'tick' : '' }`}>
+                        <input 
+                            placeholder="Email Address" 
+                            name="email" 
+                            id="email" 
+                            type="email" 
+                            value={this.state.email} 
+                            onChange={ (e) => this.onChange(e) } 
+                        />
                     </div>
-                    <div className="input-wrapper">
-                        <input placeholder="Password" name="password" id="password" type="password" value={this.state.password} onChange={ (e) => this.onChange(e) } />
+                    <div className={`input-wrapper ${ this.state.password !== '' && this.state.errorName !== 'password' ? 'tick' : '' } ${ this.state.errorName === 'password' ? 'cross error' : '' }`}>
+                        <input 
+                            placeholder="Password" 
+                            name="password" 
+                            id="password" 
+                            type="password" 
+                            value={this.state.password} 
+                            onChange={ (e) => this.onChange(e) }
+                        />
                     </div>
                     { this.renderFormActions() }
                 </form>
@@ -220,14 +247,35 @@ export default class SignInRegister extends Component {
             <Fragment>
                 <div className="register-bg cheetah" />
                 <form id="signin-register-form" onSubmit={ (e) => this.onSubmission(e) }>
-                    <div className="input-wrapper">
-                        <input placeholder="Name" name="name" id="name" type="text" value={this.state.name} onChange={ (e) => this.onChange(e) } />
+                    <div className={`input-wrapper ${ this.state.name !== '' && this.state.errorName !== 'name' ? 'tick' : '' } ${ this.state.errorName === 'name' ? 'cross error' : '' }`}>
+                        <input 
+                            placeholder="Name" 
+                            name="name" 
+                            id="name" 
+                            type="text" 
+                            value={this.state.name} 
+                            onChange={ (e) => this.onChange(e) }
+                        />
                     </div>
-                    <div className="input-wrapper">
-                        <input placeholder="Email Address" name="email" id="email" type="email" value={this.state.email} onChange={ (e) => this.onChange(e) } />
+                    <div className={`input-wrapper ${ this.state.errorName === 'email' ? 'cross error' : '' } ${ this.state.errorName === 'password' ? 'tick' : '' }`}>
+                        <input 
+                            placeholder="Email Address" 
+                            name="email" 
+                            id="email" 
+                            type="email" 
+                            value={this.state.email} 
+                            onChange={ (e) => this.onChange(e) } 
+                        />
                     </div>
-                    <div className="input-wrapper">
-                        <input placeholder="Password" name="password" id="password" type="password" value={this.state.password} onChange={ (e) => this.onChange(e) } />
+                    <div className={`input-wrapper ${ this.state.password !== '' && this.state.errorName !== 'password' ? 'tick' : '' } ${ this.state.errorName === 'password' ? 'cross error' : '' }`}>
+                        <input 
+                            placeholder="Password" 
+                            name="password" 
+                            id="password" 
+                            type="password" 
+                            value={this.state.password} 
+                            onChange={ (e) => this.onChange(e) }
+                        />
                     </div>
                     { this.renderFormActions() }
                 </form>

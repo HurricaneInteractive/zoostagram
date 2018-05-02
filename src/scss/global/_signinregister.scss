@@ -35,6 +35,32 @@
             }
         }
         form {
+            .input-wrapper {
+                position: relative;
+                &:before {
+                    content: '';
+                    display: block;
+                    width: 14px;
+                    height: 14px;
+                    background-repeat: no-repeat;
+                    background-size: 14px 14px;
+                    background-position: center center;
+                    position: absolute;
+                    right: calc(100% + 10px);
+                    opacity: 0;
+                    transition: opacity 250ms ease-in-out;
+                }
+                &.tick:before,
+                &.cross:before {
+                    opacity: 1;
+                }
+                &.tick:before {
+                    background-image: url('./images/entry-tick.svg');
+                }
+                &.cross:before {
+                    background-image: url('./images/entry-cross.svg');
+                }
+            }
             .form-actions {
                 margin-top: 70px;
                 position: relative;
