@@ -33,7 +33,7 @@ class LearnModal extends React.Component {
             <div className="learn-modal" style={this.props.isOpen ? {display: "block"} : {display: "none"} }>
                 <div>
                     <div>
-                        <h1>{this.props.itemId}</h1>
+                        <h1>{this.props.itemId + 1}</h1>
                         <p onClick={ this.props.closeModalBox }>X</p>
                         <div className="quiz-info">
                             <div>
