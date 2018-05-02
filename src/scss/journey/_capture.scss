@@ -68,8 +68,8 @@
                 width: 40px;
                 height: 40px;
                 background: url('./images/capture-flip.svg') no-repeat center center / 40px 40px;
-                // right: calc(30px + 30px + 20px);    // #fullscreen width + fullscreen right + spacing in XD
-                right: 30px;
+                right: calc(30px + 30px + 20px);    // #fullscreen width + fullscreen right + spacing in XD
+                // right: 30px;
             }
             #fullscreen {
                 width: 30px;
