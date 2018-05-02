@@ -198,44 +198,42 @@ class SingleQuiz extends React.Component {
 
         let quizAttempt = 0;
         let quizCompleted = 0;
+        let currentHighScore = 0;
         if (typeof allUserData.quiz_number_attempts !== "undefined") {
             quizAttempt = allUserData.quiz_number_attempts;
+            console.log("quiz_number_attempts checker: " + allUserData.quiz_number_attempts);
         }
-        if (typeof allUserData.quiz_number_attempts !== "undefined") {
+        if (typeof allUserData.quiz_number_completed !== "undefined") {
             quizCompleted = allUserData.quiz_number_completed;
+            console.log("quiz_number_completed checker" + allUserData.quiz_number_completed);
+        }
+        if (typeof allUserData.quiz_attempts[currentQuizName] !== "undefined") {
+            currentHighScore = allUserData.quiz_attempts[currentQuizName].hs;
+            console.log("allUserData.quiz_attempts[currentQuizName].hs checker");
         }
 
         console.log("key Length: " + keyLength);
         console.log("current user score: " + userScore);
-        console.log("current quiz_number_completd: " + this.state.allUserData.quiz_number_completed);
+        console.log("current quiz_number_completed: " + allUserData.quiz_number_completed);
+        console.log("current currentHighScore: " + currentHighScore);
         if (userScore === keyLength) {
             console.log("quiz 100% checker '1st if'");
-            if (typeof allUserData.quiz_attempts[currentQuizName] === "undefined") {
-                quizCompleted = allUserData.quiz_number_completed;
-            }
-            else if (allUserData.quiz_attempts[currentQuizName].hs !== userScore) {
-                quizCompleted = allUserData.quiz_number_completed;
+            console.log("display currentHighScore: " + currentHighScore)
+            console.log("display userScore: " + userScore)
+            if (currentHighScore === userScore) {
+                // quizCompleted = quizCompleted;
                 console.log("quiz 100% checker '2nd if'");
             }
             else {
-                quizCompleted = allUserData.quiz_number_completed + 1;
+                quizCompleted = quizCompleted + 1;
                 console.log("quiz 100% checker 'else'");
             }
         }
 
-        /*
-        if currentscore = keylength
-            if currentscore = highscore {
-                break
-            }
-            else {
-                totalCompleted = totalcompleted + 1
-            }
-
-        */
+        quizAttempt = quizAttempt + 1;
 
         let pointsToUpdate = {
-            quiz_number_attempts: quizAttempt + 1,
+            quiz_number_attempts: quizAttempt,
             quiz_number_completed: quizCompleted
         }
 
@@ -246,8 +244,6 @@ class SingleQuiz extends React.Component {
                 console.error(err.message);
             })
         console.log("Achievements updated");
-        console.log("current quiz_number_completd (After update): " + this.state.allUserData.quiz_number_completed);
-
     }
 
     /**
