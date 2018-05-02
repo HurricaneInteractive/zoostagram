@@ -115,7 +115,6 @@ export default class Learn extends Component {
 
         databaseRef.ref(`quiz/`).once('value').then(function(snapshot) {
             let databaseState = snapshot.val();
-            // console.log(databaseState);
             _this.setState({
                 allLearnData: databaseState
             });
@@ -136,9 +135,6 @@ export default class Learn extends Component {
      * @memberof Learn
      */
     quizModal(key, item) {
-        console.log(item);
-        console.log(key);
-        // console.log(this.state.allUserData.quiz_attempts[`${key}`].hs);
         let userHighScore = 0;
         let firstTime = true;
         if (typeof this.state.allUserData.quiz_attempts === "undefined") {
@@ -149,10 +145,8 @@ export default class Learn extends Component {
             userHighScore = this.state.allUserData.quiz_attempts[key].hs;
             firstTime = false;
         }
-        console.log(Object.keys(this.state.allLearnData[key]).length)
 
         let userPercentageScore = userHighScore / Object.keys(this.state.allLearnData[key]).length * 100;
-        console.log(userPercentageScore);
         this.setState({
             openDeleteModal: true,
             activeItemName: key,
@@ -181,7 +175,6 @@ export default class Learn extends Component {
      */
     quizStateChecker(key, item, quizLength) {
         let quizClassName = "";
-        // console.log(this.state);
 
         if (typeof this.state.allUserData.quiz_attempts === "undefined") {
             quizClassName = "noAttempt"
@@ -198,7 +191,6 @@ export default class Learn extends Component {
         else {
             quizClassName = "error"
         }
-        // console.log(quizClassName);
         return quizClassName
     }
     quizDisplayStateChecker(key, item, quizLength) {
@@ -225,17 +217,13 @@ export default class Learn extends Component {
      * @memberof Learn
      */
     renderQuizTitles() {
-        // console.log(this.state.allLearnData);
         let quiz = this.state.allLearnData;
         let keysTitle = Object.keys(quiz);
-        // console.log(keysTitle);
-        // console.log(quiz[keys[0]].question);
 
         let quizTiles = keysTitle.map( (key, item) => {
             let quizLength = Object.keys(this.state.allLearnData[key]);
 
             let quizzoClasso = this.quizStateChecker(key, item, quizLength);
-            // console.log(quizzoClasso);
             let quizDisplay = this.quizDisplayStateChecker(key, item, quizLength);
             let quizQuestionNumber = item;
             if (item >= 5 && item <= 10) {
@@ -280,8 +268,6 @@ export default class Learn extends Component {
 
         return (
             <div className="page" id="learn">
-            {console.log(this.props.routerProps)}
-            {console.log(this.props)}
             <PageTitle title="Learn" back={() => this.props.routerProps.history.push('/')} />
             <div className="hint">
                <p> Hint: Pay attention to notice boards at the National Zoo & Aquarium </p>
