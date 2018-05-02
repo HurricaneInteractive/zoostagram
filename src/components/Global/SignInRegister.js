@@ -4,9 +4,9 @@ import firebase from '../firebase';
 import Loading from './Loading'
 import Logo from './Logo'
 
-import agouti from '../../images/map/animal_agouti.svg'
-import eland from '../../images/map/animal_eland.svg'
-import deer from '../../images/map/animal_deer.svg'
+import agouti from '../../images/welcome/agouti-sign-in.png'
+import eland from '../../images/welcome/eland-sign-in.png'
+import deer from '../../images/welcome/deer-sign-in.png'
 
 /**
  * Shows the Sign In / Register Page
