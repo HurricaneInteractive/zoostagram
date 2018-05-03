@@ -25,7 +25,14 @@
         width: 450px;
         height: auto;
         border-radius: 40px;
-        //Quiz tile numbers h1 {}
+    h1 {
+        position: absolute;
+        left: 0; 
+        right: 0; 
+        top: 100px;
+        margin-left: auto; 
+        margin-right: auto;
+        }
 
 
         .quiz-info {
