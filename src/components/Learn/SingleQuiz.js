@@ -35,7 +35,7 @@ class SingleQuiz extends React.Component {
             correctAnswers: [],
             userProgression: 0,
             userPercentage: 50,
-            updatedUserData: null
+            updatedUserAttempts: null
         }
 
        this.renderQuiz = this.renderQuiz.bind(this)
@@ -192,7 +192,8 @@ class SingleQuiz extends React.Component {
         // quiz 100%
     }
     updateAchievementProgress(quizName, keyLength, userScore) {
-        const { userID, allUserData } = this.state;
+        const { userID } = this.state;
+        let allUserData = this.state.allUserData;
         const currentQuizName = quizName;
         const userPoints = firebase.database().ref(`users/${userID}`);
 
@@ -205,35 +206,37 @@ class SingleQuiz extends React.Component {
         }
         if (typeof allUserData.quiz_number_completed !== "undefined") {
             quizCompleted = allUserData.quiz_number_completed;
-            console.log("quiz_number_completed checker" + allUserData.quiz_number_completed);
+            // console.log("quiz_number_completed checker" + allUserData.quiz_number_completed);
         }
         if (typeof allUserData.quiz_attempts[currentQuizName] !== "undefined") {
             currentHighScore = allUserData.quiz_attempts[currentQuizName].hs;
-            console.log("allUserData.quiz_attempts[currentQuizName].hs checker");
+            // console.log("allUserData.quiz_attempts[currentQuizName].hs checker");
         }
 
-        console.log("key Length: " + keyLength);
-        console.log("current user score: " + userScore);
-        console.log("current quiz_number_completed: " + allUserData.quiz_number_completed);
-        console.log("current currentHighScore: " + currentHighScore);
+        console.log("allUserData.quiz_number_attempts: " + allUserData.quiz_number_attempts);
+        // console.log("current user score: " + userScore);
+        // console.log("current quiz_number_completed: " + allUserData.quiz_number_completed);
+        // console.log("current currentHighScore: " + currentHighScore);
         if (userScore === keyLength) {
-            console.log("quiz 100% checker '1st if'");
-            console.log("display currentHighScore: " + currentHighScore)
-            console.log("display userScore: " + userScore)
+            // console.log("quiz 100% checker '1st if'");
+            // console.log("display currentHighScore: " + currentHighScore)
+            // console.log("display userScore: " + userScore)
             if (currentHighScore === userScore) {
-                // quizCompleted = quizCompleted;
-                console.log("quiz 100% checker '2nd if'");
+                quizCompleted = quizCompleted + 0;
+                // console.log("quiz 100% checker '2nd if'");
             }
             else {
                 quizCompleted = quizCompleted + 1;
-                console.log("quiz 100% checker 'else'");
+                // console.log("quiz 100% checker 'else'");
             }
         }
 
-        quizAttempt = quizAttempt + 1;
+        console.log("before addition of this quiz attempt: " + quizAttempt);
+        let updateQuizAttempt = quizAttempt + 1;
+        console.log("updateQuizAttempt before assign to array: " + updateQuizAttempt);
 
         let pointsToUpdate = {
-            quiz_number_attempts: quizAttempt,
+            quiz_number_attempts: updateQuizAttempt,
             quiz_number_completed: quizCompleted
         }
 
@@ -243,6 +246,7 @@ class SingleQuiz extends React.Component {
             }).catch((err) => {
                 console.error(err.message);
             })
+        console.log("updateQuizAttempt after update: " + updateQuizAttempt);
         console.log("Achievements updated");
     }
 
@@ -252,6 +256,12 @@ class SingleQuiz extends React.Component {
      * @memberof SingleQuiz
      */
     resetQuiz() {
+        databaseRef.ref(`users/${this.state.userID}`).once('value').then((snapshot) => {
+            console.log("quiz reset allUserData");
+            this.setState({
+                allUserData: snapshot.val()
+            })
+        });
         this.setState({
             userAnswers: [],
             correctAnswers: [],
