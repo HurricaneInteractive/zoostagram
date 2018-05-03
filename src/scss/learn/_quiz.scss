@@ -25,6 +25,7 @@
         width: 450px;
         height: auto;
         border-radius: 40px;
+
     h1 {
         height: 400px;
         width: 250px;
@@ -38,7 +39,14 @@
         background: url(images/quizshape-one.png) no-repeat center center;
         background-position: 50% 0;
         }
-
+        .close{
+        position: absolute;
+        left: 350px; 
+        right: 0; 
+        top: 300px;
+        margin-left: auto; 
+        margin-right: auto;
+        }
 
         .quiz-info {
         position: absolute;
@@ -52,6 +60,7 @@
     }
     p {
         color: $orange-yellow !important;
+
     }
     h2{
     font-family: Arial;

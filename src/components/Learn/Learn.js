@@ -34,7 +34,9 @@ class LearnModal extends React.Component {
                 <div>
                     <div>
                         <h1>{this.props.itemId + 1}</h1>
+                        <div className="close">
                         <p onClick={ this.props.closeModalBox }>X</p>
+                        </div>
                         <div className="quiz-info">
                             <div>
                                 <h2>What do you know about {this.props.itemName}?</h2>
