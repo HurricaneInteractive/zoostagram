@@ -25,11 +25,17 @@
         width: 450px;
         height: auto;
         border-radius: 40px;
-        // h1 { // number/quiz tile 
+        //Quiz tile numbers h1 {}
 
-        // }
+
         .quiz-info {
-            background-color: #FDF4DF;
+        position: absolute;
+        left: 0; 
+        right: 0; 
+        top: 200px;
+        margin-left: auto; 
+        margin-right: auto;
+        background-color: #FDF4DF;
         }
     }
     p {
