@@ -108,8 +108,7 @@
     background-repeat: no-repeat;
     background-position: 50% 100px;
     background-size: 8px 100%;
-    
-    margin-bottom: 50px;
+    z-index:1;
 }
 
 .dune-bg{
@@ -119,7 +118,6 @@
     background-position: 50% 600px;
     padding: 0;
     margin: 0;
-
 }
 
 .birds-bg{
