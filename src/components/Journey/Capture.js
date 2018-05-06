@@ -277,7 +277,9 @@ class Capture extends Component {
             let newKey = journeyRef.push();
             newKey.set({
                 image_name: name,
-                image_url: downloadURL
+                image_url: downloadURL,
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                enclosure: _this.state.selectedEnclosure
             })
             .then(() => {
                 _this.setState({
@@ -329,9 +331,8 @@ class Capture extends Component {
      * 
      * @param {any} e Anchor Event Object
      * @memberof Capture
-     * @deprecated
      */
-    goFullscreen(e) {
+    goFullscreen(e, callback = null) {
         e.preventDefault()
         let elem = document.body;
         
@@ -343,7 +344,9 @@ class Capture extends Component {
                 this.setState({
                     fullscreen: false
                 }, () => {
-                    this.initialiseStream();
+                    if (callback === null) {
+                        this.initialiseStream();
+                    }
                 })
                 break;
 
@@ -354,9 +357,15 @@ class Capture extends Component {
                 this.setState({
                     fullscreen: true
                 }, () => {
-                    this.initialiseStream();
+                    if (callback === null) {
+                        this.initialiseStream();
+                    }
                 })
                 break;
+        }
+
+        if (callback !== null) {
+            callback();
         }
     }
 
@@ -418,7 +427,7 @@ class Capture extends Component {
                 key={enclosure} 
                 onClick={ () => this.selectEnclosure(enclosure) }
                 className={`${this.state.selectedEnclosure === enclosure ? 'active' : ''}`}
-            >{enclosure}</li>
+            >{enclosure.replace('_', ' ')}</li>
         ))
 
         return (
@@ -460,11 +469,13 @@ class Capture extends Component {
                             ) : (
                                 <Fragment>
                                     <a id="camera-flip" onClick={ (e) => this.flipCameraFacingMode(e) }>Flip View</a>
-                                    <a id="stop-capturing" onClick={ () => this.props.routerProps.history.goBack() }>Stop</a>
+                                    <a id="stop-capturing" onClick={ (e) => this.goFullscreen(e, () => {
+                                        this.props.routerProps.history.goBack()
+                                    }) }>Stop</a>
                                 </Fragment>
                             )
                         }
-                        { /* <a id="fullscreen" className={`${this.state.fullscreen ? 'exit' : ''}`} onClick={ (e) => this.goFullscreen(e) }>Fullscreen</a> */ }
+                        <a id="fullscreen" className={`${this.state.fullscreen ? 'exit' : ''}`} onClick={ (e) => this.goFullscreen(e) }>Fullscreen</a>
                     </div>
                     <div className="capture-bar">
                         {

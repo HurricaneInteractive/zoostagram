@@ -32,7 +32,7 @@ input {
     display: block;
     border: none;
     border-bottom: 3px solid white;
-    @include placeholder(white);
+    @include placeholder(rgba(255, 255, 255, 0.65));
 }
 
 img {

@@ -1,5 +1,4 @@
-// put your sass code here
-
+// *** quiz specific styling *** 
 // default quesion styling
 .quizOption {
     background-color: #787878;
@@ -9,20 +8,114 @@
     background-color: green;
 }
 
+// quiz page modal popup styling
+.learn-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(33, 33, 33, 0.5);
+    display: grid;
+    justify-content: center;
+    text-align: center;
+    align-content: center;
+    position: fixed;
+    z-index: 2;
+    div {
+        width: 450px;
+        height: auto;
+        border-radius: 40px;
+
+    h1 {
+        height: 400px;
+        width: 250px;
+        position: absolute;
+        left: 0; 
+        right: 0; 
+        top: 200px;
+        margin-left: auto; 
+        margin-right: auto;
+        padding-top: 20px;
+        color: $orange-yellow !important;
+        background: url(images/quizshape-one.png) no-repeat center center;
+        background-position: 50% 0;
+        }
+        .close{
+        position: absolute;
+        left: 40%; 
+        right: 0; 
+        top: 300px;
+        margin-left: auto; 
+        margin-right: auto;
+        }
+
+        .quiz-info {
+        position: absolute;
+        left: 0; 
+        right: 0; 
+        top: 350px;
+        margin-left: auto; 
+        margin-right: auto;
+        background-color: #FDF4DF;
+        }
+    }
+    p {
+        color: $orange-yellow !important;
+
+    }
+    h2{
+    font-family: Arial;
+    color: #FFAA00;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+    }
+    .pop-option{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 0;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    background-color:#fff;
+    a{
+    font-family: Arial;
+    color: #FFAA00;
+    text-decoration: none;
+    }
+    a:visited{
+    color: #FFAA00;
+    }
+}
+
+}
+
+
+
 // progression bar styling
 // .progression bar is the container (bg colour here is the background colour you see)
 .progressionBar {
-    background-color: #ffaa00;
-    height: 25px;
+    width: 75%;
+    margin: 0 auto;
+    background-color: $quiz-light-white;
+    height: 1px;
+    position: relative;
     // this elements width is auto adjusted (DONT ADD WIDTH TAG). change bg color to change progression bar colour
     div {
         height: 100%;
-        background-color: #fff327;
+        background-color: $quiz-light-white;
+        height: 3px;
+        position: absolute;
+        top: -1px;
+        left: 0;
+        border-radius: 50px;
     }
 }
 .quizQuestions {
     list-style-type: upper-latin;
 }
+
+
 
 //Hover variables
 
@@ -30,117 +123,170 @@ $a-tags: 'a, a:active, a:hover, a:visited';
 
 $a-tags-hover: 'a:active, a:hover';
 
-// Learn body gradient styling
 
-#learn {
+
+
+
+// Learn body gradient styling
+#learn, #individual_quiz {
      height: auto;
+     min-height: 100vh;
      margin: 0;
      background: -moz-linear-gradient(top, rgba(255,170,0,1) 0%, rgba(255,170,0,0.64) 100%);
      background: -webkit-linear-gradient(top, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
      background: linear-gradient(to bottom, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaa00', endColorstr='#a3ffaa00',GradientType=0 );
+   
 
+   .hint{
+     
+     p{
+        text-align: center;
+        padding-top: 45px;
+        padding-bottom: 85px;
+        color:#fff;
+     }
+  }
 }
+
 
 // Quiz container styling 
 .quiz-container{
     height: auto;
     margin: 0;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0;
+    .animal-background {
+        width: 100vw;
+        height: 100vh;
+        background-size: 85%;
+        background-position: 50% 30%;
+        background-repeat: no-repeat;
+        z-index: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .single-quiz-container {
+        min-height: 100vh;
+        z-index: 1;
+        position: relative;
+        background-color: rgba(255,170,0,.35);
+    }
+
+    div {
+        div {
+            .quizTiles {
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                align-content: center;
+                justify-content: center;
+                margin: 0;
+                padding: 0;
+                li {
+                    display: grid;
+                    grid-template-columns: 1;
+                    grid-template-rows: 1;
+                    align-content: center;
+                    justify-content: center;
+                    align-self: center;
+                    justify-self: center;
+                    height: 100px;
+                    width: 100px;
+                    margin: 5px;
+                    font-size: 35px;
+                    text-align: center;
+                    padding-top: 95px;
+                    padding-bottom: 95px;
+                    list-style-type: none;
+                    .quizNumber {
+                        height: 100%;
+                        width: 100%;
+                        align-self: stretch;
+                        justify-self: stretch;
+                        grid-column: 1;
+                        grid-row: 1;
+                        color: white;
+                        background-color: transparent;
+                        z-index: 1;
+                        margin: 0;
+                        padding: 0;
+                        display: grid;
+                        p {
+                            font-family: $heebo;
+                            text-align: center;
+                            align-self: center;
+                            justify-self: center;
+                            color: $orange-yellow;
+                            font-weight: bold;
+                        }
+                        img {
+                            align-self: center;
+                            justify-self: center;
+                        }
+                    }
+                    .quizSvgBackground {
+                        height: 100%;
+                        width: 100%;
+                        background-color: transparent;
+                        grid-column: 1;
+                        grid-row: 1;
+                        fill: $orange-yellow;   
+                        margin: 0;
+                        padding: 0;
+                        display: grid;
+                        align-content: center;
+                        justify-content: center;
+                        svg {
+                            width: 100% !important;
+                            background: none;
+                            stroke: white;
+                            stroke-width: 5px;
+                            path {
+                                width: 100%;
+                                height: auto;
+                            }
+                        }
+                    }
+                }
+                .noAttempt { //user not done quiz before
+                    .quizSvgBackground {
+                        fill: white;
+                    }
+                }
+                .progress { // =completed quiz - but not 100%
+                    .quizNumber {
+                        font-size: 0;
+                    }
+                }
+                .star { // completed quiz and got 100%
+                    .quizNumber {
+                        font-size: 0;
+                    }
+                }
+                li:last-of-type {
+                    margin-bottom: -60px;
+                    overflow: hidden;
+                }
+                // allows css to be dynamic - targets every multiple of 5 (because 5 different bg images)
+                // li:nth-of-type(5n) {
+                //     background: url(images/quizshape-one.png) no-repeat center center;
+
+                // }
+                // li:nth-of-type(5n + 1) {
+                //     background: url(images/quizshape-two.png) no-repeat center center;
+                // }
+                // li:nth-of-type(5n + 2) {
+                //     background: url(images/quizshape-three.png) no-repeat center center;
+                // }
+                // li:nth-of-type(5n + 3) {
+                //     background: url(images/quizshape-four.png) no-repeat center center;
+                // }
+                // li:nth-of-type(5n + 4) {
+                //     background: url(images/quizshape-five.png) no-repeat center center;
+                // }
+            }
+        }
+    }
 }
-
-// Learn h1 styling 
-#learn h1{
-    font-family: $deco-family;
-    font-size: 40px;
-    color: #fff;
-	text-align: center;
-    margin: 0;
-	padding-top: 83px;
-	padding-bottom: 130px;
-}
-
-//Learn p styling
-#learn p{
-    font-family:'Raleway', sans-serif;
-    font-size: 14px;
-    text-align: center;
-    color: #fff;
-    padding-left: 10vh;
-    padding-right: 10vh;
-    position: relative;
-}
-
-//Learn list item styling
-#learn li {
-    font-family:'Heebo', sans-serif;
-    font-size: 35px;
-    text-align: center;
-    padding-top: 85px;
-    padding-bottom: 75px;
-    list-style-type: none;
-}
-
-
-
-//Learn Question 1 Tile styling 
-#learn li:nth-child(1) {
-    background: url(images/quizshape-one.png) no-repeat center center;
-     margin: 0;
-
-}
-
-
-//Learn Question 2 Tile styling
-
-// @Will have you thought of possibly using a function for the nth-child selector?
-// e.g.
-
-// #learn li:nth-child(2n) {
-//     background: url(images/quizshape-two.png) no-repeat center center;
-//      margin: 0;
-// }
-// 2n will select every second child element
-// could do the same and make it so the 5 bg images we have, get resused every 5 quizes
-
-// read more here - https://css-tricks.com/almanac/selectors/n/nth-child/ 
-
-#learn li:nth-child(2) {
-    background: url(images/quizshape-two.png) no-repeat center center;
-     margin: 0;
-}
-
-
-#learn li:nth-child(3) {
-    background: url(images/quizshape-three.png) no-repeat center center;
-     margin: 0;
-}
-
-#learn li:nth-child(4) {
-    background: url(images/quizshape-four.png) no-repeat center center;
-     margin: 0;
-}
-
-
-#learn li:nth-child(5) {
-    background: url(images/quizshape-five.png) no-repeat center center;
-     margin: 0;
-}
-
-
-#learn li:nth-child(6) {
-    background: url(images/quizshape-six.png) no-repeat center center;
-     margin: 0;
-}
-
-#learn li:nth-child(7) {
-    background: url(images/quizshape-seven.png) no-repeat center center;
-     margin: 0;
-}
-
-#learn li:nth-child(8) {
-    background: url(images/quizshape-eight.png) no-repeat center center;
-     margin: 0;
-}
-

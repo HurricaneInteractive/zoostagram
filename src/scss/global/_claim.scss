@@ -1,0 +1,83 @@
+.claim-page {
+    .user-info {
+        @include clearfix();
+        margin: 0 0 30px;
+        h3, p {
+            font-family: $heebo;
+            line-height: 21px;
+        }
+        h3 {
+            display: inline-block;
+            margin: 0;
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-family: $heebo;
+        }
+        p {
+            margin: 0;
+            float: right;
+            font-size: 14px;
+        }
+    }
+    .prizes-container {
+        opacity: 0;
+        transform: translateY(30px);
+        &.fadeIn {
+            animation: fadeInPrizes 0.5s ease-in-out 0.25s forwards;
+        }
+        .prize {
+            @include clearfix();
+            border: 1px solid $light-grey;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            &.active {
+                background: none;
+                border-color: $red;
+                .prize-thumbnail {
+                    border-color: $red;
+                }
+            }
+            .prize-thumbnail {
+                width: 63px;
+                height: 63px;
+                border: 1px solid $light-grey;
+                border-radius: 10px;
+                display: inline-block;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: cover;
+                vertical-align: middle;
+                margin: -1px;
+            }
+            h4 {
+                margin: 0 0 0 28px;
+                display: inline-block;
+                font-size: 14px;
+                font-weight: bold;
+            }
+        }
+    }
+    .controls {
+        margin-top: 30px;
+    }
+    .no-results {
+        margin: 0;
+        font-family: $deco-family;
+        color: darken($light-grey, 10%);
+        font-size: 60px;
+        line-height: 1;
+        font-weight: normal;
+    }
+}
+
+@keyframes fadeInPrizes {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

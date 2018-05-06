@@ -1,8 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import firebase from '../firebase';
 
 import Loading from './Loading'
 import Logo from './Logo'
+
+import agouti from '../../images/welcome/agouti-sign-in.png'
+import eland from '../../images/welcome/eland-sign-in.png'
+import deer from '../../images/welcome/deer-sign-in.png'
 
 /**
  * Shows the Sign In / Register Page
@@ -25,7 +29,9 @@ export default class SignInRegister extends Component {
             password: '',
             register: null,
             processing: false,
-            errorMsg: ''
+            errorMsg: '',
+            errorName: '',
+            homeImage: agouti
         }
 
         // Bind events
@@ -37,6 +43,16 @@ export default class SignInRegister extends Component {
         this.generateRegisterForm = this.generateRegisterForm.bind(this)
         this.generateSignInForm = this.generateSignInForm.bind(this)
         this.renderFormActions = this.renderFormActions.bind(this)
+    }
+
+    componentDidMount() {
+        let allImages = [agouti, eland, deer]
+        let min = 0
+        let max = Math.floor(allImages.length - 1)
+        let rand = Math.floor(Math.random() * (max - min + 1)) + min;
+        this.setState({
+            homeImage: allImages[rand]
+        })
     }
 
     /**
@@ -77,10 +93,16 @@ export default class SignInRegister extends Component {
         const _this = this;
         let { name, email, password, register } = this.state;
 
+        this.setState({
+            errorMsg: '',
+            errorName: ''
+        })
+
         if (register === true) {
             if (name === '') {
                 this.setState({
-                    errorMsg: 'Name field is required'
+                    errorMsg: 'Name field is required',
+                    errorName: 'name'
                 })
                 return false;
             }
@@ -145,9 +167,15 @@ export default class SignInRegister extends Component {
      * @param {object} error Firebase Error Object
      */
     handleErrors(error) {
+        let name = '';
+
+        name = error.message.includes('email') > 0 ? 'email' : '';
+        name = error.message.includes('password') > 0 ? 'password' : name;
+
         this.setState({
             processing: false,
-            errorMsg: error.message
+            errorMsg: error.message,
+            errorName: name
         })
     }
 
@@ -179,15 +207,32 @@ export default class SignInRegister extends Component {
      */
     generateSignInForm() {
         return (
-            <form id="signin-register-form" onSubmit={ (e) => this.onSubmission(e) }>
-                <div className="input-wrapper">
-                    <input placeholder="Email Address" name="email" id="email" type="email" value={this.state.email} onChange={ (e) => this.onChange(e) } />
-                </div>
-                <div className="input-wrapper">
-                    <input placeholder="Password" name="password" id="password" type="password" value={this.state.password} onChange={ (e) => this.onChange(e) } />
-                </div>
-                { this.renderFormActions() }
-            </form>
+            <Fragment>
+                <div className="register-bg giraffe" />
+                <form id="signin-register-form" onSubmit={ (e) => this.onSubmission(e) }>
+                    <div className={`input-wrapper ${ this.state.errorName === 'email' ? 'cross error' : '' } ${ this.state.errorName === 'password' ? 'tick' : '' }`}>
+                        <input 
+                            placeholder="Email Address" 
+                            name="email" 
+                            id="email" 
+                            type="email" 
+                            value={this.state.email} 
+                            onChange={ (e) => this.onChange(e) } 
+                        />
+                    </div>
+                    <div className={`input-wrapper ${ this.state.password !== '' && this.state.errorName !== 'password' ? 'tick' : '' } ${ this.state.errorName === 'password' ? 'cross error' : '' }`}>
+                        <input 
+                            placeholder="Password" 
+                            name="password" 
+                            id="password" 
+                            type="password" 
+                            value={this.state.password} 
+                            onChange={ (e) => this.onChange(e) }
+                        />
+                    </div>
+                    { this.renderFormActions() }
+                </form>
+            </Fragment>
         )
     }
 
@@ -199,18 +244,42 @@ export default class SignInRegister extends Component {
      */
     generateRegisterForm() {
         return (
-            <form id="signin-register-form" onSubmit={ (e) => this.onSubmission(e) }>
-                <div className="input-wrapper">
-                    <input placeholder="Name" name="name" id="name" type="text" value={this.state.name} onChange={ (e) => this.onChange(e) } />
-                </div>
-                <div className="input-wrapper">
-                    <input placeholder="Email Address" name="email" id="email" type="email" value={this.state.email} onChange={ (e) => this.onChange(e) } />
-                </div>
-                <div className="input-wrapper">
-                    <input placeholder="Password" name="password" id="password" type="password" value={this.state.password} onChange={ (e) => this.onChange(e) } />
-                </div>
-                { this.renderFormActions() }
-            </form>
+            <Fragment>
+                <div className="register-bg cheetah" />
+                <form id="signin-register-form" onSubmit={ (e) => this.onSubmission(e) }>
+                    <div className={`input-wrapper ${ this.state.name !== '' && this.state.errorName !== 'name' ? 'tick' : '' } ${ this.state.errorName === 'name' ? 'cross error' : '' }`}>
+                        <input 
+                            placeholder="Name" 
+                            name="name" 
+                            id="name" 
+                            type="text" 
+                            value={this.state.name} 
+                            onChange={ (e) => this.onChange(e) }
+                        />
+                    </div>
+                    <div className={`input-wrapper ${ this.state.errorName === 'email' ? 'cross error' : '' } ${ this.state.errorName === 'password' ? 'tick' : '' }`}>
+                        <input 
+                            placeholder="Email Address" 
+                            name="email" 
+                            id="email" 
+                            type="email" 
+                            value={this.state.email} 
+                            onChange={ (e) => this.onChange(e) } 
+                        />
+                    </div>
+                    <div className={`input-wrapper ${ this.state.password !== '' && this.state.errorName !== 'password' ? 'tick' : '' } ${ this.state.errorName === 'password' ? 'cross error' : '' }`}>
+                        <input 
+                            placeholder="Password" 
+                            name="password" 
+                            id="password" 
+                            type="password" 
+                            value={this.state.password} 
+                            onChange={ (e) => this.onChange(e) }
+                        />
+                    </div>
+                    { this.renderFormActions() }
+                </form>
+            </Fragment>
         )
     }
 
@@ -226,7 +295,7 @@ export default class SignInRegister extends Component {
         }
 
         return(
-            <div className="page sign-in-register purple-grain-bg silhouette-birds">
+            <div className="page sign-in-register purple-grain-bg">
                 <Logo />
                 <div className="sign-in-wrapper">
                     { 
@@ -235,10 +304,13 @@ export default class SignInRegister extends Component {
                                 { this.state.register ? ( this.generateRegisterForm() ) : ( this.generateSignInForm() ) }
                             </div>
                         ) : (
-                            <div className="select-path">
-                                <a className={`btn`} onClick={ (e) => this.togglePills(e, true) }>Register</a>
-                                <a className={`btn btn-secondary`} onClick={ (e) => this.togglePills(e, false) }>Sign In</a>
-                            </div>
+                            <Fragment>
+                                <div className="register-bg" style={{ backgroundImage: `url(${this.state.homeImage})` }} />
+                                <div className="select-path">
+                                    <a className={`btn`} onClick={ (e) => this.togglePills(e, true) }>Register</a>
+                                    <a className={`btn btn-secondary`} onClick={ (e) => this.togglePills(e, false) }>Sign In</a>
+                                </div>
+                            </Fragment>
                         )
                     }
                 </div>

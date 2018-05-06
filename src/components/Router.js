@@ -14,12 +14,14 @@ import firebase from 'firebase'
 import Entry from './Global/Entry'
 import SignInRegister from './Global/SignInRegister'
 import Profile from './Global/Profile'
+import Claim from './Global/Claim'
 import Loading from './Global/Loading'
 
 // Journey Components
 import Journey from './Journey/Journey'
 import JourneySingle from './Journey/JourneySingle'
 import Capture from './Journey/Capture'
+import Generate from './Journey/Generate'
 
 // Learn Components
 import Learn from './Learn/Learn';
@@ -89,6 +91,13 @@ export default class AppRouter extends Component {
         const PrivateRoutes = () => (
             <Switch>
                 <Route exact path="/" component={Entry} />
+                <Route exact path="/profile" render={(routeProps) => (
+                    <Profile routerProps={routeProps} authUser={user} />
+                )} />
+                <Route exact path="/profile/claim" render={(routeProps) => (
+                    <Claim routerProps={routeProps} authUser={user} />
+                )} />
+                
                 <Route exact path="/journey" render={(routeProps) => (
                     <Journey routerProps={routeProps} authUser={user} />
                 )} />
@@ -98,14 +107,16 @@ export default class AppRouter extends Component {
                 <Route exact path="/journey/capture/:id" render={(routeProps) => (
                     <Capture routerProps={routeProps} authUser={user} />
                 )} />
-                {/* <Route path="/learn" component={Learn} /> */}
+                <Route exact path="/journey/generate/:id" render={(routeProps) => (
+                    <Generate routerProps={routeProps} authUser={user} />
+                )} />
+
                 <Route exact path="/learn" render={(routeProps) => (
                     <Learn routerProps={routeProps} authUser={user} />
                 )} />
                 <Route path="/quizfinish" component={QuizFinish} />
-                <Route path="/doquiz/:id" component={SingleQuiz} />
-                <Route exact path="/profile" render={(routeProps) => (
-                    <Profile routerProps={routeProps} authUser={user} />
+                <Route path="/doquiz/:id" render={(routeProps) => (
+                    <SingleQuiz routerProps={routeProps} authUser={user} />
                 )} />
             </Switch>
         )

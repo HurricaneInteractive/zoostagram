@@ -107,15 +107,17 @@
     background-image: url('./images/path.png');
     background-repeat: no-repeat;
     background-position: 50% 100px;
-    background-size: 8px 1300px;;
+    background-size: 8px 100%;
+    z-index:1;
 }
 
 .dune-bg{
     background-image: url('./images/dunes.png');
     background-repeat: no-repeat;
-    background-position:  0.5px 1110px;
-    background-size: 100% 50vh;
-
+    background-size: 100vh 50vh;
+    background-position: 50% 600px;
+    padding: 0;
+    margin: 0;
 }
 
 .birds-bg{
@@ -185,5 +187,96 @@
         top: 50%;
         left: 0px;
         transform: translateY(-50%);
+    }
+}
+
+.settings-dropdown {
+    position: relative;
+    a {
+        display: block;
+        line-height: 16px;
+        cursor: pointer;
+        svg {
+            fill: rgba($black, 0.5);
+        }
+    }
+    ul {
+        margin: 0;
+        padding: 5px 0;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px 0 rgba($black, 0.2);
+        position: absolute;
+        z-index: 3;
+        right: 0;
+        top: calc(100% + 5px);
+        &:not(.open) {
+            display: none;
+        }
+        li {
+            list-style: none;
+            &:not(:first-child) {
+                a {
+                    border-top: 1px solid $light-grey;
+                }
+            }
+            a {
+                display: block;
+                font-size: 14px;
+                text-decoration: none;
+                text-transform: uppercase;
+                color: $black;
+                font-family: $heebo;
+                font-weight: bold;
+                padding: 10px 20px;
+            }
+        }
+    }
+}
+
+.popup-dialogue,
+.journey-dialogue {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba($black, 0.45);
+    padding: 30px;
+    z-index: 5;
+    .dialogue-inner {
+        width: 100%;
+        background: white;
+        border-radius: 10px;
+        padding: 30px 25px;
+        margin-top: 70px;
+        > *:first-child {
+            margin-top: 0;
+        }
+        .input-wrapper {
+            margin-bottom: 50px;
+            &:after {
+                background: $black
+            }
+            input {
+                color: $black;
+                @include placeholder($black);
+                border-bottom-color: rgba($black, 0.2);
+            }
+        }
+        .btn {
+            background: $red;
+            color: white;
+            font-size: 14px;
+            text-transform: uppercase;
+            padding: 12px;
+            &.btn-outline {
+                background: none;
+                margin-top: 5px;
+                color: $black;
+                border-color: $black;
+                padding: 10px;
+            }
+        }
     }
 }

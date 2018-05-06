@@ -6,95 +6,105 @@ import { Link } from 'react-router-dom'
 import firebase from '../firebase'
 
 import Loading from '../Global/Loading'
-// import PageTitle from '../Global/PageTitle';
+import PageTitle from '../Global/PageTitle';
+
+import Enclosures from '../config/enclosures';
 
 const databaseRef = firebase.database();
 /**
- * 
+ * Single Quiz page Component
  * 
  * @class SingleQuiz
  * @extends {React.Component}
  */
 class SingleQuiz extends React.Component {
+    /**
+     * Creates an instance of SingleQuiz.
+     * 
+     * @param {any} props Props passed to the Component
+     * @memberof SingleQuiz
+     */
     constructor(props) {
         super(props);
-
         this.state = {
-            userID: null,
+            userID: this.props.authUser.uid,
             allUserData: null,
             allLearnData: null,
             quizName: null,
             userAnswers: [],
             correctAnswers: [],
             userProgression: 0,
-            userPoints: 0,
             userPercentage: 50,
-            updatedUserData: null
+            updatedUserAttempts: null
         }
 
        this.renderQuiz = this.renderQuiz.bind(this)
        this.pushTheData = this.pushTheData.bind(this)
        this.updateHighScore = this.updateHighScore.bind(this)
+       this.changeProgression = this.changeProgression.bind(this)
     }
 
+    /**
+     * React Function - See React Lifecycle
+     * Gets the quiz data & user data from the DB
+     * 
+     * @memberof SingleQuiz
+     */
     componentDidMount() {
         const _this = this;
 
         // gets quiz information based on the url params
-        databaseRef.ref(`quiz/${this.props.match.params.id}`).once('value').then(function(snapshot) {
-            let databaseState = snapshot.val();
-            let quizNameYo = snapshot.key;
+        databaseRef.ref(`quiz/${this.props.routerProps.match.params.id}`).once('value').then((snapshot) => {
             _this.setState({
-                allLearnData: databaseState,
-                quizName: quizNameYo
+                allLearnData: snapshot.val(),
+                quizName: snapshot.key
             });
         });
 
-        _this.setState({
-            userID: firebase.auth().currentUser.uid
-        });
         // get current users information/stats
-        databaseRef.ref(`users/${firebase.auth().currentUser.uid}`).once('value').then(function(snapshot){
-            let userDataHere = snapshot.val();
+        databaseRef.ref(`users/${this.state.userID}`).once('value').then((snapshot) => {
             _this.setState({
-                allUserData: userDataHere
+                allUserData: snapshot.val()
             })
         });
     }
 
-    // checks if the option has been selected and updates the userAnswers state
+    /**
+     * Checks if the option has been selected and updates the userAnswers state
+     * 
+     * @param {string} question current question
+     * @param {string} answer correct answer
+     * @param {object} quizProgression current quiz object
+     * @memberof SingleQuiz
+     */
     clickHandler(question, answer, quizProgression) {
-        if (typeof this.state.userAnswers[this.state.userProgression] === 'undefined') {
-            let newAnswers = this.state.userAnswers;
-            newAnswers.push(question);
-
-            let theAnswers = this.state.correctAnswers;
-            theAnswers.push(answer);
-            // console.log("the OG answers" + theAnswers)
-
-            this.setState({
-                userAnswers: newAnswers,
-                correctAnswers: theAnswers
-            })
+        let { userAnswers, userProgression, correctAnswers } = this.state,
+            newUserAnswers = userAnswers,
+            newCorrectAnswers = correctAnswers;
+        
+        if (typeof userAnswers[userProgression] === 'undefined') {
+            newUserAnswers.push(question);
+            newCorrectAnswers.push(answer);
         }
         else {
-            let updatedAnswers = this.state.userAnswers;
-            updatedAnswers[this.state.userProgression] = question;
-
-            let updatedTheAnswers = this.state.correctAnswers
-            updatedTheAnswers[this.state.userProgression] = answer;
-            // console.log("updated answers" + updatedTheAnswers)
-
-            this.setState({
-                userAnswers: updatedAnswers,
-                correctAnswers: updatedTheAnswers
-            })
+            newUserAnswers[userProgression] = question;
+            newCorrectAnswers[userProgression] = answer;
         }
+
+        this.setState({
+            userAnswers: newUserAnswers,
+            correctAnswers: newCorrectAnswers
+        })
     }
 
+    /**
+     * Checks if the user has answered the quiz correctly
+     * 
+     * @returns updatedPoints
+     * @memberof SingleQuiz
+     */
     checkThemAnswers() {
         const totalQuestionsAsked = this.state.correctAnswers.length;
-        // console.log(this.state.correctAnswers)
         let updatedPoints = 0;
 
         for (let i = 0; i < totalQuestionsAsked; i++) {
@@ -115,17 +125,29 @@ class SingleQuiz extends React.Component {
      * @param {int} points Points to replace the current High Score
      * @memberof SingleQuiz
      */
-    updateHighScore(points) {
-        const { userID, quizName } = this.state;
+    updateHighScore(points, currentHighScore) {
+        const { userID, quizName, allUserData } = this.state;
         const quizAttemptsRef = firebase.database().ref(`users/${userID}/quiz_attempts/${quizName}`);
+        const userPoints = firebase.database().ref(`users/${userID}`);
 
         let updateData = {
             hs: points
         }
 
+        let pointsToUpdate = {
+            points: allUserData.points - currentHighScore + points
+        }
+
+        userPoints.update(pointsToUpdate)
+            .then(() => {
+                // console.log('successfully updated total points');
+            }).catch((err) => {
+                console.error(err.message);
+            })
+
         quizAttemptsRef.update(updateData)
             .then(() => {
-                console.log('Successfully Added');
+                // console.log('Successfully Added');allUserData.quiz_number_attempts
             }).catch((err) => {
                 console.error(err.message);
             })
@@ -144,51 +166,153 @@ class SingleQuiz extends React.Component {
         let { allUserData, quizName } = this.state;
 
         if (typeof allUserData.quiz_attempts === 'undefined') {
-            this.updateHighScore(pointsToPush);
+            this.updateHighScore(pointsToPush, 0);
         }
         else {
             if (typeof allUserData.quiz_attempts[quizName] === 'undefined') {
-                this.updateHighScore(pointsToPush);
+                this.updateHighScore(pointsToPush, 0);
             }
             else {
-                let currentHighScore = allUserData.quiz_attempts[quizName].hs;
-                if (currentHighScore < pointsToPush) {
-                    this.updateHighScore(pointsToPush);
+                if (typeof allUserData.quiz_attempts[quizName].hs === 'undefined') {
+                    this.updateHighScore(pointsToPush, 0);
+                }
+                else {
+                    let currentHighScore = allUserData.quiz_attempts[quizName].hs;
+                    if (currentHighScore < pointsToPush) {
+                        this.updateHighScore(pointsToPush, currentHighScore);
+                    }
                 }
             }
         }
+
+        // quiz achievements here
+
+        // quiz attempts
+
+        // quiz 100%
+    }
+    updateAchievementProgress(quizName, keyLength, userScore) {
+        const { userID } = this.state;
+        let allUserData = this.state.allUserData;
+        const currentQuizName = quizName;
+        const userPoints = firebase.database().ref(`users/${userID}`);
+
+        let quizAttempt = 0;
+        let quizCompleted = 0;
+        let currentHighScore = 0;
+        if (typeof allUserData.quiz_number_attempts !== "undefined") {
+            quizAttempt = allUserData.quiz_number_attempts;
+            console.log("quiz_number_attempts checker: " + allUserData.quiz_number_attempts);
+        }
+        if (typeof allUserData.quiz_number_completed !== "undefined") {
+            quizCompleted = allUserData.quiz_number_completed;
+            // console.log("quiz_number_completed checker" + allUserData.quiz_number_completed);
+        }
+        if (typeof allUserData.quiz_attempts[currentQuizName] !== "undefined") {
+            currentHighScore = allUserData.quiz_attempts[currentQuizName].hs;
+            // console.log("allUserData.quiz_attempts[currentQuizName].hs checker");
+        }
+
+        console.log("allUserData.quiz_number_attempts: " + allUserData.quiz_number_attempts);
+        // console.log("current user score: " + userScore);
+        // console.log("current quiz_number_completed: " + allUserData.quiz_number_completed);
+        // console.log("current currentHighScore: " + currentHighScore);
+        if (userScore === keyLength) {
+            // console.log("quiz 100% checker '1st if'");
+            // console.log("display currentHighScore: " + currentHighScore)
+            // console.log("display userScore: " + userScore)
+            if (currentHighScore === userScore) {
+                quizCompleted = quizCompleted + 0;
+                // console.log("quiz 100% checker '2nd if'");
+            }
+            else {
+                quizCompleted = quizCompleted + 1;
+                // console.log("quiz 100% checker 'else'");
+            }
+        }
+
+        console.log("before addition of this quiz attempt: " + quizAttempt);
+        let updateQuizAttempt = quizAttempt + 1;
+        console.log("updateQuizAttempt before assign to array: " + updateQuizAttempt);
+
+        let pointsToUpdate = {
+            quiz_number_attempts: updateQuizAttempt,
+            quiz_number_completed: quizCompleted
+        }
+
+        userPoints.update(pointsToUpdate)
+            .then(() => {
+                console.log('successfully updated total points');
+            }).catch((err) => {
+                console.error(err.message);
+            })
+        console.log("updateQuizAttempt after update: " + updateQuizAttempt);
+        console.log("Achievements updated");
     }
 
+    /**
+     * Resets the Quiz
+     * 
+     * @memberof SingleQuiz
+     */
     resetQuiz() {
+        databaseRef.ref(`users/${this.state.userID}`).once('value').then((snapshot) => {
+            console.log("quiz reset allUserData");
+            this.setState({
+                allUserData: snapshot.val()
+            })
+        });
         this.setState({
             userAnswers: [],
             correctAnswers: [],
             userProgression: 0,
-            userPoints: 0,
             userPercentage: 0
         })
     }
 
-    renderQuiz() {
-        // console.log(this.state);
-        const _this = this;
+    /**
+     * Changes the Progression of the Quiz
+     * 
+     * @param {object} e Button Event Object
+     * @param {int} idx Next progression step
+     * @returns false IF the user is not allowed to move
+     * @memberof SingleQuiz
+     */
+    changeProgression(e, idx) {
+        e.preventDefault();
+        let { userProgression, userAnswers } = this.state;
+        let nextProgression = userProgression + idx;
 
-        let quiz = this.state.allLearnData;
-        let keys = Object.keys(quiz);
-        let keyLength = keys.length;
-
-        let quizProgression = quiz[keys[this.state.userProgression]];
-        let progressionPercentage = this.state.userProgression / keys.length * 100;
-
-        let updateTheScore = 0;
-
-        let buttonButton = "Next";
-
-        if (this.state.userProgression === keyLength - 1) {
-            buttonButton = "Results"
+        if (typeof userAnswers[userProgression] === 'undefined') {
+            if (idx > 0) {
+                return false;
+            }
         }
 
-        if (this.state.userProgression === keyLength) {
+        if (nextProgression >= 0) {
+            let nextProgression = userProgression + idx;
+            this.setState({
+                userProgression: nextProgression
+            })
+        }
+    }
+
+    /**
+     * Renders either the quiz questions or the Completed page
+     * 
+     * @returns DOM
+     * @memberof SingleQuiz
+     */
+    renderQuiz() {
+        let quiz = this.state.allLearnData,
+            { userProgression, userAnswers, quizName } = this.state,
+            keys = Object.keys(quiz),
+            keyLength = keys.length,
+            quizProgression = quiz[keys[userProgression]],
+            progressionPercentage = userProgression / keys.length * 100,
+            updateTheScore = 0;
+
+        if (userProgression === keyLength) {
             updateTheScore = this.checkThemAnswers();
             let pointsToPush = updateTheScore;
 
@@ -197,35 +321,38 @@ class SingleQuiz extends React.Component {
             let roundedUserScorePercentage = Math.round(userScorePercentage);
 
             // function here to push user score (updateTheScore) back to the DB
+            this.updateAchievementProgress(quizName, keyLength, pointsToPush);
             this.pushTheData(pointsToPush);
-
-            let leQuizName = this.state.quizName;
+            let animalImage = (`${quizName}`); // use this value for image
+            // console.log(quizName);
+            // console.log(animalImage);
 
             return (
-                <div>
-                    <div className="progressionBar">
-                        <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
+                <div className="quiz-completed">
+                    <div className="animal-background" style={{backgroundImage: `url(${animalImage})`}}>
+                        <div className="progressionBar">
+                            <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
+                        </div>
+                        <h2>Congratulations</h2>
+                        <h3>You completed The Quiz on {quizName}</h3>
+                        <div>
+                            <h2>{"" + roundedUserScorePercentage + "%"}</h2>
+                            <h3>{userScoreFraction + " Questions Answered Correctly"}</h3>
+                        </div>
+                        <Link className="btn" to="/learn">Back to Quiz Map</Link>
+                        <Link className="btn" to={`/doquiz/${quizName}`} onClick={ () => this.resetQuiz()}>Take The Quiz Again</Link>
                     </div>
-                    {/* { console.log("inside return " + updateTheScore) } */}
-                    <h2>Congradulations</h2>
-                    <h3>You completed The Quiz on {this.state.quizName}</h3>
-                    <div>
-                        <h2>{"" + roundedUserScorePercentage + "%"}</h2>
-                        <h3>{userScoreFraction + " Questions Answered Correctly"}</h3>
-                    </div>
-                    <Link to="/learn">Back to Quiz Map</Link>
-                    <Link to={`/doquiz/${leQuizName}`} onClick={ () => this.resetQuiz()}>Take The Quiz Again</Link>
                 </div>
             )
         }
 
         return (
-            <div>
+            <div className="quiz-questions-wrapper">
                 <div className="progressionBar">
                     <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
                 </div>
                 <div>
-                    <p>{ "Question " + (this.state.userProgression + 1) }</p>
+                    <p>{ "Question " + (userProgression + 1) }</p>
                 </div>
                 <div className="questionContainer">
                     <h2>{ quizProgression.question }</h2>
@@ -236,8 +363,8 @@ class SingleQuiz extends React.Component {
                                 let questionAnswerClass = "quizOption";
                                 let answers = quizProgression.answer;
 
-                                if (typeof this.state.userAnswers[this.state.userProgression] !== 'undefined') {
-                                    if (this.state.userAnswers[this.state.userProgression] === question) {
+                                if (typeof userAnswers[userProgression] !== 'undefined') {
+                                    if (userAnswers[userProgression] === question) {
                                         questionAnswerClass += ' active';
                                     }
                                 }
@@ -253,35 +380,34 @@ class SingleQuiz extends React.Component {
                         }
                     </ul>
                 </div>
-                <button className="backArrow" onClick={()=>{
-                    if (this.state.userProgression === 0) {
-                        console.log("do nothing :P");
-                    }
-                    else {
-                        _this.setState({
-                            userProgression: this.state.userProgression - 1,
-                        })
-                    }
-                }}>{"<"}</button>
-                <button  className="forwardArrow" onClick={()=>{
-                    // if statement to force users to answer
-                    _this.setState({
-                        userProgression: this.state.userProgression + 1
-                    })
-                }}> {buttonButton + ">"} </button>
+
+                <button className="backArrow" onClick={ (e) => this.changeProgression(e, -1) }>Back</button>
+                <button  className="forwardArrow" onClick={ (e) => this.changeProgression(e, 1) }>
+                    {userProgression === keyLength - 1 ? 'Results >' : 'Next >'}
+                </button>
             </div>
         )
     }
 
+    /**
+     * React Function - Renders Component Markup
+     * 
+     * @returns DOM
+     * @memberof SingleQuiz
+     */
     render() {
         if (this.state.allLearnData === null) {
             return <Loading fullscreen={true} />
         }
+        let { quizName } = this.state;
+
+        let animalImage = quizName; // use this value for image
 
         return (
-            <div className="page quiz-container">
-                <div>
-                    <h2>{this.state.quizName}</h2>
+            <div className="page quiz-container" id="individual_quiz">
+                <div className="animal-background" style={{backgroundImage: `url(${Enclosures.coordinates[animalImage].img})`}}/>
+                <div className="single-quiz-container">
+                    <PageTitle title={this.state.quizName} back={() => this.props.routerProps.history.goBack()} />
                     { this.renderQuiz() }
                 </div>
             </div>

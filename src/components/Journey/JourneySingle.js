@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import Masonry from 'react-masonry-component'
 import firebase from '../firebase'
@@ -10,7 +10,7 @@ import JourneyTitle from './elements/JourneyTitle'
 import JourneyImage from './elements/JourneyImage'
 
 const masonryOptions = {
-    transitionDuration: 0
+    transitionDuration: 200
 };
 
 /**
@@ -42,6 +42,8 @@ export default class JourneySingle extends Component {
         this.fetchJourneyImages = this.fetchJourneyImages.bind(this)
         this.generateImageGallery = this.generateImageGallery.bind(this)
         this.updateStateWithNewTitle = this.updateStateWithNewTitle.bind(this)
+        this.updateFakeImageState = this.updateFakeImageState.bind(this)
+        this.afterImageDelete = this.afterImageDelete.bind(this)
     }
 
     /**
@@ -64,12 +66,25 @@ export default class JourneySingle extends Component {
         let id = this.id;
         let ref = firebase.database().ref(`journeys/${this.state.user.uid}/${id}`)
 
+        this.setState({
+            fetching: true
+        })
+
         ref.once('value', (snap) => {
             _this.setState({
                 journey: snap.val(),
                 fetching: false
             })
         })
+    }
+
+    /**
+     * Refetches data after deleting image
+     * 
+     * @memberof JourneySingle
+     */
+    afterImageDelete() {
+        this.fetchJourneyData();
     }
 
     /**
@@ -104,6 +119,22 @@ export default class JourneySingle extends Component {
     }
 
     /**
+     * Updates the state to reflect the new Enclosure value
+     * 
+     * @param {string} id ID of the image
+     * @param {string} newEnclosure Text of the new enclosure
+     * @memberof JourneySingle
+     */
+    updateFakeImageState(id, newEnclosure) {
+        let newJourney = {...this.state.journey};
+        newJourney.images[id].enclosure = newEnclosure;
+
+        this.setState({
+            journey: newJourney
+        })
+    }
+
+    /**
      * Loops through images and displays them to the user
      * 
      * @returns DOM
@@ -114,8 +145,17 @@ export default class JourneySingle extends Component {
         if (images !== null && typeof images !== 'undefined') {
             let imageDOM = Object.keys(images).map((key) => {
                 let imageRef = firebase.storage().ref(`journey/${this.state.user.uid}/${this.state.journey.id}/${images[key].image_name}`);
+                let imageDBRef = firebase.database().ref(`journeys/${this.state.user.uid}/${this.state.journey.id}/images/${key}`);
                 return (
-                    <JourneyImage key={key} imageURL={images[key].image_url} storageRef={imageRef} />
+                    <JourneyImage 
+                        key={key} 
+                        id={key} 
+                        imageData={images[key]} 
+                        storageRef={imageRef} 
+                        DBRef={imageDBRef}
+                        updateFakeState={ (id, enclosure) => this.updateFakeImageState(id, enclosure) }
+                        afterImageDelete={() => this.afterImageDelete()}
+                    />
                 )
             })
 
@@ -148,6 +188,11 @@ export default class JourneySingle extends Component {
     render() {
         let { journey, fetching } = this.state;
         let journey_id = this.props.routerProps.match.params.id;
+        let totalImages = 0;
+
+        if (journey !== null) {
+            totalImages = typeof journey.images === 'undefined' ? 0 : Object.keys(journey.images).length;
+        }
 
         return (
             <div className="journey-page journey-single">
@@ -163,6 +208,7 @@ export default class JourneySingle extends Component {
                                     id={journey.id}
                                     uid={this.state.user.uid}
                                     updateFakeState={ (title) => this.updateStateWithNewTitle(title) }
+                                    totalImages={totalImages}
                                 />
                                 {
                                     journey.images === null || typeof journey.images === 'undefined' ? (
@@ -175,7 +221,16 @@ export default class JourneySingle extends Component {
                                             disableImagesLoaded={false}
                                             updateOnEachImageLoad={true}
                                         >
-                                            { this.generateImageGallery() }
+                                            <Fragment>
+                                                {
+                                                    typeof journey.generatedMapURL !== 'undefined' ? (
+                                                        <div className="single-image">
+                                                            <img src={journey.generatedMapURL} alt="generate map" />
+                                                        </div>
+                                                    ) : ('')
+                                                }
+                                                { this.generateImageGallery() }
+                                            </Fragment>
                                         </Masonry>
                                     )
                                 }

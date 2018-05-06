@@ -11,49 +11,6 @@
                 font-weight: bold;
                 font-family: $heebo;
             }
-            .journey-settings {
-                position: relative;
-                a {
-                    display: block;
-                    line-height: 16px;
-                    cursor: pointer;
-                    svg {
-                        fill: rgba($black, 0.5);
-                    }
-                }
-                ul {
-                    margin: 0;
-                    padding: 5px 0;
-                    background: white;
-                    border-radius: 10px;
-                    box-shadow: 0 2px 6px 0 rgba($black, 0.2);
-                    position: absolute;
-                    z-index: 3;
-                    right: 0;
-                    top: calc(100% + 5px);
-                    &:not(.open) {
-                        display: none;
-                    }
-                    li {
-                        list-style: none;
-                        &:not(:first-child) {
-                            a {
-                                border-top: 1px solid $light-grey;
-                            }
-                        }
-                        a {
-                            display: block;
-                            font-size: 14px;
-                            text-decoration: none;
-                            text-transform: uppercase;
-                            color: $black;
-                            font-family: $heebo;
-                            font-weight: bold;
-                            padding: 10px 20px;
-                        }
-                    }
-                }
-            }
         }
     }
     .journey-listing {
@@ -67,13 +24,21 @@
             padding: 0 10px;
             width: 50%;
             z-index: 0;
-            &.editing {
+            &.editing,
+            &.viewing {
                 z-index: 10;
             }
             img {
                 border-radius: 10px;
                 display: block;
                 border: 1px solid $light-grey;
+            }
+            &.viewing {
+                &.editing {
+                    .journey-dialogue:first-of-type {
+                        display: none;
+                    }
+                }
             }
             .journey-dialogue {
                 .dialogue-inner {
@@ -83,12 +48,41 @@
                         width: 100%;
                         border-radius: 10px;
                         margin-bottom: 20px;
+                        position: relative;
                         img {
                             width: auto;
                             height: 230px;
                             margin: 0 auto;
                             border: none;
                             border-radius: 0;
+                        }
+                        .image-actions {
+                            position: absolute;
+                            bottom: 10px;
+                            right: 10px;
+                            width: 20px;
+                            > div {
+                                margin-bottom: 10px;
+                            }
+                            svg {
+                                fill: #909090;
+                            }
+                        }
+                    }
+                    .image-info {
+                        margin-bottom: 30px;
+                        padding-bottom: 20px;
+                        border-bottom: 2px solid $light-grey;
+                        p {
+                            margin: 0 0 5px;
+                            text-transform: capitalize;
+                            &:last-child {
+                                margin-bottom: 0;
+                            }
+                            strong {
+                                font-family: $heebo;
+                                font-weight: bold;
+                            }
                         }
                     }
                     .enclosure-select {

@@ -1,15 +1,15 @@
 {
   "name": "zoostagram",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "crypto-js": "^3.1.9-1",
-    "dotenv": "^5.0.1",
     "firebase": "^4.12.1",
     "node-sass-chokidar": "^1.2.2",
     "npm-run-all": "^4.1.2",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
+    "react-facebook": "^5.0.3",
     "react-masonry-component": "^6.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4"

@@ -1,15 +1,38 @@
 .app-home {
     display: grid;
     grid-template-rows: 40px auto 50px;
-    .user-profile {
-        width: 25px;
-        height: 25px;
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        background: url('./images/default_user.svg') no-repeat center center / 25px 25px;
-        text-indent: -9999px;
-        overflow: hidden;
+    .app-header {
+        position: relative;
+        .profile-image,
+        #logout {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .profile-image {
+            width: 32px;
+            height: 32px;
+            left: 15px;
+            text-indent: -9999px;
+            overflow: hidden;
+            .image-wrapper {
+                .image,
+                svg {
+                    height: 30px;
+                }
+            }
+        }
+        // #logout {
+        //     right: 15px;
+        //     text-decoration: none;
+        //     font-weight: bold;
+        //     font-size: 14px;
+        //     text-transform: uppercase;
+        //     color: white;
+        //     font-family: $heebo;
+        //     opacity: 0.5;
+        //     cursor: pointer;
+        // }
     }
     .app-feature-options {
         align-self: center;
@@ -37,6 +60,7 @@
                     display: block;
                     border: 3px solid white;
                     border-radius: 10px;
+                    text-decoration-color: rgba(255, 255, 255, 0.34);
                 }
                 &.ape-bg {
                     &:after {

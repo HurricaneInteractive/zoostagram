@@ -1,18 +1,8 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import firebase from '../../firebase'
 
-/**
- * SVG Code for the three dots
- * 
- * @returns DOM
- */
-const SettingsIcon = () => {
-    return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 4">
-            <path d="M6,10a2,2,0,1,0,2,2A2.006,2.006,0,0,0,6,10Zm12,0a2,2,0,1,0,2,2A2.006,2.006,0,0,0,18,10Zm-6,0a2,2,0,1,0,2,2A2.006,2.006,0,0,0,12,10Z" transform="translate(-4 -10)"/>
-        </svg>
-    )
-}
+import { SettingsIcon } from '../../Global/Icons'
 
 /**
  * JourneyTitle class - Used in JourneySingle
@@ -141,10 +131,11 @@ export default class JourneyTitle extends Component {
         return (
             <div className="journey-title">
                 <h3>{this.props.title}</h3>
-                <div className="journey-settings">
+                <div className="settings-dropdown">
                     <a onClick={ (e) => this.toggleSettings(e) }><SettingsIcon /></a>
                     <ul className={ this.state.settingsOpen === true ? 'open' : '' }>
                         <li><a onClick={ (e) => this.toggleRenameDialogue(e) }>Rename</a></li>
+                        { this.props.totalImages > 1 ? (<li><Link to={`/journey/generate/${this.props.id}`}>Generate</Link></li>) : ('') }
                         <li><a>Delete</a></li>
                     </ul>
                 </div>
