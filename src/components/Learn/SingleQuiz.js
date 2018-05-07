@@ -351,7 +351,7 @@ class SingleQuiz extends React.Component {
                 <div className="progressionBar">
                     <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
                 </div>
-                <div>
+                <div className="Question-title">
                     <p>{ "Question " + (userProgression + 1) }</p>
                 </div>
                 <div className="questionContainer">
@@ -380,11 +380,12 @@ class SingleQuiz extends React.Component {
                         }
                     </ul>
                 </div>
-
+              <div className="question-nav">
                 <button className="backArrow" onClick={ (e) => this.changeProgression(e, -1) }>Back</button>
                 <button  className="forwardArrow" onClick={ (e) => this.changeProgression(e, 1) }>
                     {userProgression === keyLength - 1 ? 'Results >' : 'Next >'}
                 </button>
+               </div>
             </div>
         )
     }

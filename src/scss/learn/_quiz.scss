@@ -172,6 +172,27 @@ $a-tags-hover: 'a:active, a:hover';
         z-index: 1;
         position: relative;
         background-color: rgba(255,170,0,.35);
+
+        .questionContainer{
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #FDF4DF;
+        width: 60%;
+        height: 400px;
+        border-radius: 10px;
+    }
+
+
+    div{
+        p{
+
+        text-align: center;
+         }
+      }
+
+    .question-nav{
+      text-align: center;
+    }
     }
 
     div {
