@@ -1,11 +1,11 @@
 // *** quiz specific styling *** 
 // default quesion styling
 .quizOption {
-    background-color: #787878;
+    background-color: transparent;
 }
 // when quesion is selected styling
 .active {
-    background-color: green;
+    background-color: #fff;
 }
 
 // quiz page modal popup styling
@@ -167,6 +167,8 @@ $a-tags-hover: 'a:active, a:hover';
         left: 0;
     }
 
+// Single Quiz container styling
+
     .single-quiz-container {
         min-height: 100vh;
         z-index: 1;
@@ -180,8 +182,49 @@ $a-tags-hover: 'a:active, a:hover';
         width: 60%;
         height: 400px;
         border-radius: 10px;
+        }
+
+        .question-title{
+        font-family: $heebo;
+        font-size: 15px;
+        color: #fff;
+        }
+
+    h2{
+       padding-left:10px;
+       padding-right:10px;
+       padding-top: 20px;
+       font-family: $heebo;
+       font-size: 20px;
+       color: $orange-yellow;
     }
 
+    ul{
+        text-align:center;
+        padding-top: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    li{
+       padding-top: 10px;
+       padding-bottom: 10px;
+       font-family: $heebo;
+       font-size: 14px;
+    }
+    
+
+     li:nth-child(1){
+       border-bottom: 0.2px #BDBFB8 solid;
+    }
+
+     li:nth-child(2){
+       border-bottom: 0.2px #BDBFB8 solid;
+    }
+
+     li:nth-child(3){
+       border-bottom: 0.2px #BDBFB8 solid;
+    }
 
     div{
         p{

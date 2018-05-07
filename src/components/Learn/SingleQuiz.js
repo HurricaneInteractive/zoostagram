@@ -351,7 +351,7 @@ class SingleQuiz extends React.Component {
                 <div className="progressionBar">
                     <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
                 </div>
-                <div className="Question-title">
+                <div className="question-title">
                     <p>{ "Question " + (userProgression + 1) }</p>
                 </div>
                 <div className="questionContainer">
