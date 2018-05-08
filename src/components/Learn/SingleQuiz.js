@@ -292,72 +292,81 @@ class SingleQuiz extends React.Component {
         // let userAttempts = null;
 
         // const allUserData = firebase.database().ref(`users/${this.state.userID}`);
-        const { userID, allUserData } = this.state;
+        const { userID } = this.state;
         // let allUserDataDB = firebase.database().ref(`users/${userID}/`);
         let userDataBadges = firebase.database().ref(`users/${userID}/badges_earned`);
         // let userCompleted = firebase.database().ref(`users/${userID}/quiz_number_completed`);
 
-        // allUserData
-        //     badges_earned
-        //         attempted_one
-        //         attempted_five
-        //         attempted_ten
-        //         completed_one
-        //         completed_five
-        //         completed_ten
-        //     quiz_number_attempts
-        //     quiz_number_completed
-                
-        // console.log(allUserData);
-        // console.log(userDataBadges);
-        let userAttempts = allUserData.quiz_number_attempts;
-        let userCompleted = allUserData.quiz_number_completed;
-        console.log(userAttempts);
-        console.log(userCompleted);
+        let allUserData = null;
+        firebase.database().ref(`users/${userID}`).once('value').then(function(snapshot) {
+            allUserData = snapshot.val();
+        }).then(() => {
+            console.log(allUserData);
 
-        let badgeName = "";
-        let badgeCompleteName = "";
-
-        let badgeToUpdate = {};
-
-        if (userAttempts >= 1) {
-            badgeToUpdate["attempted_one"] = true;
-            if (userAttempts >= 5) {
-                badgeToUpdate["attempted_five"] = true;
-                if (userAttempts >= 10) {
-                    badgeToUpdate["attempted_ten"] = true;
-                    if (userAttempts >= 11) {
-                        console.log("maxed out all badges");
+            // allUserData
+            //     badges_earned
+            //         attempted_one
+            //         attempted_five
+            //         attempted_ten
+            //         completed_one
+            //         completed_five
+            //         completed_ten
+            //     quiz_number_attempts
+            //     quiz_number_completed
+                    
+            // console.log(allUserData);
+            // console.log(userDataBadges);
+            let userAttempts = allUserData.quiz_number_attempts;
+            let userCompleted = allUserData.quiz_number_completed;
+            console.log(userAttempts);
+            console.log(userCompleted);
+    
+            let badgeName = "";
+            let badgeCompleteName = "";
+    
+            let badgeToUpdate = {};
+    
+            if (userAttempts >= 1) {
+                badgeToUpdate["attempted_one"] = true;
+                if (userAttempts >= 5) {
+                    badgeToUpdate["attempted_five"] = true;
+                    if (userAttempts >= 10) {
+                        badgeToUpdate["attempted_ten"] = true;
+                        if (userAttempts >= 11) {
+                            console.log("maxed out all badges");
+                        }
                     }
                 }
             }
-        }
-
-        if (userCompleted >= 1) {
-            badgeToUpdate["completed_one"] = true;
-            if (userCompleted >= 5) {
-                badgeToUpdate["completed_five"] = true;
-                if (userCompleted >= 10) {
-                    badgeToUpdate["completed_ten"] = true;
-                    if (userCompleted >= 11) {
-                        console.log("maxed out all badges");
+    
+            if (userCompleted >= 1) {
+                badgeToUpdate["completed_one"] = true;
+                if (userCompleted >= 5) {
+                    badgeToUpdate["completed_five"] = true;
+                    if (userCompleted >= 10) {
+                        badgeToUpdate["completed_ten"] = true;
+                        if (userCompleted >= 11) {
+                            console.log("maxed out all badges");
+                        }
                     }
                 }
             }
-        }
-        console.log(badgeName)
-        console.log(badgeCompleteName)
-        console.log(badgeToUpdate)
+            console.log(badgeName)
+            console.log(badgeCompleteName)
+            console.log(badgeToUpdate)
+            
+            if (badgeToUpdate !== null) {
+                userDataBadges.update(badgeToUpdate)
+                .then(() => {
+                    console.log('successfully updated total points');
+                }).catch((err) => {
+                    console.error(err.message);
+                })
+            console.log("Badges updated");
+            }
+        });
+
         
-        if (badgeToUpdate !== null) {
-            userDataBadges.update(badgeToUpdate)
-            .then(() => {
-                console.log('successfully updated total points');
-            }).catch((err) => {
-                console.error(err.message);
-            })
-        console.log("Badges updated");
-        }
     }
 
     /**
