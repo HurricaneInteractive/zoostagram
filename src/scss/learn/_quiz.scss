@@ -65,13 +65,15 @@
 
     }
     h2{
-    font-family: Arial;
+    font-family: $heebo;
     color: #FFAA00;
     padding-left: 50px;
     padding-right: 50px;
     padding-top: 20px;
     }
     .pop-option{
+    font-family: $heebo;
+    color: $orange-yellow !important;
     padding-top: 20px;
     padding-bottom: 20px;
     border-radius: 0;
