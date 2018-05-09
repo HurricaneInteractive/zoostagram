@@ -15,6 +15,7 @@ import Entry from './Global/Entry'
 import SignInRegister from './Global/SignInRegister'
 import Profile from './Global/Profile'
 import Claim from './Global/Claim'
+import Achievements from './Global/Achievements'
 import Loading from './Global/Loading'
 
 // Journey Components
@@ -96,6 +97,9 @@ export default class AppRouter extends Component {
                 )} />
                 <Route exact path="/profile/claim" render={(routeProps) => (
                     <Claim routerProps={routeProps} authUser={user} />
+                )} />
+                <Route exact path="/profile/achievements" render={(routeProps) => (
+                    <Achievements routerProps={routeProps} authUser={user} />
                 )} />
                 
                 <Route exact path="/journey" render={(routeProps) => (

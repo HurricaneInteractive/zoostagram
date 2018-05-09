@@ -202,39 +202,24 @@ class SingleQuiz extends React.Component {
         let currentHighScore = 0;
         if (typeof allUserData.quiz_number_attempts !== "undefined") {
             quizAttempt = allUserData.quiz_number_attempts;
-            console.log("quiz_number_attempts checker: " + allUserData.quiz_number_attempts);
         }
         if (typeof allUserData.quiz_number_completed !== "undefined") {
             quizCompleted = allUserData.quiz_number_completed;
-            // console.log("quiz_number_completed checker" + allUserData.quiz_number_completed);
         }
         if (typeof allUserData.quiz_attempts[currentQuizName] !== "undefined") {
             currentHighScore = allUserData.quiz_attempts[currentQuizName].hs;
-            // console.log("allUserData.quiz_attempts[currentQuizName].hs checker");
         }
 
-        console.log("allUserData.quiz_number_attempts: " + allUserData.quiz_number_attempts);
-        // console.log("current user score: " + userScore);
-        // console.log("current quiz_number_completed: " + allUserData.quiz_number_completed);
-        // console.log("current currentHighScore: " + currentHighScore);
         if (userScore === keyLength) {
-            // console.log("quiz 100% checker '1st if'");
-            // console.log("display currentHighScore: " + currentHighScore)
-            // console.log("display userScore: " + userScore)
             if (currentHighScore === userScore) {
                 quizCompleted = quizCompleted + 0;
-                // console.log("quiz 100% checker '2nd if'");
             }
             else {
                 quizCompleted = quizCompleted + 1;
-                // console.log("quiz 100% checker 'else'");
             }
         }
 
-        console.log("before addition of this quiz attempt: " + quizAttempt);
         let updateQuizAttempt = quizAttempt + 1;
-        console.log("updateQuizAttempt before assign to array: " + updateQuizAttempt);
-
         let pointsToUpdate = {
             quiz_number_attempts: updateQuizAttempt,
             quiz_number_completed: quizCompleted
@@ -242,12 +227,10 @@ class SingleQuiz extends React.Component {
 
         userPoints.update(pointsToUpdate)
             .then(() => {
-                console.log('successfully updated total points');
+                // console.log('successfully updated total points');
             }).catch((err) => {
                 console.error(err.message);
             })
-        console.log("updateQuizAttempt after update: " + updateQuizAttempt);
-        console.log("Achievements updated");
     }
 
     /**
@@ -268,6 +251,14 @@ class SingleQuiz extends React.Component {
             userProgression: 0,
             userPercentage: 0
         })
+    }
+    reGetData() {
+        databaseRef.ref(`users/${this.state.userID}`).once('value').then((snapshot) => {
+            console.log("quiz reset allUserData");
+            this.setState({
+                allUserData: snapshot.val()
+            })
+        });
     }
 
     /**
@@ -295,6 +286,87 @@ class SingleQuiz extends React.Component {
                 userProgression: nextProgression
             })
         }
+    }
+    checkBadgeProgress() {
+        // let allUserData = null;
+        // let userAttempts = null;
+
+        // const allUserData = firebase.database().ref(`users/${this.state.userID}`);
+        const { userID } = this.state;
+        // let allUserDataDB = firebase.database().ref(`users/${userID}/`);
+        let userDataBadges = firebase.database().ref(`users/${userID}/badges_earned`);
+        // let userCompleted = firebase.database().ref(`users/${userID}/quiz_number_completed`);
+
+        let allUserData = null;
+        firebase.database().ref(`users/${userID}`).once('value').then(function(snapshot) {
+            allUserData = snapshot.val();
+        }).then(() => {
+            console.log(allUserData);
+
+            // allUserData
+            //     badges_earned
+            //         attempted_one
+            //         attempted_five
+            //         attempted_ten
+            //         completed_one
+            //         completed_five
+            //         completed_ten
+            //     quiz_number_attempts
+            //     quiz_number_completed
+                    
+            // console.log(allUserData);
+            // console.log(userDataBadges);
+            let userAttempts = allUserData.quiz_number_attempts;
+            let userCompleted = allUserData.quiz_number_completed;
+            console.log(userAttempts);
+            console.log(userCompleted);
+    
+            let badgeName = "";
+            let badgeCompleteName = "";
+    
+            let badgeToUpdate = {};
+    
+            if (userAttempts >= 1) {
+                badgeToUpdate["attempted_one"] = true;
+                if (userAttempts >= 5) {
+                    badgeToUpdate["attempted_five"] = true;
+                    if (userAttempts >= 10) {
+                        badgeToUpdate["attempted_ten"] = true;
+                        if (userAttempts >= 11) {
+                            console.log("maxed out all badges");
+                        }
+                    }
+                }
+            }
+    
+            if (userCompleted >= 1) {
+                badgeToUpdate["completed_one"] = true;
+                if (userCompleted >= 5) {
+                    badgeToUpdate["completed_five"] = true;
+                    if (userCompleted >= 10) {
+                        badgeToUpdate["completed_ten"] = true;
+                        if (userCompleted >= 11) {
+                            console.log("maxed out all badges");
+                        }
+                    }
+                }
+            }
+            console.log(badgeName)
+            console.log(badgeCompleteName)
+            console.log(badgeToUpdate)
+            
+            if (badgeToUpdate !== null) {
+                userDataBadges.update(badgeToUpdate)
+                .then(() => {
+                    console.log('successfully updated total points');
+                }).catch((err) => {
+                    console.error(err.message);
+                })
+            console.log("Badges updated");
+            }
+        });
+
+        
     }
 
     /**
@@ -324,8 +396,7 @@ class SingleQuiz extends React.Component {
             this.updateAchievementProgress(quizName, keyLength, pointsToPush);
             this.pushTheData(pointsToPush);
             let animalImage = (`${quizName}`); // use this value for image
-            // console.log(quizName);
-            // console.log(animalImage);
+            this.checkBadgeProgress();
 
             return (
                 <div className="quiz-completed">
@@ -351,7 +422,7 @@ class SingleQuiz extends React.Component {
                 <div className="progressionBar">
                     <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
                 </div>
-                <div>
+                <div className="question-title">
                     <p>{ "Question " + (userProgression + 1) }</p>
                 </div>
                 <div className="questionContainer">
@@ -380,11 +451,12 @@ class SingleQuiz extends React.Component {
                         }
                     </ul>
                 </div>
-
+              <div className="question-nav">
                 <button className="backArrow" onClick={ (e) => this.changeProgression(e, -1) }>Back</button>
                 <button  className="forwardArrow" onClick={ (e) => this.changeProgression(e, 1) }>
                     {userProgression === keyLength - 1 ? 'Results >' : 'Next >'}
                 </button>
+               </div>
             </div>
         )
     }
