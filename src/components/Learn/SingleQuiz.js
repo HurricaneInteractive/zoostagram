@@ -395,10 +395,7 @@ class SingleQuiz extends React.Component {
             // function here to push user score (updateTheScore) back to the DB
             this.updateAchievementProgress(quizName, keyLength, pointsToPush);
             this.pushTheData(pointsToPush);
-            // this.reGetData();
             let animalImage = (`${quizName}`); // use this value for image
-            // console.log(quizName);
-            // console.log(animalImage);
             this.checkBadgeProgress();
 
             return (

@@ -39,6 +39,7 @@ export default class Profile extends Component {
 
     renderUserStats() {
         let { userDetails } = this.state;
+        let badgeLength = Object.keys(userDetails.badges_earned).length;
         let stats = [
             {
                 name: 'Points',
@@ -47,23 +48,30 @@ export default class Profile extends Component {
             },
             {
                 name: 'Achievements',
-                value: userDetails.achievements,
+                value: badgeLength,
                 theme: 'purple'
             }
         ]
 
         let allStats = stats.map((stat, key) => {
             return (
-                <div className={`stat ${stat.theme}`} key={`${stat.name}__${key}`}>
-                    <strong>{
-                        stat.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
-                    }</strong>
-                    <p>{stat.name}</p>
+                <div onClick={ () => this.badgeView(stat.name) } className={`stat ${stat.theme}`} key={`${stat.name}__${key}`}>
+                        <strong>{
+                            stat.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
+                        }</strong>
+                        <p>{stat.name}</p>
                 </div>
             )
         })
-
         return allStats;
+    }
+
+    badgeView(statName) {
+        let { userDetails } = this.state;
+        console.log(userDetails);
+        if (statName === "Achievments") {
+            // render badge grid view here
+        }
     }
 
     render() {
