@@ -49,29 +49,37 @@ export default class Profile extends Component {
             {
                 name: 'Achievements',
                 value: badgeLength,
-                theme: 'purple'
+                theme: 'purple',
+                link: '/profile/achievements'
             }
         ]
 
         let allStats = stats.map((stat, key) => {
-            return (
-                <div onClick={ () => this.badgeView(stat.name) } className={`stat ${stat.theme}`} key={`${stat.name}__${key}`}>
+            let linkTo = false;
+            if (typeof stat.link !== 'undefined') {
+                linkTo = true;
+            }
+
+            let linkToPage = linkTo ? (
+                <Link to={stat.link} key={`${stat.name}__${key}`}>
+                    <div className={`stat ${stat.theme}`}>
                         <strong>{
                             stat.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
                         }</strong>
                         <p>{stat.name}</p>
+                    </div>
+                </Link>
+            ) : (
+                <div className={`stat ${stat.theme}`} key={`${stat.name}__${key}`}>
+                    <strong>{
+                        stat.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
+                    }</strong>
+                    <p>{stat.name}</p>
                 </div>
-            )
+            );
+            return linkToPage;
         })
         return allStats;
-    }
-
-    badgeView(statName) {
-        let { userDetails } = this.state;
-        console.log(userDetails);
-        if (statName === "Achievments") {
-            // render badge grid view here
-        }
     }
 
     render() {
