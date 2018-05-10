@@ -61,13 +61,11 @@ export default class Profile extends Component {
             }
 
             let linkToPage = linkTo ? (
-                <Link to={stat.link} key={`${stat.name}__${key}`}>
-                    <div className={`stat ${stat.theme}`}>
-                        <strong>{
-                            stat.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
-                        }</strong>
-                        <p>{stat.name}</p>
-                    </div>
+                <Link to={stat.link} className={`stat ${stat.theme}`} key={`${stat.name}__${key}`}>
+                    <strong>{
+                        stat.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
+                    }</strong>
+                    <p>{stat.name}</p>
                 </Link>
             ) : (
                 <div className={`stat ${stat.theme}`} key={`${stat.name}__${key}`}>

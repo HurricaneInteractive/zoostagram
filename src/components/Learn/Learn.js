@@ -14,8 +14,6 @@ import firebase from '../firebase'
 
 import Loading from '../Global/Loading'
 import PageTitle from '../Global/PageTitle'
-// eslint-disable-next-line
-import QuizModal from './QuizModal'
 
 import StarImage from '../../images/quizshape-star.png'
 import TickImage from '../../images/quizshape-tick.png'

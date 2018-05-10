@@ -26,7 +26,6 @@ import Generate from './Journey/Generate'
 
 // Learn Components
 import Learn from './Learn/Learn';
-import QuizFinish from './Learn/QuizFinish'
 import SingleQuiz from './Learn/SingleQuiz'
 
 /**
@@ -118,7 +117,6 @@ export default class AppRouter extends Component {
                 <Route exact path="/learn" render={(routeProps) => (
                     <Learn routerProps={routeProps} authUser={user} />
                 )} />
-                <Route path="/quizfinish" component={QuizFinish} />
                 <Route path="/doquiz/:id" render={(routeProps) => (
                     <SingleQuiz routerProps={routeProps} authUser={user} />
                 )} />
