@@ -273,15 +273,19 @@ export default class Learn extends Component {
                <p> Hint: Pay attention to notice boards at the National Zoo & Aquarium </p>
             </div>
                 <div className="path-bg">
+                  <div className="clouds-bg">
                     <div className="birds-bg">
+                      <div className="dune-bg">
                             <div className="quiz-container">
                                 <div>
                                     { this.renderQuizTitles() }
                                 </div>
                             </div>
-                      </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
         )
     }
 }

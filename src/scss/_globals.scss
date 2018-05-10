@@ -112,19 +112,34 @@
 }
 
 .dune-bg{
+    z-index: 1;
     background-image: url('./images/dunes.png');
+    background-size: 100% 200px;
     background-repeat: no-repeat;
-    background-size: 100vh 50vh;
-    background-position: 50% 600px;
-    padding: 0;
-    margin: 0;
+    background-position: center top 800px;
+}
+
+.clouds-bg{
+    z-index: -10;
+    background-image: url('./images/cloud-one.png'), url('./images/cloud-one.png');
+    background-size: 400px 200px, 400px 200px;
+    background-repeat: no-repeat,
+      no-repeat,
+      no-repeat;
+    background-position: right -150px top 300px,
+    top 200px left -120px;
 }
 
 .birds-bg{
-    background-image: url('./images/birds.png');
-    background-repeat: no-repeat;
-    background-size: 100vh 50vh;
-    background-position: 50% 350px;
+    width: 100%;
+    z-index: -10;
+    background-image: url('./images/birds.png'), url('./images/eagle-white.png');
+    background-size: 100% 40%, 20vh 20vh;
+      background-repeat: no-repeat,
+      no-repeat,
+      no-repeat;
+  background-position: center,
+      top 540px left 1px;
 }
 
 .adax-bg{
