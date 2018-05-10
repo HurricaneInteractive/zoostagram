@@ -31,7 +31,8 @@
     position: fixed;
     z-index: 2;
     div {
-        width: 450px;
+        width:100%;
+        max-width: 450px;
         height: auto;
         border-radius: 40px;
 
