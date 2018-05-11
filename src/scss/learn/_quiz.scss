@@ -16,6 +16,10 @@
     }
 }
 
+#learn{
+    padding-bottom: 200px;
+}
+
 // quiz page modal popup styling
 .learn-modal {
     position: absolute;
@@ -142,7 +146,7 @@ $a-tags-hover: 'a:active, a:hover';
 #learn, #individual_quiz {
      height: auto;
      margin: 0;
-     padding-bottom: 300px;
+     z-index: -10;
      background: -moz-linear-gradient(top, rgba(255,170,0,1) 0%, rgba(255,170,0,0.64) 100%);
      background: -webkit-linear-gradient(top, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
      background: linear-gradient(to bottom, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
@@ -292,6 +296,7 @@ $a-tags-hover: 'a:active, a:hover';
                 justify-content: center;
                 margin: 0;
                 padding: 0;
+                padding-bottom: 200px;
                 li {
                     display: grid;
                     grid-template-columns: 1;

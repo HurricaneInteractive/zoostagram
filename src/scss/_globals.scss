@@ -104,6 +104,7 @@
 
 
 .path-bg{
+    height: 1100px;
     max-height: 100%;
     background-image: url('./images/path.png');
     background-repeat: no-repeat;
@@ -113,14 +114,17 @@
 }
 
 .dune-bg{
-    z-index: 1;
+    z-index: 20;
+    postion: abosolute;
     background-image: url('./images/dunes.png');
-    background-size: 100% 200px;
+    background-size: 100% 80vh;
     background-repeat: no-repeat;
-    background-position: center top 800px;
+    background-position: center top 780px;
+
 }
 
 .clouds-bg{
+    height: 100%;
     z-index: -10;
     background-image: url('./images/cloud-one.png'), url('./images/cloud-one.png');
     background-size: 400px 200px, 400px 200px;
@@ -132,6 +136,7 @@
 }
 
 .birds-bg{
+    height: 100%;
     width: 100%;
     z-index: -10;
     background-image: url('./images/birds.png'), url('./images/eagle-white.png');
