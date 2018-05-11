@@ -404,15 +404,18 @@ class SingleQuiz extends React.Component {
                         <div className="progressionBar">
                             <div style={{ width: `${"" + progressionPercentage + "%"}`}}></div>
                         </div>
+                        <div className="completed-head">
                         <h2>Congratulations</h2>
                         <h3>You completed The Quiz on {quizName}</h3>
-                        <div>
+                        </div>
+                        <div className="completed-score">
                             <h2>{"" + roundedUserScorePercentage + "%"}</h2>
                             <h3>{userScoreFraction + " Questions Answered Correctly"}</h3>
                         </div>
-                        <Link className="btn" to="/learn">Back to Quiz Map</Link>
-                        <Link className="btn" to={`/doquiz/${quizName}`} onClick={ () => this.resetQuiz()}>Take The Quiz Again</Link>
-                    </div>
+    
+                        <Link className="completed-back" to="/learn">Back to Quiz Map <i class="arrow right"></i></Link>
+                        <Link className="completed-restart" to={`/doquiz/${quizName}`} onClick={ () => this.resetQuiz()}>Take The Quiz Again</Link>
+                   </div>
                 </div>
             )
         }
