@@ -114,12 +114,10 @@
 }
 
 .dune-bg{
-    z-index: 20;
-    postion: abosolute;
     background-image: url('./images/dunes.png');
-    background-size: 100% 80vh;
+    background-size: 100% 400px;
     background-repeat: no-repeat;
-    background-position: center top 780px;
+    background-position: center top 900px;
 
 }
 
@@ -136,22 +134,19 @@
 }
 
 .birds-bg{
-    height: 100%;
-    width: 100%;
-    z-index: -10;
     background-image: url('./images/birds.png'), url('./images/eagle-white.png');
-    background-size: 100% 40%, 20vh 20vh;
+    background-size: 100vh 40%, 20vh 15%;
       background-repeat: no-repeat,
       no-repeat,
       no-repeat;
   background-position: center,
-      top 540px left 1px;
+      top 630px left;
 }
 
 .adax-bg{
     background-image: url('./images/adax-white.png');
     background-repeat: no-repeat;
-    background-position: 100% 1320px;
+    background-position: bottom 20px right 20px;
     background-size: 150px 150px;
 }
 

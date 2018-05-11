@@ -276,10 +276,12 @@ export default class Learn extends Component {
                     <div className="birds-bg">
                           <div className="path-bg">
                             <div className="dune-bg">
+                              <div className="adax-bg">
                             <div className="quiz-container">
                                 <div>
                                     { this.renderQuizTitles() }
                                 </div>
+                            </div>
                         </div>
                      </div>
                   </div>
