@@ -36,7 +36,8 @@
     z-index: 2;
     div {
         width:100%;
-        max-width: 450px;
+        max-width: 500px;
+        min-width: 400px;
         height: auto;
         border-radius: 40px;
 
@@ -203,16 +204,17 @@ $a-tags-hover: 'a:active, a:hover';
         margin-left: auto;
         margin-right: auto;
         background-color: #FDF4DF;
-        width: auto;
+        width: 80%;
         height: auto;
-        max-width: 50%;
+        max-width: 90%;
         border-radius: 10px;
         }
 
     .question-title{
         font-family: $heebo;
-        font-size: 18px;
+        font-size: 16px;
         color: #fff;
+        opacity: 0.8;
         }
 
     h2{
