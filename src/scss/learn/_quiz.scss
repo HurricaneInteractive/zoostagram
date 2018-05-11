@@ -299,6 +299,7 @@ $a-tags-hover: 'a:active, a:hover';
         h2{
         text-align: center;
         color: #fff;
+        font-size: 22px;
         }
         h3{
         text-align: center;
@@ -311,6 +312,7 @@ $a-tags-hover: 'a:active, a:hover';
         text-align: center;
         color: #fff;
         font-size: 60px;
+        margin: 0;
         }
         h3{
         text-align: center;
@@ -322,14 +324,17 @@ $a-tags-hover: 'a:active, a:hover';
     
     .completed-back{
     color: $orange-yellow;
+    font-family: $heebo;
     position: absolute;
     top: 450px; 
     left: 0; 
     right: 0; 
     margin-left: auto; 
     margin-right: auto; 
-    width: 200px; 
-    height: 20px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    width: 300px; 
+    height: 30px;
     border-radius: 10px;
     text-decoration: none;
     text-align: center;
@@ -349,13 +354,17 @@ $a-tags-hover: 'a:active, a:hover';
 
     .completed-restart{
     color: #fff;
+    font-family: $heebo;
     position: absolute;
     top: 500px; 
     left: 0; 
     right: 0; 
-    width: 200px; 
+    width: 300px;
+    height: 30px; 
     margin-left: auto; 
     margin-right: auto;
+    padding-top: 2px;
+    padding-bottom: 6px;
     border: 2px solid #fff;
     border-radius: 10px;
     text-decoration: none;
