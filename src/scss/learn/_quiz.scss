@@ -150,11 +150,14 @@ $a-tags-hover: 'a:active, a:hover';
    
 
    .hint{
-     
+        
+        width: 60%;
+        height: auto;
+        margin: auto;
      p{
         text-align: center;
         padding-top: 45px;
-        padding-bottom: 85px;
+        padding-bottom: 85px; 
         color:#fff;
      }
   }
@@ -186,7 +189,13 @@ $a-tags-hover: 'a:active, a:hover';
         position: relative;
         background-color: rgba(255,170,0,.35);
 
-        .questionContainer{
+        .page-title {
+        h1 {
+            color: white;
+        }
+        }
+
+    .questionContainer{
         margin-left: auto;
         margin-right: auto;
         background-color: #FDF4DF;
@@ -260,6 +269,9 @@ $a-tags-hover: 'a:active, a:hover';
       border: none;
       border-radius: 10px;
       background-color: #fff;
+      }
+
+      button:nth-child(1){
       }
 
       button:nth-child(2){
