@@ -54,7 +54,7 @@
         position: absolute;
         left: 40%; 
         right: 0; 
-        top: 300px;
+        top: 150px;
         margin-left: auto; 
         margin-right: auto;
         }
@@ -138,12 +138,11 @@ $a-tags-hover: 'a:active, a:hover';
 
 
 
-
 // Learn body gradient styling
 #learn, #individual_quiz {
      height: auto;
-     min-height: 100vh;
      margin: 0;
+     padding:0;
      background: -moz-linear-gradient(top, rgba(255,170,0,1) 0%, rgba(255,170,0,0.64) 100%);
      background: -webkit-linear-gradient(top, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
      background: linear-gradient(to bottom, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
@@ -191,14 +190,15 @@ $a-tags-hover: 'a:active, a:hover';
         margin-left: auto;
         margin-right: auto;
         background-color: #FDF4DF;
-        width: 60%;
-        height: 400px;
+        width: auto;
+        height: auto;
+        max-width: 50%;
         border-radius: 10px;
         }
 
-        .question-title{
+    .question-title{
         font-family: $heebo;
-        font-size: 15px;
+        font-size: 18px;
         color: #fff;
         }
 
@@ -213,16 +213,17 @@ $a-tags-hover: 'a:active, a:hover';
 
     ul{
         text-align:center;
-        padding-top: 20px;
-        padding-left: 20px;
+        padding-top: 10px;
         padding-right: 20px;
+        padding-left: 30px;
     }
 
     li{
        padding-top: 10px;
        padding-bottom: 10px;
        font-family: $heebo;
-       font-size: 14px;
+       font-size: 17px;
+       color: black;
     }
     
 
@@ -247,6 +248,25 @@ $a-tags-hover: 'a:active, a:hover';
 
     .question-nav{
       text-align: center;
+      padding-top: 10px;
+      padding-bottom: 20px;
+
+      button{
+      height: 30px;
+      font-family: $heebo;
+      font-size: 14px;
+      color: $orange-yellow;
+      text-decoration: none;
+      border: none;
+      border-radius: 10px;
+      background-color: #fff;
+      }
+
+      button:nth-child(2){
+      padding-right: 40px;
+      padding-left: 40px;
+      }
+
     }
     }
 

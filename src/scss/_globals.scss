@@ -104,10 +104,11 @@
 
 
 .path-bg{
+    max-height: 100%;
     background-image: url('./images/path.png');
     background-repeat: no-repeat;
-    background-position: 50% 100px;
-    background-size: 8px 100%;
+    background-position: center center;
+    background-size: 8px 800px;
     z-index:1;
 }
 
