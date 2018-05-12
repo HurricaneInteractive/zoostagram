@@ -399,7 +399,7 @@ class SingleQuiz extends React.Component {
                             <h3>{userScoreFraction + " Questions Answered Correctly"}</h3>
                         </div>
     
-                        <Link className="completed-back" to="/learn">Back to Quiz Map <i class="arrow right"></i></Link>
+                        <Link className="completed-back" to="/learn">Back to Quiz Map <i className="arrow right"></i></Link>
                         <Link className="completed-restart" to={`/doquiz/${quizName}`} onClick={ () => this.resetQuiz()}>Take The Quiz Again</Link>
                    </div>
                 </div>
@@ -468,7 +468,8 @@ class SingleQuiz extends React.Component {
             <div className="page quiz-container" id="individual_quiz">
                 <div className="animal-background" style={{backgroundImage: `url(${Enclosures.coordinates[animalImage].img})`}}/>
                 <div className="single-quiz-container">
-                    <PageTitle title={this.state.quizName} back={() => this.props.routerProps.history.goBack()} />
+                    {/* AJ - Replaced _ with space */}
+                    <PageTitle title={this.state.quizName.replace('_', ' ')} back={() => this.props.routerProps.history.goBack()} />
                     { this.renderQuiz() }
                 </div>
             </div>

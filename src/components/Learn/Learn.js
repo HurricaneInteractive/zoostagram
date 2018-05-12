@@ -36,7 +36,8 @@ class LearnModal extends React.Component {
                     </div>
                     <div className="quiz-info">
                         <div>
-                            <h2>What do you know about {this.props.itemName}?</h2>
+                            {/* AJ - Replaced _ with space & add conditional & <span> wrap */}
+                            <h2>What do you know about <span>{this.props.itemName ? this.props.itemName.replace('_', ' ') : ''}</span>?</h2>
                             <p>{this.props.userBestScore}%</p>
                         </div>
                     <div className="pop-option">

@@ -44,17 +44,17 @@
 }
 
 
-    i {
-    border: solid $orange-yellow;;
+i {
+    border: solid $orange-yellow;
     border-width: 0 3px 3px 0;
     display: inline-block;
     padding: 4px;
-    }
+}
     
-    .right {
+.right {
     transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
-    }
+}
 
 .btn {
     font-family: $heebo;
@@ -205,6 +205,7 @@
         color: $black;
         padding: 0;
         font-weight: normal;
+        text-transform: capitalize;
     }
     .back-arrow {
         width: 14px;

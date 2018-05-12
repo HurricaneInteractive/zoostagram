@@ -89,6 +89,10 @@
         padding-left: 50px;
         padding-right: 50px;
         padding-top: 20px;
+        // AJ
+        span {
+            text-transform: capitalize;
+        }
     }
 
     .pop-option {
@@ -150,27 +154,28 @@ $a-tags-hover: 'a:active, a:hover';
 
 // Learn body gradient styling
 #learn, #individual_quiz {
-     height: auto;
-     margin: 0;
-     z-index: -10;
-     background: -moz-linear-gradient(top, rgba(255,170,0,1) 0%, rgba(255,170,0,0.64) 100%);
-     background: -webkit-linear-gradient(top, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
-     background: linear-gradient(to bottom, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
-     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaa00', endColorstr='#a3ffaa00',GradientType=0 );
-   
+    height: auto;
+    margin: 0;
+    z-index: -10;
+    background: -moz-linear-gradient(top, rgba(255,170,0,1) 0%, rgba(255,170,0,0.64) 100%);
+    background: -webkit-linear-gradient(top, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
+    background: linear-gradient(to bottom, rgba(255,170,0,1) 0%,rgba(255,170,0,0.64) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaa00', endColorstr='#a3ffaa00',GradientType=0 );
+    
+    // AJ
+    padding: 50px 15px 15px;
 
-   .hint{
-        
+   .hint {
         width: 60%;
         height: auto;
         margin: auto;
-     p{
-        text-align: center;
-        padding-top: 45px;
-        padding-bottom: 85px; 
-        color:#fff;
-     }
-  }
+        p {
+            text-align: center;
+            padding-top: 45px;
+            padding-bottom: 85px; 
+            color:#fff;
+        }
+    }
 }
 
 
@@ -200,9 +205,9 @@ $a-tags-hover: 'a:active, a:hover';
         background-color: rgba(255,170,0,.35);
 
         .page-title {
-        h1 {
-            color: white;
-        }
+            h1 {
+                color: white;
+            }
         }
 
     .questionContainer{
@@ -238,26 +243,32 @@ $a-tags-hover: 'a:active, a:hover';
         padding-left: 30px;
     }
 
-    li{
-       padding-top: 10px;
-       padding-bottom: 10px;
-       font-family: $heebo;
-       font-size: 17px;
-       color: black;
+    li {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-family: $heebo;
+        font-size: 17px;
+        color: black;
+        // AJ Fix
+        border-bottom: 0.2px #BDBFB8 solid;
+        &:last-child {
+            border-bottom: none;
+        }
     }
     
 
-     li:nth-child(1){
-       border-bottom: 0.2px #BDBFB8 solid;
-    }
+    // WILL'S CODE
+    //  li:nth-child(1){
+    //    border-bottom: 0.2px #BDBFB8 solid;
+    // }
 
-     li:nth-child(2){
-       border-bottom: 0.2px #BDBFB8 solid;
-    }
+    //  li:nth-child(2){
+    //    border-bottom: 0.2px #BDBFB8 solid;
+    // }
 
-     li:nth-child(3){
-       border-bottom: 0.2px #BDBFB8 solid;
-    }
+    //  li:nth-child(3){
+    //    border-bottom: 0.2px #BDBFB8 solid;
+    // }
 
     div{
         p{
@@ -292,7 +303,7 @@ $a-tags-hover: 'a:active, a:hover';
       }
 
     }
-    }
+}
 //Quiz completed page
     .quiz-completed{ 
       width: 100%;
