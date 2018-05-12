@@ -15,6 +15,7 @@ import Entry from './Global/Entry'
 import SignInRegister from './Global/SignInRegister'
 import Profile from './Global/Profile'
 import Claim from './Global/Claim'
+import Achievements from './Global/Achievements'
 import Loading from './Global/Loading'
 
 // Journey Components
@@ -25,7 +26,6 @@ import Generate from './Journey/Generate'
 
 // Learn Components
 import Learn from './Learn/Learn';
-import QuizFinish from './Learn/QuizFinish'
 import SingleQuiz from './Learn/SingleQuiz'
 
 /**
@@ -97,6 +97,9 @@ export default class AppRouter extends Component {
                 <Route exact path="/profile/claim" render={(routeProps) => (
                     <Claim routerProps={routeProps} authUser={user} />
                 )} />
+                <Route exact path="/profile/achievements" render={(routeProps) => (
+                    <Achievements routerProps={routeProps} authUser={user} />
+                )} />
                 
                 <Route exact path="/journey" render={(routeProps) => (
                     <Journey routerProps={routeProps} authUser={user} />
@@ -114,7 +117,6 @@ export default class AppRouter extends Component {
                 <Route exact path="/learn" render={(routeProps) => (
                     <Learn routerProps={routeProps} authUser={user} />
                 )} />
-                <Route path="/quizfinish" component={QuizFinish} />
                 <Route path="/doquiz/:id" render={(routeProps) => (
                     <SingleQuiz routerProps={routeProps} authUser={user} />
                 )} />

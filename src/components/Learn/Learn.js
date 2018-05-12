@@ -14,8 +14,6 @@ import firebase from '../firebase'
 
 import Loading from '../Global/Loading'
 import PageTitle from '../Global/PageTitle'
-// eslint-disable-next-line
-import QuizModal from './QuizModal'
 
 import StarImage from '../../images/quizshape-star.png'
 import TickImage from '../../images/quizshape-tick.png'
@@ -31,23 +29,21 @@ class LearnModal extends React.Component {
     render() {
         return (
             <div className="learn-modal" style={this.props.isOpen ? {display: "block"} : {display: "none"} }>
-                <div>
-                    <div>
-                        <h1>{this.props.itemId + 1}</h1>
-                        <div className="close">
-                        <p onClick={ this.props.closeModalBox }>X</p>
-                        </div>
-                        <div className="quiz-info">
-                            <div>
-                                <h2>What do you know about {this.props.itemName}?</h2>
-                                <p>{this.props.userBestScore}%</p>
-                            </div>
-                        <div className="pop-option">
-                            <Link to={`/doquiz/${this.props.itemName}`}>{this.props.firstTimeQuizAttempt ? "Start Quiz" : "Try Again"}</Link>
-                        </div>
-                        </div>
+                <div className="modal-wrapper">
+                    <h1>{this.props.itemId + 1}</h1>
+                    <div className="close">
+                    <p onClick={ this.props.closeModalBox }>X</p>
                     </div>
-                    
+                    <div className="quiz-info">
+                        <div>
+                            {/* AJ - Replaced _ with space & add conditional & <span> wrap */}
+                            <h2>What do you know about <span>{this.props.itemName ? this.props.itemName.replace('_', ' ') : ''}</span>?</h2>
+                            <p>{this.props.userBestScore}%</p>
+                        </div>
+                    <div className="pop-option">
+                        <Link to={`/doquiz/${this.props.itemName}`}>{this.props.firstTimeQuizAttempt ? "Start Quiz" : "Try Again"}</Link>
+                    </div>
+                    </div>
                 </div>
             </div>
         )
@@ -274,16 +270,22 @@ export default class Learn extends Component {
             <div className="hint">
                <p> Hint: Pay attention to notice boards at the National Zoo & Aquarium </p>
             </div>
-                <div className="path-bg">
+                <div className="clouds-bg">
                     <div className="birds-bg">
+                          <div className="path-bg">
+                            <div className="dune-bg">
+                              <div className="adax-bg">
                             <div className="quiz-container">
                                 <div>
                                     { this.renderQuizTitles() }
                                 </div>
                             </div>
-                      </div>
+                        </div>
+                     </div>
+                  </div>
                 </div>
             </div>
+        </div>
         )
     }
 }

@@ -39,6 +39,10 @@ export default class Profile extends Component {
 
     renderUserStats() {
         let { userDetails } = this.state;
+        let badgeLength = 0;
+        if (typeof userDetails.badges_earned !== 'undefined') {
+            badgeLength = Object.keys(userDetails.badges_earned).length;
+        }
         let stats = [
             {
                 name: 'Points',
@@ -47,22 +51,35 @@ export default class Profile extends Component {
             },
             {
                 name: 'Achievements',
-                value: userDetails.achievements,
-                theme: 'purple'
+                value: badgeLength,
+                theme: 'purple',
+                link: '/profile/achievements'
             }
         ]
 
         let allStats = stats.map((stat, key) => {
-            return (
+            let linkTo = false;
+            if (typeof stat.link !== 'undefined') {
+                linkTo = true;
+            }
+
+            let linkToPage = linkTo ? (
+                <Link to={stat.link} className={`stat ${stat.theme}`} key={`${stat.name}__${key}`}>
+                    <strong>{
+                        stat.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
+                    }</strong>
+                    <p>{stat.name}</p>
+                </Link>
+            ) : (
                 <div className={`stat ${stat.theme}`} key={`${stat.name}__${key}`}>
                     <strong>{
                         stat.value !== null && typeof stat.value !== 'undefined' ? stat.value : '0'
                     }</strong>
                     <p>{stat.name}</p>
                 </div>
-            )
+            );
+            return linkToPage;
         })
-
         return allStats;
     }
 

@@ -17,30 +17,43 @@
         width: 100%;
         height: 100%;
         z-index: 999;
-        svg {
+        > div {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
         }
     }
-    svg {
-        stroke: $black;
-        .red {
-            stroke: $red;
-        }
-        .yellow {
-            stroke: $orange-yellow;
-        }
-        .black {
-            stroke: $black;
-        }
-    }
+    // svg {
+    //     stroke: $black;
+    //     .red {
+    //         stroke: $red;
+    //     }
+    //     .yellow {
+    //         stroke: $orange-yellow;
+    //     }
+    //     .black {
+    //         stroke: $black;
+    //     }
+    // }
 }
 
 .page {
     padding: 50px 15px 15px;
     height: 100vh;
+}
+
+
+i {
+    border: solid $orange-yellow;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 4px;
+}
+    
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }
 
 .btn {
@@ -104,33 +117,49 @@
 
 
 .path-bg{
+    height: 1100px;
+    max-height: 100%;
     background-image: url('./images/path.png');
     background-repeat: no-repeat;
-    background-position: 50% 100px;
-    background-size: 8px 100%;
+    background-position: top 77px center;
+    background-size: 8px 90%;
     z-index:1;
 }
 
 .dune-bg{
     background-image: url('./images/dunes.png');
+    background-size: 100% 400px;
     background-repeat: no-repeat;
-    background-size: 100vh 50vh;
-    background-position: 50% 600px;
-    padding: 0;
-    margin: 0;
+    background-position: center top 900px;
+
+}
+
+.clouds-bg{
+    height: 100%;
+    z-index: -10;
+    background-image: url('./images/cloud-one.png'), url('./images/cloud-one.png');
+    background-size: 400px 200px, 400px 200px;
+    background-repeat: no-repeat,
+      no-repeat,
+      no-repeat;
+    background-position: right -150px top 300px,
+    top 200px left -120px;
 }
 
 .birds-bg{
-    background-image: url('./images/birds.png');
-    background-repeat: no-repeat;
-    background-size: 100vh 50vh;
-    background-position: 50% 350px;
+    background-image: url('./images/birds.png'), url('./images/eagle-white.png');
+    background-size: 100vh 40%, 20vh 15%;
+      background-repeat: no-repeat,
+      no-repeat,
+      no-repeat;
+  background-position: center,
+      top 630px left;
 }
 
 .adax-bg{
     background-image: url('./images/adax-white.png');
     background-repeat: no-repeat;
-    background-position: 100% 1320px;
+    background-position: bottom 20px right 20px;
     background-size: 150px 150px;
 }
 
@@ -173,8 +202,10 @@
         text-align: center;
         margin: 0 0 20px;
         font-family: $deco-family;
+        color: $black;
         padding: 0;
         font-weight: normal;
+        text-transform: capitalize;
     }
     .back-arrow {
         width: 14px;

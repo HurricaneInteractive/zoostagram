@@ -1,5 +1,8 @@
 import React from 'react'
+import Lottie from 'react-lottie'
+import * as animationData from '../config/loading.json'
 
+/*
 const Loading = (props) => {
     return (
         <div className={`loading-svg ${ props.fullscreen === true ? 'fullscreen' : 'local' }`}>
@@ -48,6 +51,28 @@ const Loading = (props) => {
                     </g>
                 </g>
             </svg>
+        </div>
+    )
+}
+*/
+
+const Loading = (props) => {
+    const defaultOptions = {
+        loop: true,
+        autoplay: true, 
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+        }
+    };
+
+    return (
+        <div className={`loading-svg ${ props.fullscreen === true ? 'fullscreen' : 'local' }`}>
+            <Lottie
+                options={defaultOptions}
+                width={60}
+                height={80}
+            />
         </div>
     )
 }

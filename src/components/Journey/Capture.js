@@ -469,9 +469,15 @@ class Capture extends Component {
                             ) : (
                                 <Fragment>
                                     <a id="camera-flip" onClick={ (e) => this.flipCameraFacingMode(e) }>Flip View</a>
-                                    <a id="stop-capturing" onClick={ (e) => this.goFullscreen(e, () => {
-                                        this.props.routerProps.history.goBack()
-                                    }) }>Stop</a>
+                                    <a id="stop-capturing" onClick={ (e) => {
+                                        if (this.state.fullscreen) {
+                                            this.goFullscreen(e, () => {
+                                                this.props.routerProps.history.goBack()
+                                            }) 
+                                        } else {
+                                            this.props.routerProps.history.goBack()
+                                        }
+                                    }}>Stop</a>
                                 </Fragment>
                             )
                         }
