@@ -39,7 +39,10 @@ export default class Profile extends Component {
 
     renderUserStats() {
         let { userDetails } = this.state;
-        let badgeLength = Object.keys(userDetails.badges_earned).length;
+        let badgeLength = 0;
+        if (typeof userDetails.badges_earned !== 'undefined') {
+            badgeLength = Object.keys(userDetails.badges_earned).length;
+        }
         let stats = [
             {
                 name: 'Points',

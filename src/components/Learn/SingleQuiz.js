@@ -206,8 +206,16 @@ class SingleQuiz extends React.Component {
         if (typeof allUserData.quiz_number_completed !== "undefined") {
             quizCompleted = allUserData.quiz_number_completed;
         }
-        if (typeof allUserData.quiz_attempts[currentQuizName] !== "undefined") {
-            currentHighScore = allUserData.quiz_attempts[currentQuizName].hs;
+        // if (typeof allUserData.quiz_attempts !== "undefined") {
+
+        // }
+        if (typeof allUserData.quiz_attempts !== "undefined") {
+            if (typeof allUserData.quiz_attempts[currentQuizName] !== "undefined") {
+                currentHighScore = allUserData.quiz_attempts[currentQuizName].hs;
+            }
+            else {
+                currentHighScore = 0;
+            }
         }
 
         if (userScore === keyLength) {
@@ -288,44 +296,22 @@ class SingleQuiz extends React.Component {
         }
     }
     checkBadgeProgress() {
-        // let allUserData = null;
-        // let userAttempts = null;
-
-        // const allUserData = firebase.database().ref(`users/${this.state.userID}`);
         const { userID } = this.state;
-        // let allUserDataDB = firebase.database().ref(`users/${userID}/`);
         let userDataBadges = firebase.database().ref(`users/${userID}/badges_earned`);
-        // let userCompleted = firebase.database().ref(`users/${userID}/quiz_number_completed`);
 
         let allUserData = null;
         firebase.database().ref(`users/${userID}`).once('value').then(function(snapshot) {
             allUserData = snapshot.val();
         }).then(() => {
             console.log(allUserData);
-
-            // allUserData
-            //     badges_earned
-            //         attempted_one
-            //         attempted_five
-            //         attempted_ten
-            //         completed_one
-            //         completed_five
-            //         completed_ten
-            //     quiz_number_attempts
-            //     quiz_number_completed
-                    
-            // console.log(allUserData);
-            // console.log(userDataBadges);
             let userAttempts = allUserData.quiz_number_attempts;
             let userCompleted = allUserData.quiz_number_completed;
-            console.log(userAttempts);
-            console.log(userCompleted);
-    
+
             let badgeName = "";
             let badgeCompleteName = "";
-    
+
             let badgeToUpdate = {};
-    
+
             if (userAttempts >= 1) {
                 badgeToUpdate["attempted_one"] = true;
                 if (userAttempts >= 5) {
@@ -338,7 +324,7 @@ class SingleQuiz extends React.Component {
                     }
                 }
             }
-    
+
             if (userCompleted >= 1) {
                 badgeToUpdate["completed_one"] = true;
                 if (userCompleted >= 5) {

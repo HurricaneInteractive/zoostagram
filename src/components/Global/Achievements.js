@@ -74,33 +74,42 @@ export default class Achievements extends Component {
 
     badgeView() {
         let { allUserData } = this.state;
-        let badgesArray = allUserData.badges_earned;
-        let badgeDataArray = Object.keys(badgesArray);
-        let allBadges = badgeDataArray.map((item, key) => {
-            let badgeName = item.replace(/[_-]/g, " ");
-            let badgeImage = Badges.badgeInfo[item].img;
+        if (typeof allUserData.badges_earned === 'undefined') {
             return (
-                <li className="badge-container" key={key} onClick={() => this.badgeModal(key, item, badgeName, badgeImage)}>
-                    <div className="badge-img" style={{ backgroundImage: `url(${badgeImage})` }} />
-                    <h3>{badgeName}</h3>
-                </li>
+                <div>No Badges Earned</div>
             )
-        })
-        return (
-            <div>
-                <ul className="badgeTiles">
-                    { allBadges }
-                </ul>
-                <BadgeModal
-                    isOpen={this.state.openDeleteModal}  
-                    itemId={this.state.activeItemId}
-                    itemDesc={this.state.activeItemDesc}
-                    itemName={this.state.activeItemName}
-                    itemImage={this.state.activeItemImage}
-                    closeModalBox={ () => this.toggleModal()}
-                />
-            </div>
-        )
+        }
+        else {
+            let badgesArray = allUserData.badges_earned;
+            let badgeDataArray = Object.keys(badgesArray);
+
+            let allBadges = badgeDataArray.map((item, key) => {
+                let badgeName = item.replace(/[_-]/g, " ");
+                let badgeImage = Badges.badgeInfo[item].img;
+                return (
+                    <li className="badge-container" key={key} onClick={() => this.badgeModal(key, item, badgeName, badgeImage)}>
+                        <div className="badge-img" style={{ backgroundImage: `url(${badgeImage})` }} />
+                        <h3>{badgeName}</h3>
+                    </li>
+                )
+            })
+            return (
+                <div>
+                    <ul className="badgeTiles">
+                        { allBadges }
+                    </ul>
+                    <BadgeModal
+                        isOpen={this.state.openDeleteModal}  
+                        itemId={this.state.activeItemId}
+                        itemDesc={this.state.activeItemDesc}
+                        itemName={this.state.activeItemName}
+                        itemImage={this.state.activeItemImage}
+                        closeModalBox={ () => this.toggleModal()}
+                    />
+                </div>
+            )
+        }
+        
     }
 
     render() {
