@@ -25,7 +25,8 @@ export default class Journey extends Component {
             creatingNew: false,
             journeyName: '',
             user: this.props.authUser,
-            fetching: true
+            fetching: true,
+            error: false
         }
 
         this.onChange = this.onChange.bind(this)
@@ -112,8 +113,15 @@ export default class Journey extends Component {
         let { journeyName, user } = this.state;
 
         if (journeyName === '') {
+            this.setState({
+                error: true
+            })
             return false;
         }
+
+        this.setState({
+            error: false
+        })
 
         var newJourneyKey = firebase.database().ref().child(`journeys/${user.uid}/`).push().key;
 
@@ -204,7 +212,7 @@ export default class Journey extends Component {
                     this.state.creatingNew ? (
                         <div className="journey-dialogue">
                             <div className="dialogue-inner">
-                                <div className="input-wrapper">
+                                <div className={`input-wrapper ${ this.state.error ? 'error' : '' }`}>
                                     <input placeholder="Journey Name" value={this.state.journeyName} name="journeyName" id="journeyName" onChange={(e) => this.onChange(e)} />
                                 </div>
                                 <button className="btn" onClick={(e) => this.createNewJourney(e)}>Create</button>

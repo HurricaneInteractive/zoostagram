@@ -136,7 +136,6 @@ export default class JourneyTitle extends Component {
                     <ul className={ this.state.settingsOpen === true ? 'open' : '' }>
                         <li><a onClick={ (e) => this.toggleRenameDialogue(e) }>Rename</a></li>
                         { this.props.totalImages > 1 ? (<li><Link to={`/journey/generate/${this.props.id}`}>Generate</Link></li>) : ('') }
-                        <li><a>Delete</a></li>
                     </ul>
                 </div>
                 {

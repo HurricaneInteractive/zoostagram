@@ -34,76 +34,81 @@
     align-content: center;
     position: fixed;
     z-index: 2;
-    div {
+    .modal-wrapper {
         width:100%;
-        max-width: 500px;
-        min-width: 400px;
+        // Will's code
+            // max-width: 500px;
+            // min-width: 400px;
+            // border-radius: 40px;
         height: auto;
-        border-radius: 40px;
-
-    h1 {
-        height: 400px;
-        width: 250px;
-        position: absolute;
-        left: 0; 
-        right: 0; 
-        top: 50px;
-        margin-left: auto; 
-        margin-right: auto;
-        padding-top: 20px;
-        color: $orange-yellow !important;
-        background: url(images/quizshape-one.png) no-repeat center center;
-        background-position: 50% 0;
+        h1 {
+            height: 400px;
+            width: 250px;
+            position: absolute;
+            left: 0; 
+            right: 0; 
+            top: 50px;
+            margin-left: auto; 
+            margin-right: auto;
+            padding-top: 20px;
+            color: $orange-yellow !important;
+            background: url(images/quizshape-one.png) no-repeat center center;
+            background-position: 50% 0;
         }
         .close{
-        position: absolute;
-        left: 40%; 
-        right: 0; 
-        top: 150px;
-        margin-left: auto; 
-        margin-right: auto;
+            position: absolute;
+            left: 40%; 
+            right: 0; 
+            top: 150px;
+            margin-left: auto; 
+            margin-right: auto;
         }
 
         .quiz-info {
-        position: absolute;
-        left: 0; 
-        right: 0; 
-        top: 200px;
-        margin-left: auto; 
-        margin-right: auto;
-        background-color: #FDF4DF;
+            position: absolute;
+            left: 0; 
+            right: 0; 
+            top: 200px;
+            margin-left: auto; 
+            margin-right: auto;
+            background-color: #FDF4DF;
+            // AJ Fix
+            max-width: 500px;
+            width: calc(100% - 30px);
+            margin: 0 15px;
+            border-radius: 40px;
         }
     }
     p {
         color: $orange-yellow !important;
         font-size: 18px;
     }
-    h2{
-    font-family: $heebo;
-    color: #FFAA00;
-    padding-left: 50px;
-    padding-right: 50px;
-    padding-top: 20px;
+    h2 {
+        font-family: $heebo;
+        color: #FFAA00;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 20px;
     }
 
-    .pop-option{
-    font-family: $heebo;
-    color: $orange-yellow !important;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    border-radius: 0;
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
-    background-color:#fff;
-    a{
-    font-family: Arial;
-    color: #FFAA00;
-    text-decoration: none;
+    .pop-option {
+        font-family: $heebo;
+        color: $orange-yellow !important;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border-radius: 0;
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
+        background-color:#fff;
+        a {
+            font-family: Arial;
+            color: #FFAA00;
+            text-decoration: none;
+        }
+        a:visited {
+            color: #FFAA00;
+        }
     }
-    a:visited{
-    color: #FFAA00;
-    }
-}
 
 }
 
